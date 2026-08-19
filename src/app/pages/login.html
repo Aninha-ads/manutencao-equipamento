@@ -1,0 +1,77 @@
+
+<div class="login-page d-flex justify-content-center align-items-center">
+
+  <div class="card login-card shadow">
+
+    <div class="card-body">
+
+      <h2 class="card-title text-center mb-4">
+        Login
+      </h2>
+
+      <p class="text-center text-muted mb-4">
+        Entre com sua conta
+      </p>
+
+      <form>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">
+            E-mail
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="Digite seu e-mail"
+            [(ngModel)]="email"
+          >
+        </div>
+
+        <div class="mb-3">
+          <label for="senha" class="form-label">
+            Senha
+          </label>
+
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            class="form-control"
+            placeholder="Digite sua senha"
+            [(ngModel)]="senha"
+          >
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary w-100"
+          (click)="fazerLogin()"
+        >
+          Entrar
+        </button>
+
+      </form>
+
+      <div class="text-center mt-4">
+
+        <span>
+          Primeira vez aqui?
+        </span>
+
+        <a
+          routerLink="/cadastro"
+          class="d-block mt-2"
+        >
+          Clique aqui e cadastre-se!
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
