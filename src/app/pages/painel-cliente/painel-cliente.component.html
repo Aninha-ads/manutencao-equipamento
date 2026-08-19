@@ -1,0 +1,21 @@
+<p>Painel do Cliente</p>
+<table class="table table-striped">
+  <thead>
+        <tr>
+        <th>ID</th>
+        <th>Data e Hora</th>
+        <th>Descrição</th>
+        <th>Estado</th>
+        </tr>
+    </thead>
+  <tbody>
+      @for (solicitacao of solicitacoes; track solicitacao.id) {
+        <tr>
+        <td>{{ solicitacao.id }}</td>
+        <td>{{ solicitacao.dataHora }}</td>
+        <td>{{ solicitacao.descricao }}</td>
+        <td>{{ solicitacao.estado }}</td>
+        </tr>
+        }
+    </tbody>
+</table>
