@@ -1,0 +1,104 @@
+<div class="painel-container">
+
+  <header class="painel-header">
+
+    <div>
+      <span class="system-label">MANUTENÇÃO DE EQUIPAMENTOS</span>
+
+      <h1>Painel do Funcionário</h1>
+
+      <p>
+        Solicitações aguardando orçamento
+      </p>
+    </div>
+
+  </header>
+
+
+  <main class="painel-content">
+
+    <div class="section-title">
+
+      <div>
+        <h2>Solicitações Abertas</h2>
+
+        <p>
+          Solicitações que necessitam de atenção imediata.
+        </p>
+      </div>
+
+      <span class="total">
+        {{ solicitacoes.length }} solicitações
+      </span>
+
+    </div>
+
+
+    <div class="card tabela-card">
+
+      <div class="table-responsive">
+
+        <table class="table align-middle">
+
+          <thead>
+            <tr>
+              <th>Data / Hora</th>
+              <th>Cliente</th>
+              <th>Equipamento</th>
+              <th>Estado</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            @for (solicitacao of solicitacoes; track solicitacao.id) {
+
+              <tr>
+
+                <td>
+                  {{ solicitacao.dataHora }}
+                </td>
+
+                <td>
+                  <strong>
+                    {{ solicitacao.cliente }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{ limitarDescricao(solicitacao.equipamento) }}
+                </td>
+
+                <td>
+                  <span class="status-aberta">
+                    {{ solicitacao.estado }}
+                  </span>
+                </td>
+
+                <td>
+
+                  <a
+                    class="btn btn-orcamento"
+                    [routerLink]="['/orcamento', solicitacao.id]"
+                  >
+                    Efetuar Orçamento
+                  </a>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>

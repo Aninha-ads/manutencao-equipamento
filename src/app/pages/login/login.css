@@ -124,7 +124,7 @@ personalização do título do box :3, recomendo para nosso tema do Wall-e,
 copiem as configurações amigos para nosso look mecânico
 */
 .login-card::before {
-  content: "CONSERTO DE EQUIPAMENTOS";
+  content: "MANUTENÇÃO DE EQUIPAMENTOS";
   display: block;
   padding: 8px;
   background-color: #45483f;
