@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { NgxMaskDirective } from 'ngx-mask';
 
 export interface ClienteRegistro {
   nome: string;
@@ -18,7 +19,7 @@ export interface ClienteRegistro {
 
 @Component({
   selector: 'app-cadastro-cliente',
-  imports: [FormsModule],
+  imports: [FormsModule, NgxMaskDirective],
   templateUrl: './cadastro-cliente.component.html',
   styleUrl: './cadastro-cliente.component.css',
 })

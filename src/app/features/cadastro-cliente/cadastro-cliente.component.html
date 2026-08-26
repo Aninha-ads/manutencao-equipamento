@@ -14,11 +14,26 @@
       </div>
       <div class="col-md-3">
         <label for="cpf" class="form-label">CPF</label>
-        <input type="text" class="form-control" id="cpf" name="cpf" [(ngModel)]="cliente.cpf" required>
+        <input type="text" 
+        class="form-control" 
+        id="cpf" 
+        name="cpf" 
+        [(ngModel)]="cliente.cpf" 
+        mask="000.000.000-00"
+        placeholder="000.000.000-00"
+        appGeralValidator="cpf"
+        required>
       </div>
       <div class="col-md-3">
         <label for="telefone" class="form-label">Telefone</label>
-        <input type="text" class="form-control" id="telefone" name="telefone" [(ngModel)]="cliente.telefone" required>
+        <input type="text" 
+        class="form-control" 
+        id="telefone" 
+        name="telefone" 
+        [(ngModel)]="cliente.telefone" 
+        mask="(00) 00000-0000"
+        placeholder="(00) 00000-0000"
+        required>
       </div>
     </div>
     <hr>
@@ -26,7 +41,16 @@
     <div class="row">
       <div class="col-md-3">
         <label for="cep" class="form-label">CEP</label>
-        <input type="text" class="form-control" id="cep" name="cep" [(ngModel)]="cliente.cep" (blur)="buscarCep()" required>
+        <input 
+        type="text" 
+        class="form-control" 
+        id="cep" 
+        name="cep" 
+        [(ngModel)]="cliente.cep"  
+        mask="00000-000"
+        placeholder="00000-000"
+        (blur)="buscarCep()"
+        required>
       </div>
       <div class="col-md-7">
         <label for="logradouro" class="form-label">Logradouro / Rua</label>
@@ -47,8 +71,12 @@
         <input type="text" class="form-control" id="bairro" name="bairro" [(ngModel)]="cliente.bairro" required>
       </div>
       <div class="col-md-4">
-        <label for="cidade" class="form-label">Cidade / UF</label>
+        <label for="cidade" class="form-label">Cidade</label>
         <input type="text" class="form-control" id="cidade" name="cidade" [(ngModel)]="cliente.cidade" required>
+      </div>
+      <div class="col-md-1">
+        <label for="uf" class="form-label">UF</label>
+        <input type="text" class="form-control" id="uf" name="uf" [(ngModel)]="cliente.uf" maxlegth="2" required>
       </div>
     </div>
     <br>
