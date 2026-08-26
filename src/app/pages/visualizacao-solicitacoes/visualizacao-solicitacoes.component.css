@@ -1,0 +1,14 @@
+.badge-cinza { background-color: #6c757d; color: white; }
+.badge-marrom { background-color: #8B4513; color: white; }
+.badge-vermelho { background-color: #dc3545; color: white; }
+.badge-amarelo { background-color: #ffc107; color: black; }
+.badge-roxo { background-color: #6f42c1; color: white; }
+.badge-azul { background-color: #0d6efd; color: white; }
+.badge-alaranjado { background-color: #fd7e14; color: black; }
+.badge-verde { background-color: #198754; color: white; }
+
+.badge {
+  padding: 8px 12px;
+  font-size: 0.85em;
+  border-radius: 8px;
+}
