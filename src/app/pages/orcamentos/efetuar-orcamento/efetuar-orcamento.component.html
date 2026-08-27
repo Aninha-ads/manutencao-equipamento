@@ -1,1 +1,202 @@
-<p>efetuar-orcamento works!</p>
+<div class="container mt-4 mb-5">
+
+    <div class="mb-4">
+        <h2>Efetuar Orçamento</h2>
+        <p class="text-muted">
+            Confira os dados da solicitação e informe o valor do orçamento.
+        </p>
+    </div>
+
+    <!-- DADOS DA SOLICITAÇÃO -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Dados da Solicitação</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Data/Hora da solicitação</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="20/08/2026 14:30"
+                        readonly>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Categoria</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Notebook"
+                        readonly>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="ABERTA"
+                        readonly>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="col-md-12">
+                    <label class="form-label">Descrição do equipamento</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Notebook Dell Inspiron 15"
+                        readonly>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <label class="form-label">Descrição do defeito</label>
+
+                    <textarea
+                        class="form-control"
+                        rows="3"
+                        readonly>Notebook não liga e não apresenta nenhum sinal ao pressionar o botão de energia.</textarea>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- DADOS DO CLIENTE -->
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <strong>Dados do Cliente</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="João da Silva"
+                        readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">CPF</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="123.456.789-00"
+                        readonly>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">E-mail</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="joao@email.com"
+                        readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Telefone</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="(41) 99999-9999"
+                        readonly>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <label class="form-label">Endereço</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Rua das Flores, 100 - Centro - Curitiba/PR - CEP 80000-000"
+                        readonly>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ORÇAMENTO -->
+    <div class="card">
+
+        <div class="card-header">
+            <strong>Orçamento</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label for="valorOrcamento" class="form-label">
+                        Valor do orçamento
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text">R$</span>
+
+                        <input
+                            id="valorOrcamento"
+                            type="text"
+                            class="form-control"
+                            placeholder="0,00">
+                    </div>
+
+                    <small class="form-text text-muted">
+                        Informe o valor total para execução do serviço.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-footer d-flex justify-content-end gap-2">
+
+            <button
+                type="button"
+                class="btn btn-secondary">
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-primary">
+                Registrar Orçamento
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
