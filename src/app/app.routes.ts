@@ -1,14 +1,8 @@
 import { Routes } from '@angular/router';
-<<<<<<< HEAD
-=======
-
-import { LoginComponent } from './pages/login/login';
->>>>>>> 2f96eca8f8175900d2b86ce11a806faca9ac6b22
 import { PainelClienteComponent } from './pages/painel-cliente/painel-cliente.component';
 import { CadastroClienteComponent } from './features/cadastro-cliente/cadastro-cliente.component';
 import { LoginComponent } from './pages/login/login';
 import { PainelFuncionarioComponent } from './pages/painel-funcionario/painel-funcionario.component';
-<<<<<<< HEAD
 import { EfetuarOrcamentoComponent } from './pages/orcamentos/efetuar-orcamento/efetuar-orcamento.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
 
@@ -46,30 +40,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login'
   }
-=======
-import { CadastroClienteComponent } from './features/cadastro-cliente/cadastro-cliente.component';
-
-export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'login', 
-    pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'cadastro',
-    component: CadastroClienteComponent
-  },
-  {
-    path: 'painel-cliente',
-    component: PainelClienteComponent
-  },
-  {
-    path: 'painel-funcionario',
-    component: PainelFuncionarioComponent
-  }
->>>>>>> 2f96eca8f8175900d2b86ce11a806faca9ac6b22
 ];
