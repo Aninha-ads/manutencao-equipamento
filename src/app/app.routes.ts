@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login';
 import { PainelFuncionarioComponent } from './pages/painel-funcionario/painel-funcionario.component';
 import { EfetuarOrcamentoComponent } from './pages/orcamentos/efetuar-orcamento/efetuar-orcamento.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
+import { VisualizarServicoComponent } from './pages/visualizar-servico/visualizar-servico.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,11 @@ export const routes: Routes = [
     path: 'orcamentos',
     component: MostrarOrcamentoComponent
   },
+    {
+    path: 'visualizar-servico',
+    component: VisualizarServicoComponent
+  },
+
   {
     path: '**',
     redirectTo: 'login'
