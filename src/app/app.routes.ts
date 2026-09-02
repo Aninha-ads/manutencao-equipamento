@@ -6,6 +6,7 @@ import { PainelFuncionarioComponent } from './pages/painel-funcionario/painel-fu
 import { EfetuarOrcamentoComponent } from './pages/orcamentos/efetuar-orcamento/efetuar-orcamento.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
 import { VisualizarServicoComponent } from './pages/visualizar-servico/visualizar-servico.component';
+import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
   {
     path: 'orcamentos/efetuar',
     component: EfetuarOrcamentoComponent
+  },
+  {
+    path: 'orcamento/:id',
+    component: OrcamentoSolicitacaoComponent
   },
   {
     path: 'orcamentos',

@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <h3>Efetuar Orçamento (Solicitação #{{ solicitacaoId }})</h3>
+
+  <form #formOrcamento="ngForm" (ngSubmit)="salvarOrcamento()">
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <label class="form-label fw-bold" for="valor">Valor do Orçamento (R$)</label>
+        <input
+          id="valor"
+          type="number"
+          class="form-control"
+          name="valor"
+          [(ngModel)]="valorOrcamento"
+          required
+          min="1"
+        >
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="!formOrcamento.form.valid">
+        Aprovar Orçamento
+      </button>
+      <a class="btn btn-secondary ms-2" routerLink="/painel-funcionario">Cancelar</a>
+    </div>
+  </form>
+</div>
