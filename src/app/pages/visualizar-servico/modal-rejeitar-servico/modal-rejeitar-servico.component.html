@@ -21,6 +21,7 @@ Enfim, vamos começar:
     class="form-control"
     rows="4"
     placeholder="Digite o motivo da rejeição..."
+    [(ngModel)]="motivoRejeicao"
   ></textarea>
 </div>
 
@@ -36,8 +37,8 @@ Enfim, vamos começar:
   <button
     type="button"
     class="btn btn-danger"
+    (click)="confirmarRejeicao()"
   >
     Confirmar rejeição
   </button>
 </div>
-
