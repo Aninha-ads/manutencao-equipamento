@@ -1,0 +1,43 @@
+<!--Graças a Clarissa agora consigo comentar! Mas eu não gostei dessa forma também, poderia ser mais simples
+Enfim, vamos começar:
+- esse modal é para mostrar a mensagem de sucesso ou fracasso / Aprovar Serviço e Rejeitar Serviço
+-->
+
+<div class="modal-header">
+  <h4 class="modal-title">Rejeitar Serviço</h4>
+
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Fechar"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <p>Escreva o motivo da rejeição do serviço:</p>
+
+  <textarea
+    class="form-control"
+    rows="4"
+    placeholder="Digite o motivo da rejeição..."
+  ></textarea>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="activeModal.dismiss()"
+  >
+    Cancelar
+  </button>
+
+  <button
+    type="button"
+    class="btn btn-danger"
+  >
+    Confirmar rejeição
+  </button>
+</div>
+
