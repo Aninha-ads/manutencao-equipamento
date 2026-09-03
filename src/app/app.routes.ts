@@ -8,6 +8,7 @@ import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/
 import { VisualizarServicoComponent } from './pages/visualizar-servico/visualizar-servico.component';
 import { EfetuarManutencaoComponent } from './pages/manutencoes/efetuar-manutencao/efetuar-manutencao.component';
 import { RedirecionarManutencaoComponent } from './pages/manutencoes/redirecionar-manutencao/redirecionar-manutencao.component';
+import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,14 @@ export const routes: Routes = [
     component: EfetuarOrcamentoComponent
   },
   {
+    path: 'orcamento/:id',
+    component: OrcamentoSolicitacaoComponent
+  },
+  {
+    path: 'orcamento/:id',
+    component: OrcamentoSolicitacaoComponent
+  },
+  {
     path: 'orcamentos',
     component: MostrarOrcamentoComponent
   },
@@ -43,6 +52,7 @@ export const routes: Routes = [
     path: 'visualizar-servico',
     component: VisualizarServicoComponent
   },
+  
 
   {
     path: 'manutencoes/efetuar',

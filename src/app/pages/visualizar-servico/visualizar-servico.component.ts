@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalRejeitarServicoComponent } from './modal-rejeitar-servico/modal-rejeitar-servico.component';
+
 //AQUI PODE COMENTÁRIO DE BARRINHA, EEEEEE
 //informações fantasia para ilustração (que vamos precisar msotrar no protótipo)
 //livre para qualquer um mudar se quiser
@@ -19,6 +22,8 @@ interface Historico {
   styleUrl: './visualizar-servico.component.css'
 })
 export class VisualizarServicoComponent {
+
+  private modalService = inject(NgbModal);
 
   // acima, referências pq outros arquivos, abaixo, começam as informações fictícias
   solicitacao = {
@@ -58,5 +63,18 @@ export class VisualizarServicoComponent {
     }
 
   ];
+
+  abrirModalRejeitar() {
+    const modalRef = this.modalService.open(ModalRejeitarServicoComponent);
+
+    modalRef.result.then(
+      (motivo: string) => {
+        console.log('Motivo da rejeição:', motivo);
+      },
+      () => {
+        console.log('Modal fechado sem confirmar');
+      }
+    );
+  }
 
 }
