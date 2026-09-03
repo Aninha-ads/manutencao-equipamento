@@ -1,0 +1,290 @@
+<div class="container mb-4 mb-5">
+
+    <!-- Título -->
+    <div class="mb-4">
+        <h2>Efetuar Manutenção</h2>
+        <p class="text-muted">
+            Confira os dados da solicitação e informe o valor do serviço.
+        </p>
+         
+</div>
+
+    <div class="card mb-4">
+
+            <div class="card-header">
+                <strong>Dados da Solicitação</strong>
+            </div>
+             <div class="card-body">
+
+            <div class="row mb-3">
+
+                <!-- DATA/HORA -->
+                <div class="col-md-4">
+                    <label class="form-label">
+                        Data/Hora da Solicitação
+                    </label>
+                     <input
+                        type="text"
+                        class="form-control"
+                        value="01/09/2026 14:30"
+                        readonly>
+                </div>
+
+                 <!-- CATEGORIA -->
+                <div class="col-md-4">
+                    <label class="form-label">
+                        Categoria
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Notebook"
+                        readonly>
+                </div>
+                <!-- ESTADO -->
+                <div class="col-md-4">
+                    <label class="form-label">
+                        Estado
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="APROVADA"
+                        readonly>
+                </div>
+            </div>
+         
+             <!-- EQUIPAMENTO -->
+
+            <div class="row mb-3">
+
+                <div class="col-md-12">
+
+                    <label class="form-label">
+                        Equipamento
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Notebook Dell Inspiron 15"
+                        readonly>
+
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO DO DEFEITO -->
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <label class="form-label">
+                        Descrição do Defeito
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        rows="3"
+                        readonly>Notebook não liga e não apresenta sinal ao pressionar o botão de energia.</textarea>
+                </div>
+            </div>
+        </div>
+     </div>
+         <!-- ===================================================== -->
+    <!-- DADOS DO CLIENTE                                      -->
+    <!-- ===================================================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <strong>Dados do Cliente</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <!-- NOME -->
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="João da Silva"
+                        readonly>
+
+                </div>
+
+
+                <!-- CPF -->
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        CPF
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="123.456.789-00"
+                        readonly>
+
+                </div>
+
+            </div>
+
+
+            <div class="row mb-3">
+
+                <!-- E-MAIL -->
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        class="form-control"
+                        value="joao@email.com"
+                        readonly>
+
+                </div>
+
+
+                <!-- TELEFONE -->
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Telefone
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="(41) 99999-9999"
+                        readonly>
+
+                </div>
+
+            </div>
+
+
+            <!-- ENDEREÇO -->
+
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <label class="form-label">
+                        Endereço
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="Rua das Flores, 100 - Centro - Curitiba/PR"
+                        readonly>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- MANUTENÇÃO                                            -->
+    <!-- ===================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <strong>Manutenção</strong>
+        </div>
+
+
+        <div class="card-body">
+
+            <!-- DESCRIÇÃO DA MANUTENÇÃO -->
+
+            <div class="mb-4">
+
+                <label
+                    for="descricaoManutencao"
+                    class="form-label">
+
+                    Descrição da Manutenção
+
+                </label>
+
+                <textarea
+                    id="descricaoManutencao"
+                    name="descricaoManutencao"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Descreva o serviço realizado"></textarea>
+
+            </div>
+
+
+            <!-- ORIENTAÇÕES -->
+
+            <div class="mb-3">
+
+                <label
+                    for="orientacoesCliente"
+                    class="form-label">
+
+                    Orientações para o Cliente
+
+                </label>
+
+                <textarea
+                    id="orientacoesCliente"
+                    name="orientacoesCliente"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Informe as orientações para o cliente"></textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTÕES -->
+
+        <div class="card-footer d-flex justify-content-end gap-2">
+
+            <button
+                type="button"
+                class="btn btn-warning"
+                routerLink="/manutencoes/redirecionar">
+
+                Redirecionar Manutenção
+
+            </button>
+
+
+            <button
+                type="button"
+                class="btn btn-primary">
+
+                Efetuar Manutenção
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>        
