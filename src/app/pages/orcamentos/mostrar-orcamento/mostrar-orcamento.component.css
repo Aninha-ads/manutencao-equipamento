@@ -1,0 +1,167 @@
+
+
+
+.budget-page {
+  min-height: 100vh;
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+}
+
+
+.budget-page .card {
+  border: 3px solid #b8a94a !important;
+  border-radius: 14px !important;
+  background-color: #d8d5c5 !important;
+  box-shadow: 0 8px 20px rgba(78, 31, 0, 0.45), inset 0 0 0 2px #77786c !important;
+  overflow: hidden;
+}
+
+.budget-page .card-header {
+  background-color: #45483f !important;
+  color: #d4bd3d !important;
+  padding: 12px 20px !important;
+  border-bottom: 2px solid #8f8030 !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.budget-page .card-header strong {
+  color: #d4bd3d !important;
+}
+
+.budget-page .card-body {
+  padding: 25px 30px !important;
+  color: #30332d;
+}
+
+/* TITULO S*/
+.budget-page h2 {
+  color: #33281d !important;
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.budget-page h5 {
+  color: #694002 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.budget-page .text-muted {
+  color: #66675c !important;
+}
+
+/* LABELS e TEXTO FORTE */
+.budget-page strong {
+  color: #694002 !important;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.budget-page .card-body p {
+  color: #30332d !important;
+  margin-bottom: 0;
+}
+
+/* BADGE DE ESTADO */
+.budget-page .badge.text-bg-secondary {
+  background-color: #45483f !important;
+  color: #d4bd3d !important;
+  padding: 6px 14px !important;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border: 1px solid #8f8030 !important;
+  border-radius: 4px !important;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+
+.budget-page .display-5 {
+  color: #33281d !important;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.budget-page hr {
+  border-top: 2px solid #77786c !important;
+  opacity: 0.5;
+  margin: 16px 0;
+}
+
+/* BOTOES */
+.budget-page .btn {
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 12px 24px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.budget-page .btn-danger {
+  background-color: #8b2c2c !important;
+  border: 2px solid #5a1a1a !important;
+  color: #ffffff !important;
+}
+
+.budget-page .btn-danger:hover {
+  background-color: #a33a3a !important;
+  border-color: #4a1515 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.budget-page .btn-danger:active {
+  transform: translateY(1px);
+}
+
+.budget-page .btn-success {
+  background-color: #5a7a3a !important;
+  border: 2px solid #3d5528 !important;
+  color: #ffffff !important;
+}
+
+.budget-page .btn-success:hover {
+  background-color: #6e8f4a !important;
+  border-color: #334422 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.budget-page .btn-success:active {
+  transform: translateY(1px);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 576px) {
+  .budget-page .card-body {
+    padding: 18px 16px !important;
+  }
+  
+  .budget-page h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  .budget-page .display-5 {
+    font-size: 2rem !important;
+  }
+  
+  .budget-page .d-flex.justify-content-end {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  
+  .budget-page .btn {
+    width: 100% !important;
+  }
+}
