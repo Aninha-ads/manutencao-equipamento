@@ -1,0 +1,436 @@
+/*css visualizarserviço
+comentário feio do cacete */
+
+.servico-page {
+  min-height: 100vh;
+
+  background:
+   /*imagemzinha do Wall-e provisória que fiz no canva (está em PUBLIC)*/
+    url('/visualizar-servico-bg.png');
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+}
+
+
+
+/* cabeçalho */
+
+.servico-header {
+  background-color: rgba(66, 44, 14, 0.87);
+
+  color: #e0c85a;
+
+  border-bottom: 5px solid #b58b32;
+
+  padding: 25px 0;
+
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.system-label {
+  display: block;
+
+  color: #c9ad42;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 5px;
+}
+
+
+
+/* status, 'orçada' (provisório)*/
+.status-badge {
+  background-color: #633c0a;
+
+  color: #f5efefd3;
+
+  padding: 10px 18px;
+
+  font-size: 0.85rem;
+
+  letter-spacing: 1px;
+}
+
+
+
+/* cards */
+
+.wall-e-card {
+  background-color: rgba(238, 235, 220, 0.945);
+
+  border: 3px solid #a87932;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+}
+
+
+.wall-e-card-header {
+  background-color: #45483fd7;
+
+  color: #e0c85a;
+
+  border-bottom: 3px solid #a87932;
+
+  padding: 15px 20px;
+}
+
+
+.wall-e-card-header p {
+  color: #d8d5c5d2;
+}
+
+
+
+/* labellls - títulos*/
+
+.section-label {
+  display: block;
+
+  color: #c49a3a;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 5px;
+}
+
+
+
+/* caixas, boxes com informações*/
+
+.info-box {
+  padding: 13px;
+
+  background-color: #e5e1d0da;
+
+  border-left: 5px solid #b58b32;
+
+  border-radius: 5px;
+}
+
+
+.info-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #6d6d62d7;
+
+  font-size: 0.72rem;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+
+.info-value {
+  display: block;
+
+  color: #3d4037d5;
+
+  font-size: 1rem;
+
+  font-weight: 600;
+}
+
+
+
+/*descriptionnnsssss*/
+
+.description-box {
+  padding: 13px;
+
+  background-color: #e5e1d0e0;
+
+  border: 1px solid #c9c4af;
+
+  border-radius: 5px;
+
+  color: #45463f;
+
+  line-height: 1.5;
+}
+
+
+
+/* orçamento - importante, cor forte*/
+
+.orcamento-box {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 20px;
+
+  background-color: #5f300a;
+
+  border-left: 6px solid #b58b32;
+
+  border-radius: 6px;
+
+  color: #eee7ce;
+}
+
+
+.orcamento-box .info-label {
+  color: #d0ad3f;
+}
+
+
+.orcamento-box strong {
+  color: #dfc34a;
+
+  font-size: 1.6rem;
+
+  white-space: nowrap;
+}
+
+
+
+/*historico */
+
+.timeline {
+  position: relative;
+
+  padding-left: 30px;
+}
+
+
+/*
+  Linha vertical que conecta os passos
+*/
+
+.timeline::before {
+  content: "";
+
+  position: absolute;
+
+  left: 15px;
+
+  top: 0;
+
+  bottom: 0;
+
+  width: 2px;
+
+  background-color: #ddb45b;
+}
+
+
+
+/* Cada passo */
+
+.timeline-item {
+  position: relative;
+
+  margin-bottom: 25px;
+}
+
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+
+
+/* Número */
+
+.timeline-marker {
+  position: absolute;
+
+  left: -45px;
+
+  top: 0;
+
+  width: 32px;
+
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background-color: #57564d;
+
+  border: 3px solid #b58b32;
+
+  border-radius: 50%;
+
+  color: #e0c85a;
+
+  font-size: 0.8rem;
+
+  font-weight: bold;
+
+  z-index: 1;
+}
+
+
+
+/* Conteúdo do passo */
+
+.timeline-content {
+  padding: 18px;
+
+  background-color: #e5e1d0;
+
+  border-left: 4px solid #b58b32;
+
+  border-radius: 6px;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+
+
+/* Badge do estado */
+
+.estado-badge {
+  background-color: #45483f;
+
+  color: #e0c85a;
+
+  padding: 7px 12px;
+
+  font-size: 0.75rem;
+
+  letter-spacing: 1px;
+}
+
+
+
+/* Data */
+
+.data-historico {
+  color: #6d6d62;
+
+  font-size: 0.8rem;
+
+  font-weight: 500;
+}
+
+
+
+/* Funcionário */
+
+.funcionario {
+  padding-top: 10px;
+
+  border-top: 1px solid #c9c4af;
+
+  color: #77786c;
+
+  font-size: 0.8rem;
+}
+
+
+.funcionario strong {
+  color: #45483f;
+}
+
+
+
+/* Botão voltar*/
+
+.btn-voltar {
+  padding: 10px 20px;
+
+  border: 2px solid #30322e;
+
+  font-weight: bold;
+
+  transition: all 0.2s ease;
+}
+
+
+.btn-voltar:hover {
+  background-color: #b58b32;
+
+  border-color: #85651f;
+
+  color: #292b25;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 3px 7px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/*responsividade questionável que infelizmente não inclui bem o background 
+ainda*/
+
+@media (max-width: 576px) {
+
+  .servico-header {
+    padding: 20px 0;
+  }
+
+
+  .servico-header h1 {
+    font-size: 1.6rem;
+  }
+
+
+  .wall-e-card-header {
+    padding: 18px;
+  }
+
+
+  .wall-e-card .card-body {
+    padding: 18px;
+  }
+
+
+  .orcamento-box {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+
+  .orcamento-box strong {
+    font-size: 1.4rem;
+  }
+
+
+  .timeline {
+    padding-left: 35px;
+  }
+
+
+  .timeline-marker {
+    left: -35px;
+
+    width: 28px;
+
+    height: 28px;
+  }
+
+}
