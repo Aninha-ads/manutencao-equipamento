@@ -1,0 +1,71 @@
+<div class="container mt-4">
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <h3>Gerenciar Categorias de Equipamento</h3>
+      <p class="text-muted">Cadastro e listagem de categorias para os equipamentos de manutenção.</p>
+    </div>
+  </div>
+  
+  
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form (ngSubmit)="salvarCategoria()">
+        <div class="row align-items-end">
+          <div class="col-md-8">
+            <label for="nomeCategoria" class="form-label fw-bold">Nome da Categoria</label>
+            <input type="text" class="form-control" id="nomeCategoria" name="nome" 
+                   [(ngModel)]="categoriaAtual.nome" 
+                   placeholder="Ex: Monitores, Placas-mãe, etc." required>
+          </div>
+          <div class="col-md-4 mt-3 mt-md-0">
+            
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa" [class.fa-save]="categoriaAtual.id === 0" [class.fa-sync]="categoriaAtual.id !== 0"></i>
+              {{ categoriaAtual.id === 0 ? 'Cadastrar Categoria' : 'Atualizar Categoria' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+ 
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 10%">ID</th>
+              <th style="width: 60%">Nome da Categoria</th>
+              <th class="text-center" style="width: 30%">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            @for (categoria of listaCategorias; track categoria.id) {
+              <tr>
+                <td class="fw-bold">{{ categoria.id }}</td>
+                <td>{{ categoria.nome }}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-info me-2 text-white" (click)="editarCategoria(categoria)">
+                    Editar
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="excluirCategoria(categoria.id)">
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3" class="text-center py-4 text-muted">
+                  Nenhuma categoria cadastrada no momento.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
