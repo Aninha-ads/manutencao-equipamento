@@ -1,0 +1,339 @@
+<!-- Não entendi muito bem esse requisito, espero que seja a ideia que
+estou colocando aqui-->
+<div class="funcionarios-page">
+
+  <!-- cabeçalho -->
+  <header class="funcionarios-header">
+    <div class="container">
+      <span class="system-label">
+        Sistema de Manutenção de Equipamentos
+         <!-- Eu sempre esqueço o nome que estamos mantendo pra essa coisa
+          Sistema? Site? Loja? temos que verificar depois se todo mundo
+          colocou o mesmo título-->
+      </span>
+
+      <div
+        class="d-flex justify-content-between align-items-center flex-wrap gap-3" >
+        <div>
+
+          <h1 class="display-6 fw-bold mb-1">
+            Manter Funcionários
+          </h1>
+
+          <p class="text-light mb-0">
+            Cadastro e gerenciamento dos funcionários do sistema.
+          </p>
+        </div>
+
+        <div class="employee-count">
+          <span class="badge"><!--calcula quantos funcionários tem no total e mostra-->
+            {{ funcionarios.length }} funcionários
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <!--form -->
+    <section class="card shadow wall-e-card mb-4">
+
+      <div class="card-header wall-e-card-header">
+        <span class="section-label">
+          {{ modoEdicao ? 'Editar' : 'Cadastro' }}
+        </span>
+
+        <h2 class="h4 fw-bold mb-1">
+          @if (modoEdicao) {
+            Editar Funcionário
+          } @else {
+            Novo Funcionário}
+        </h2>
+
+        <p class="mb-0">
+          Informe os dados do funcionário.
+        </p>
+      </div>
+
+      <div class="card-body">
+        <form
+          #funcionarioForm="ngForm"
+          (ngSubmit)="modoEdicao
+            ? atualizarFuncionario()
+            : adicionarFuncionario()" >
+          <div class="row g-3">
+
+            <!-- email -->
+            <div class="col-12 col-md-6">
+              <label
+                for="email"
+                class="form-label fw-bold" >
+                E-mail
+              </label>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                class="form-control"
+                [(ngModel)]="email"
+                placeholder="funcionario@empresa.com"
+                required             >
+
+              <div class="form-text">
+                O e-mail será utilizado para acessar o sistema.
+              </div>
+            </div>
+            <!-- nome -->
+            <div class="col-12 col-md-6">
+
+              <label
+                for="nome"
+                class="form-label fw-bold">
+                Nome
+              </label>
+
+              <input
+                id="nome"
+                name="nome"
+                type="text"
+                class="form-control"
+                [(ngModel)]="nome"
+                placeholder="Nome completo"
+                required>
+
+            </div>
+            <!-- nascimento -->
+
+            <div class="col-12 col-md-6">
+
+              <label
+                for="nascimento"
+                class="form-label fw-bold">
+                Data de nascimento
+              </label>
+
+              <input
+                id="nascimento"
+                name="nascimento"
+                type="date"
+                class="form-control"
+                [(ngModel)]="nascimento"
+                required>
+            </div>
+
+            <!-- senha -->
+            <div class="col-12 col-md-6">
+              <label
+                for="senha"
+                class="form-label fw-bold">
+                Senha
+              </label>
+
+              <input
+                id="senha"
+                name="senha"
+                type="password"
+                class="form-control"
+                [(ngModel)]="senha"
+                [required]="!modoEdicao"
+                placeholder="Digite a senha">
+
+              @if (modoEdicao) {
+                <div class="form-text">
+                  Deixe em branco para manter a senha atual.
+                  <!--eu acho que o ideal seria uma página nova para um
+                  "esqueci minha senha", ou"mudar senha", mas acho que assim
+                  por enquanto está bom -->
+                </div>} @else {
+                <div class="form-text">
+                  A senha será protegida no sistema ;3.
+                </div>}
+            </div>
+          </div>
+
+          <!--Butões-->
+          <div
+            class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
+
+            @if (modoEdicao) {
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelarEdicao()">
+                Cancelar
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-warning btn-sistema">
+                Atualizar Funcionário
+              </button>
+
+            } @else {
+              <button
+                type="button"
+                class="btn btn-outline-dark"
+                (click)="limparFormulario()">
+                Limpar
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-dark btn-sistema"
+                [disabled]="!funcionarioForm.valid">
+                Cadastrar Funcionário
+              </button>}
+
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!--Uma da manhã domingo e estou cansada, enfim, tabela-->
+    <section class="card shadow wall-e-card">
+
+      <div class="card-header wall-e-card-header">
+        <span class="section-label">
+          FUNCIONÁRIOS
+          <!--acho que em uppercase tudo fica bom se for título menor??-->
+        </span>
+
+        <h2 class="h4 fw-bold mb-1">
+          Funcionários cadastrados
+        </h2>
+
+        <p class="mb-0">
+          Gerencie os funcionários que possuem acesso ao sistema.
+        </p>
+     </div>
+      <div class="card-body">
+
+        <!-- tabela responsiva do Bootstrap -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+
+           <thead class="table-dark">
+              <tr>
+                <th scope="col">
+                  #
+                </th>
+
+                <th scope="col">
+                  E-mail
+                </th>
+
+                <th scope="col">
+                  Nome
+                </th>
+
+                <th scope="col">
+                  Nascimento
+                </th>
+
+                <th
+                  scope="col"
+                  class="text-center">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (
+                funcionario of funcionarios;
+                track funcionario.id
+              ) {
+                <tr>
+
+                 <!-- id -->
+                  <td>
+                    <span class="id-badge">
+                      {{ funcionario.id }}
+                    </span>
+                  </td>
+
+                  <!-- email -->
+                  <td>
+                    <span class="email-cell">
+                      {{ funcionario.email }}
+                    </span>
+                  </td>
+
+                  <!--nome - mexer em tudo isso quando configurarmos o bd, IMPORTANTE-->
+                  <td>
+
+                    <strong>
+                      {{ funcionario.nome }}
+                    </strong>
+
+                    @if (
+                      funcionario.id === funcionarioLogadoId
+                    ) {
+
+                      <span class="badge bg-secondary ms-2">
+                        Você
+                      </span>
+                    }
+                  </td>
+
+                  <!-- nascimento do funcionário -->
+                  <td>
+                    {{ funcionario.nascimento | date:'dd/MM/yyyy' }}
+                  </td>
+
+                  <!-- açoes - configurar no ts -->
+                  <td>
+                    <div
+                      class="d-flex justify-content-center gap-2">
+                      <!-- editar -->
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-warning"
+                        (click)="editarFuncionario(funcionario)"
+                        title="Editar funcionário" >
+                        Editar
+                      </button>
+
+                      <!-- remover-->
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        (click)="removerFuncionario(funcionario)"
+                        [disabled]="
+                          funcionario.id === funcionarioLogadoId ||
+                          funcionarios.length === 1
+                        "
+                        title="Remover funcionário"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+
+              <!-- usa o lengh de novo para exibir mensagem se não houverem funcionários -->
+              @if (funcionarios.length === 0) {
+                <tr>
+                  <td
+                    colspan="5"
+                    class="text-center py-4">
+
+                    <span class="text-muted">
+                      Nenhum funcionário cadastrado.
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

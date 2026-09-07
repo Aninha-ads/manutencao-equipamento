@@ -1,0 +1,301 @@
+/* ==========================================================
+   PÁGINA
+   ========================================================== */
+
+.funcionarios-page {
+  min-height: 100vh;
+
+  background-image: url('/manter-funcionarios-bg.png');
+  background-size: cover;
+  background-position: center;
+    background-attachment: fixed;
+
+}
+
+
+
+/* ==========================================================
+   CABEÇALHO
+   ========================================================== */
+
+.funcionarios-header {
+  padding: 25px 0;
+
+  background-color: rgba(65, 68, 60, 0.97);
+
+  color: #e0c85a;
+
+  border-bottom: 5px solid #b58b32;
+
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.system-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #c9ad42;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+
+  letter-spacing: 3px;
+}
+
+
+
+/* ==========================================================
+   CONTADOR
+   ========================================================== */
+
+.employee-count .badge {
+  padding: 10px 16px;
+
+  background-color: #b58b32;
+
+  color: #292b25;
+
+  font-size: 0.85rem;
+}
+
+
+
+/* ==========================================================
+   CARDS
+   ========================================================== */
+
+.wall-e-card {
+  overflow: hidden;
+
+  background-color: rgba(238, 235, 220, 0.97);
+
+  border: 3px solid #a87932;
+
+  border-radius: 10px;
+}
+
+
+.wall-e-card-header {
+  padding: 20px 25px;
+
+  background-color: #45483f;
+
+  color: #e0c85a;
+
+  border-bottom: 3px solid #a87932;
+}
+
+
+.wall-e-card-header p {
+  color: #d8d5c5;
+}
+
+
+.section-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #c49a3a;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+
+
+/* ==========================================================
+   FORMULÁRIO
+   ========================================================== */
+
+.form-label {
+  color: #45483f;
+
+  text-transform: uppercase;
+
+  font-size: 0.8rem;
+
+  letter-spacing: 0.5px;
+}
+
+
+.form-control {
+  border: 2px solid #c8c1aa;
+
+  background-color: #f5f2e8;
+
+  color: #3d4037;
+}
+
+
+.form-control:focus {
+  border-color: #b58b32;
+
+  box-shadow:
+    0 0 0 0.2rem rgba(181, 139, 50, 0.2);
+}
+
+
+.form-text {
+  color: #77786c;
+}
+
+
+
+/* ==========================================================
+   BOTÕES
+   ========================================================== */
+
+.btn-sistema {
+  font-weight: bold;
+
+  border: 2px solid #30322e;
+
+  transition: all 0.2s ease;
+}
+
+
+.btn-sistema:hover {
+  background-color: #b58b32;
+
+  border-color: #85651f;
+
+  color: #292b25;
+
+  transform: translateY(-1px);
+}
+
+
+.btn-outline-warning {
+  color: #8a671c;
+
+  border-color: #b58b32;
+}
+
+
+.btn-outline-warning:hover {
+  background-color: #b58b32;
+
+  color: #292b25;
+}
+
+
+
+/* ==========================================================
+   TABELA
+   ========================================================== */
+
+.table {
+  color: #3d4037;
+}
+
+
+.table thead th {
+  padding: 14px;
+
+  text-transform: uppercase;
+
+  font-size: 0.75rem;
+
+  letter-spacing: 1px;
+}
+
+
+.table tbody td {
+  padding: 14px;
+
+  background-color: rgba(245, 242, 232, 0.8);
+
+  border-color: #d4cfbd;
+}
+
+
+.table-hover tbody tr:hover td {
+  background-color: #e8e2cf;
+}
+
+
+
+/* ==========================================================
+   ID
+   ========================================================== */
+
+.id-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  background-color: #45483f;
+
+  border-radius: 50%;
+
+  color: #e0c85a;
+
+  font-size: 0.8rem;
+
+  font-weight: bold;
+}
+
+
+
+/* ==========================================================
+   E-MAIL
+   ========================================================== */
+
+.email-cell {
+  color: #5d624f;
+
+  font-size: 0.9rem;
+}
+
+
+
+/* ==========================================================
+   RESPONSIVIDADE
+   ========================================================== */
+
+@media (max-width: 768px) {
+
+  .funcionarios-header {
+    padding: 20px 0;
+  }
+
+
+  .funcionarios-header h1 {
+    font-size: 1.7rem;
+  }
+
+
+  .wall-e-card-header {
+    padding: 18px;
+  }
+
+
+  .wall-e-card .card-body {
+    padding: 18px;
+  }
+
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+
+  .table tbody td {
+    padding: 10px;
+  }
+
+}

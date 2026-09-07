@@ -9,7 +9,7 @@ import { VisualizarServicoComponent } from './pages/visualizar-servico/visualiza
 import { EfetuarManutencaoComponent } from './pages/manutencoes/efetuar-manutencao/efetuar-manutencao.component';
 import { RedirecionarManutencaoComponent } from './pages/manutencoes/redirecionar-manutencao/redirecionar-manutencao.component';
 import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
-
+import { ManterFuncionariosComponent } from './pages/manter-funcionarios/manter-funcionarios.component';
 export const routes: Routes = [
   {
     path: '',
@@ -61,6 +61,11 @@ export const routes: Routes = [
 {
     path: 'manutencoes/redirecionar',
     component: RedirecionarManutencaoComponent
+},
+
+{
+  path: 'manter-funcionarios',
+  component: ManterFuncionariosComponent
 },
 
   {
