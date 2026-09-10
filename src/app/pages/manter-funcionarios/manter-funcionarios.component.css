@@ -1,0 +1,190 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/* Manter o tema das outras páginas, mas com cores diferentes para diferenciar 
+a página de manutenção de funcionários
+*/
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.funcionarios-page {
+  min-height: 100vh;
+  padding: 30px;
+
+  background-color: #d8c49a;
+  background-image: url('/manter-funcionarios-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  color: #2c2e27;
+}
+
+/* Cabeçalho */
+
+.funcionarios-header {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto 30px;
+  box-sizing: border-box;
+
+  background-color: rgba(85, 55, 16, 0.95);
+  color: #bda103;
+
+  padding: 25px 30px;
+
+  border-left: 7px solid #b58b32;
+  border-radius: 8px;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.funcionarios-page > main.container {
+  width: 100%;
+  max-width: 1140px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 0;
+  padding-left: 0;
+  box-sizing: border-box;
+}
+
+.funcionarios-header > .container {
+  width: 100%;
+  max-width: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.system-label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: #c9ad42;
+}
+
+.funcionarios-header h1 {
+  margin: 8px 0 5px;
+
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.funcionarios-header p {
+  margin: 0;
+  color: #d8d5c5;
+}
+
+
+/* Conteúdo */
+
+.wall-e-card {
+  width: 100%;
+  margin-bottom: 15px;
+  overflow: hidden;
+  background-color: rgba(238, 235, 220, 0.97);
+  border: 3px solid #a87932;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(60, 45, 20, 0.35);
+  box-sizing: border-box;
+}
+
+/* Mantém o espaço da tabela integrado ao fundo da página. */
+.funcionarios-page > main.container > .wall-e-card:last-child {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.funcionarios-page > main.container > .wall-e-card:last-child .card-header,
+.funcionarios-page > main.container > .wall-e-card:last-child .card-body {
+  background-color: rgba(238, 235, 220, 0.82);
+}
+
+.wall-e-card h2 {
+  margin: 0;
+
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.wall-e-card p {
+  margin: 5px 0 0;
+  color: #66675c;
+}
+
+/* Tabela */
+
+.table {
+  margin: 0;
+}
+
+.table thead {
+  background-color: #45483f;
+  color: #e0c85a;
+}
+
+.table th {
+  padding: 15px;
+
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 15px;
+
+  color: #41433c;
+
+  border-bottom: 1px solid #c9c4af;
+}
+
+
+/* Efeito nas linhas */
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #e8dfc2;
+}
+
+
+/* Identificação visual dos registros da tabela. */
+.id-badge {
+  display: inline-block;
+  min-width: 2rem;
+  padding: 4px 8px;
+  color: #f0e7c7;
+  background-color: #302c25;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.email-cell {
+  color: #66675c;
+}
+
+
+/* Responsividade para não desconfigurar dependnendo do tamanho da tela */
+
+@media (max-width: 768px) {
+
+  .funcionarios-page {
+    padding: 15px;
+  }
+
+  .funcionarios-header h1 {
+    font-size: 1.5rem;
+  }
+
+}
