@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RedirecionarManutencaoComponent } from './redirecionar-manutencao.component';
+import { RedirecionarManutencaoComponent } from './redirecionar-manutencao.component';http://localhost:4200/manutencoes/redirecionar
 
 describe('RedirecionarManutencaoComponent', () => {
   let component: RedirecionarManutencaoComponent;

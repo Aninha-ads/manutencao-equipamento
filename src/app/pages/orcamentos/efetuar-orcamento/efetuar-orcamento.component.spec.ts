@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EfetuarOrcamentoComponent} from './efetuar-orcamento.component';
 
 describe('EfetuarOrcamentoComponent', () => {
-  let component: EfetuarOrcamentoComponent;
+  let component: EfetuarOrcamentoComponent; // http://localhost:4200/orcamento/efetuar
   let fixture: ComponentFixture<EfetuarOrcamentoComponent>;
 
   beforeEach(async () => {
