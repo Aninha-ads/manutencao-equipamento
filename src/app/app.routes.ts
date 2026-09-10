@@ -11,6 +11,7 @@ import { RedirecionarManutencaoComponent } from './pages/manutencoes/redireciona
 import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
 import { ManterFuncionariosComponent } from './pages/manter-funcionarios/manter-funcionarios.component';
 import { CategoriaComponent } from './pages/categoria/categoria.component';
+import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
 export const routes: Routes = [
   {
     path: '',
@@ -38,8 +39,8 @@ export const routes: Routes = [
     component: EfetuarOrcamentoComponent
   },
   {
-    path: 'orcamento/:id',
-    component: OrcamentoSolicitacaoComponent
+    path: 'visualizacao-solicitacoes',
+    component: VisualizacaoSolicitacoesComponent
   },
   {
     path: 'orcamento/:id',

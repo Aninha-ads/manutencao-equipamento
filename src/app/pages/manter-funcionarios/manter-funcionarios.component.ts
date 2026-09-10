@@ -7,7 +7,7 @@ interface Funcionario {
   nome: string;
   nascimento: string;
 }
-//catando componente
+//componente seletor, importações etc.
 @Component({
   selector: 'app-manter-funcionarios',
   standalone: true,
