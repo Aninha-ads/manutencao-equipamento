@@ -10,6 +10,7 @@ import { EfetuarManutencaoComponent } from './pages/manutencoes/efetuar-manutenc
 import { RedirecionarManutencaoComponent } from './pages/manutencoes/redirecionar-manutencao/redirecionar-manutencao.component';
 import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
 import { ManterFuncionariosComponent } from './pages/manter-funcionarios/manter-funcionarios.component';
+import { CategoriaComponent } from './pages/categoria/categoria.component';
 export const routes: Routes = [
   {
     path: '',
@@ -52,21 +53,24 @@ export const routes: Routes = [
     path: 'visualizar-servico',
     component: VisualizarServicoComponent
   },
-  
-
   {
     path: 'manutencoes/efetuar',
     component: EfetuarManutencaoComponent
-},
-{
-    path: 'manutencoes/redirecionar',
+  },
+  {
+      path: 'manutencoes/redirecionar',
     component: RedirecionarManutencaoComponent
-},
+  },
 
-{
-  path: 'manter-funcionarios',
-  component: ManterFuncionariosComponent
-},
+  {
+    path: 'manter-funcionarios',
+    component: ManterFuncionariosComponent
+  },
+
+  {
+    path: 'categoria',
+    component: CategoriaComponent
+  },
 
   {
     path: '**',

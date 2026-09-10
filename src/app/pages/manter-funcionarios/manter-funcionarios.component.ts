@@ -44,14 +44,20 @@ export class ManterFuncionariosComponent {
     }
   ];
 
-  //adiciona um novo funcionário.
+  // Valida os dados e adiciona um novo funcionário à lista.
   adicionarFuncionario(): void {
-    if (!this.email || !this.nome || !this.nascimento || !this.senha) {
+    // Remove espaços extras e padroniza o e-mail para evitar duplicidades.
+    const email = this.email.trim().toLowerCase();
+    const nome = this.nome.trim();
+
+    // O cadastro exige e-mail, nome, data de nascimento e senha.
+    if (!email || !nome || !this.nascimento || !this.senha.trim()) {
       alert('Preencha todos os campos.');
       return;}
 
+    // Compara os e-mails sem diferenciar letras maiúsculas e minúsculas.
     const emailExiste = this.funcionarios.some(
-      funcionario => funcionario.email === this.email);
+      funcionario => funcionario.email.toLowerCase() === email);
 
     if (emailExiste) {
       alert('Este e-mail já está cadastrado.');
@@ -59,81 +65,98 @@ export class ManterFuncionariosComponent {
 
     const novoFuncionario: Funcionario = {
       id: this.proximoId(),
-      email: this.email,
-      nome: this.nome,
+      email,
+      nome,
       nascimento: this.nascimento};
 
     this.funcionarios.push(novoFuncionario);
     alert('Funcionário cadastrado com sucesso!');
     this.limparFormulario();
   }
-  // prepara um funcionário para edição.
- editarFuncionario(funcionario: Funcionario): void {
+  // Carrega os dados do funcionário selecionado no formulário de edição.
+  editarFuncionario(funcionario: Funcionario): void {
     this.modoEdicao = true;
     this.funcionarioEditandoId = funcionario.id;
     this.email = funcionario.email;
     this.nome = funcionario.nome;
     this.nascimento = funcionario.nascimento;
-    // Por segurança, a senha não é preenchida
+    // A senha existente não é exibida por segurança.
     this.senha = '';
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }
-  //atualiza um funcionário existente.
-     atualizarFuncionario(): void {
+  // Valida e atualiza os dados do funcionário selecionado.
+  atualizarFuncionario(): void {
 
+    // Sem um funcionário selecionado, não existe registro para atualizar.
     if (this.funcionarioEditandoId === null) {
       return;}
-    if (!this.email || !this.nome || !this.nascimento) {
+    const email = this.email.trim().toLowerCase();
+    const nome = this.nome.trim();
+
+    // Na edição, todos os campos visíveis continuam sendo obrigatórios.
+    if (!email || !nome || !this.nascimento) {
       alert('Preencha os campos obrigatórios.');
       return;}
 
+    // Ignora o próprio registro, mas bloqueia e-mail usado por outro funcionário.
+    const emailExiste = this.funcionarios.some(
+      funcionario => funcionario.id !== this.funcionarioEditandoId
+        && funcionario.email.toLowerCase() === email);
+
+    if (emailExiste) {
+      alert('Este e-mail já está cadastrado para outro funcionário.');
+      return;
+    }
+
+    // Garante que o funcionário ainda existe antes de alterar seus dados.
     const funcionario = this.funcionarios.find(
       f => f.id === this.funcionarioEditandoId);
 
     if (!funcionario) {
       return;}
 
-    funcionario.email = this.email;
-    funcionario.nome = this.nome;
+    funcionario.email = email;
+    funcionario.nome = nome;
     funcionario.nascimento = this.nascimento;
     alert('Funcionário atualizado com sucesso!');
     this.limparFormulario();}
 
-  //remove um funcionário
+  // Remove um funcionário somente depois de validar as regras de segurança.
   removerFuncionario(funcionario: Funcionario): void {
 
-    // regra do RF018:
-    // funcionário não pode remover a si mesmo (nn pode se demitir o cara kkkkkkk)
+    // RF018: impede que o funcionário logado remova o próprio usuário.
     if (funcionario.id === this.funcionarioLogadoId) {
       alert('Você não pode remover seu próprio usuário.');
       return;
     }
 
-    // regra do RF018 também:
-    // se existir apenas um funcionário, não pode remover (fecha esse quiosque)
-    if (this.funcionarios.length === 1) {
+    // RF018: mantém pelo menos um funcionário cadastrado no sistema.
+    if (this.funcionarios.length <= 1) {
       alert('O sistema precisa possuir pelo menos um funcionário.');
       return;
     }
+    // Solicita confirmação antes de excluir permanentemente o registro.
     const confirmar = confirm(
       `Deseja realmente remover o funcionário ${funcionario.nome}?`
     );
     if (!confirmar) {
       return;
     }
+    // Remove somente o funcionário escolhido, preservando os demais registros.
     this.funcionarios = this.funcionarios.filter(
       f => f.id !== funcionario.id
     );
     alert('Funcionário removido com sucesso!');
   }
 
-  //se a pessoa cancelar a edição, limpa o formulário (um extra, função seguinte)
+  // Cancela a edição e retorna o formulário ao modo de cadastro.
   cancelarEdicao(): void {
     this.limparFormulario();}
   
+  // Limpa os dados e reinicia o estado do formulário.
   limparFormulario(): void {
     this.email = '';
     this.nome = '';
@@ -143,7 +166,7 @@ export class ManterFuncionariosComponent {
     this.funcionarioEditandoId = null;
   }
 
-  //gera o próximo id, sla gente, complicado essa parte
+  // Calcula um identificador maior que todos os registros existentes.
   private proximoId(): number {
     if (this.funcionarios.length === 0) {
       return 1;
