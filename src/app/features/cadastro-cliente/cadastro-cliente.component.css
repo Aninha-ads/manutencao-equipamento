@@ -1,0 +1,126 @@
+/*Eu estou estilizando a tela cadastro. Ainda tem que terminar de arrumar ele, não está finalizado. Se quiser modificar algo não tem problema!*/
+/**/
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/*tive que colocar mais uma div no html pra conseguir add uma imagem atrás do container*/
+.pag-cadastro {
+  min-height: 100vh;
+
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.container {
+  width: 750px;
+  max-width: 95%;
+
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  padding: 0;
+
+  background-color: #dedccd;
+
+  border: 2px solid #b7a928;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  overflow: hidden;
+}
+
+.container > h3 {
+  margin: 0;
+
+  padding: 14px;
+
+  text-align: center;
+
+  background-color: #34382f;
+
+  color: #d5b928;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+/*formulário e labals*/
+.container form {
+    padding: 30px 40px 35px;
+}
+.form-label {
+    margin-bottom: 6px;
+    color: #553900;
+
+    font-size: 12px;
+    font-weight:bold;
+    text-transform: uppercase;
+}
+
+/*campos*/
+.form-control {
+    height: 42px;
+    background-color: #f1f0e9;
+    border: 2px solid #85847d;
+    border-radius: 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+/*quando clica no campo -- só pra dar um chan*/
+.form-control:focus {
+    background-color: #f1f0e9;
+    border-color: #c5ae26;
+    box-shadow:  0 0 4px rgba(197, 174, 38, 0.5);
+}
+
+/* Texto de exemplo dentro do campo */
+
+.form-control::placeholder {
+  color: #999;
+}
+
+/*endereço*/
+.container h5 {
+  margin-bottom: 18px;
+
+  color: #553900; /*não sei se ficou boa essa cor*/
+
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/*botão*/
+
+.container .btn-primary {
+  display: block;
+
+  width: 220px;
+
+  margin: 25px auto 0;
+
+  padding: 11px;
+
+  background-color: #ffef9c;
+
+  border: 2px solid #9c891b;
+
+  border-radius: 5px;
+
+  color: #704000;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  text-transform: uppercase;
+}
