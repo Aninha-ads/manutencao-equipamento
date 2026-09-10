@@ -12,10 +12,14 @@ interface Categoria {
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css',
 })
-export class CategoriaComponent {
-  categoriaAtual: Categoria = { id: 0, nome: '' };
-  listaCategorias: Categoria[] = [];
 
+export class CategoriaComponent {
+  categoriaAtual = {
+    id: 0,
+    nome: ''
+  };
+
+  listaCategorias: Categoria[] = [];
   salvarCategoria(): void {
     const nome = this.categoriaAtual.nome.trim();
 
@@ -30,7 +34,10 @@ export class CategoriaComponent {
 
       this.listaCategorias.push({ id: novoId, nome });
     } else {
-      const categoria = this.listaCategorias.find(item => item.id === this.categoriaAtual.id);
+      const categoria = this.listaCategorias.find(
+        item => item.id === this.categoriaAtual.id
+      );
+
       if (categoria) {
         categoria.nome = nome;
       }
@@ -44,11 +51,12 @@ export class CategoriaComponent {
   }
 
   excluirCategoria(id: number): void {
-    this.listaCategorias = this.listaCategorias.filter(categoria => categoria.id !== id);
+    this.listaCategorias = this.listaCategorias.filter(
+      categoria => categoria.id !== id
+    );
 
     if (this.categoriaAtual.id === id) {
       this.categoriaAtual = { id: 0, nome: '' };
     }
   }
 }
-

@@ -15,7 +15,7 @@
         <span>até</span>
         <input type="date" class="form-control w-auto" [(ngModel)]="dataFim">
       }
-      
+      <!--depois tem que colocar o método no typescript para realizar o filtro e '(click)'-->
       <button class="btn btn-primary ms-auto">Filtrar</button>
     </div>
   </div>
@@ -33,7 +33,7 @@
     <tbody>
       @for (solicitacao of solicitacoes; track solicitacao.id) {
         <tr>
-          <td>{{ solicitacao.dataHora }}</td>
+          <td>{{ solicitacao.dataHora | date:'dd/MM/yyy HH:mm':'':'pt-BR'}}</td>
           <td>{{ solicitacao.cliente }}</td>
           <td>{{ solicitacao.descricao }}</td>
 
