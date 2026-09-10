@@ -12,7 +12,7 @@
       @for (solicitacao of solicitacoes; track solicitacao.id) {
         <tr>
         <td>{{ solicitacao.id }}</td>
-        <td>{{ solicitacao.dataHora }}</td>
+        <td>{{ solicitacao.dataHora | date:'dd/MM/yyyy HH:mm':'':'py-BR' }}</td>
         <td>{{ solicitacao.descricao }}</td>
         <td>{{ solicitacao.estado }}</td>
         </tr>

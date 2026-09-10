@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 export interface Solicitacao {
   id: number;
@@ -12,7 +13,7 @@ export interface Solicitacao {
 @Component({
   selector: 'app-visualizacao-solicitacoes',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe],
   templateUrl: './visualizacao-solicitacoes.component.html',
   styleUrl: './visualizacao-solicitacoes.component.css'
 })

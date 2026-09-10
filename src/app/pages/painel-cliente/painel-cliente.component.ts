@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 interface  Solicitacao {
   id: number;
@@ -9,7 +10,7 @@ interface  Solicitacao {
 
 @Component({
   selector: 'app-painel-cliente',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './painel-cliente.component.html',
   styleUrl: './painel-cliente.component.css',
 })
