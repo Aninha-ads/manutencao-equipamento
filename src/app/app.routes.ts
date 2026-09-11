@@ -12,6 +12,7 @@ import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orc
 import { ManterFuncionariosComponent } from './pages/manter-funcionarios/manter-funcionarios.component';
 import { CategoriaComponent } from './pages/categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
+import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
 export const routes: Routes = [
   {
     path: '',
@@ -22,6 +23,9 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent
   },
+   {
+    path: 'login-funcionario',
+    component: LoginFuncionarioComponent  },
   {
     path: 'cadastro',
     component: CadastroClienteComponent

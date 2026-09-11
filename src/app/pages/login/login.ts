@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 /*pelo que eu pesquisei, aqui 'informa' meu angular de que essa aplicação é um componente*/
 @Component({
   selector: 'app-login',
@@ -23,6 +23,8 @@ export class LoginComponent {
   email: string = '';
   senha: string = '';
 
+  constructor(private router: Router) {}
+
   fazerLogin(): void {
     console.log('E-mail:', this.email);
     console.log('Senha:', this.senha);
@@ -33,5 +35,6 @@ export class LoginComponent {
     }
 
     alert('Login realizado!');
+      this.router.navigate(['/painel-cliente']);
   }
 }
