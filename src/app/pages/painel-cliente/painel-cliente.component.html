@@ -1,21 +1,53 @@
-<p>Painel do Cliente</p>
-<table class="table table-striped">
-  <thead>
-        <tr>
-        <th>ID</th>
-        <th>Data e Hora</th>
-        <th>Descrição</th>
-        <th>Estado</th>
-        </tr>
-    </thead>
-  <tbody>
-      @for (solicitacao of solicitacoes; track solicitacao.id) {
-        <tr>
-        <td>{{ solicitacao.id }}</td>
-        <td>{{ solicitacao.dataHora | date:'dd/MM/yyyy HH:mm':'':'py-BR' }}</td>
-        <td>{{ solicitacao.descricao }}</td>
-        <td>{{ solicitacao.estado }}</td>
-        </tr>
-        }
-    </tbody>
-</table>
+
+<div class="page-bg">
+
+  <div class="container mt-4">
+   
+  </div>
+
+
+
+
+  <div class="container mt-4">
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <h3>Painel do Cliente</h3>
+        <p class="text-muted">Acompanhe o histórico e o estado das suas solicitações.</p>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0 align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th style="width: 10%">ID</th>
+                <th style="width: 25%">Data e Hora</th>
+                <th style="width: 45%">Descrição</th>
+                <th style="width: 20%" class="text-center">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (solicitacao of solicitacoes; track solicitacao.id) {
+                <tr>
+                  <td class="fw-bold">{{ solicitacao.id }}</td>
+                  <!-- Corrigido de py-BR para pt-BR -->
+                  <td>{{ solicitacao.dataHora | date:'dd/MM/yyyy HH:mm':'':'pt-BR' }}</td>
+                  <td>{{ solicitacao.descricao }}</td>
+                  <td class="text-center fw-bold">{{ solicitacao.estado }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="text-center py-4 text-muted">
+                    Nenhuma solicitação encontrada no momento.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

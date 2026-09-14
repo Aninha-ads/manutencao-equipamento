@@ -1,0 +1,57 @@
+.page-bg {
+  min-height: 100vh; /* Garante que ocupe 100% da altura da tela */
+  background-image: url('/login-bg.png'); /* Busca a imagem na pasta public */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Trava o fundo durante a rolagem */
+  padding: 20px 0; /* Dá um respiro no topo e no fundo */
+}
+h3 {
+  color: #33281d;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.text-muted {
+  color: #66675c !important;
+}
+
+/* Estrutura do Card (Moldura de Metal) */
+.card {
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+  background-color: #d8d5c5;
+  box-shadow: 0 8px 20px rgba(78, 31, 0, 0.25), inset 0 0 0 2px #77786c;
+  overflow: hidden;
+}
+
+/* Customização da Tabela */
+.table {
+  margin-bottom: 0;
+  --bs-table-bg: transparent;
+  --bs-table-color: #33281d;
+}
+
+/* Cabeçalho da Tabela */
+.table-dark th {
+  background-color: #45483f !important;
+  color: #d4bd3d !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  border-bottom: 2px solid #8f8030 !important;
+  padding: 16px;
+}
+
+/* Linhas zebradas (Cinza translúcido) */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: rgba(119, 120, 108, 0.15); 
+  color: #33281d;
+}
+
+/* Efeito ao passar o mouse (Amarelo translúcido) */
+.table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: rgba(196, 173, 50, 0.2); 
+}

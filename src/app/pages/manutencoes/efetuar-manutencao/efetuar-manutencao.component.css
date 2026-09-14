@@ -1,56 +1,54 @@
-/*decidimos usar o bootstrap, aqui está sendo importado, ainda estou aprednedno como é*/
-@import 'bootstrap/dist/css/bootstrap.min.css';
-/* eu fiz essa imagem no canva, só coloquei ela de fundo. Ela vai ficar em PUBLIC!!!!
-o resto das cores eu tô tentando mantes no tema do Wall=, que são :
- Cinza, marrom, laranja, amarelo, branco e preto
- (procurar colocar preto em detalhes pequenos APENAS)*/
- /*atenção amigos que podem querer saber o que está acontecendo aqui,
-snão consegui colocar os comentários no html, ent está aqui, ainda não temos integração funcional 
-sem verificação de login ainda, etc no typescript
-futuramente vou fazer direcionamento para tela de cadastro*/
- 
-.login-page {
-  min-height: 100vh;
-
-  background-image: url('/manutencao-bg.png');
+.page-bg {
+  min-height: 100vh; 
+  background-image: url('/login-bg.png'); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
-  padding: 20px;
+  background-attachment: fixed; 
+  padding: 20px 0; 
 }
-
-/*card*/
-.login-card {
-  width: 100%;
-  max-width: 430px;
-  border: 3px solid #b8a94a;
-  border-radius: 14px;
-  background-color: #d8d5c5;
-  box-shadow:
-    0 8px 20px rgba(78, 31, 0, 0.45),
-    inset 0 0 0 2px #77786c;
-  overflow: hidden;
-}
-
-.login-card .card-body {
-  padding: 40px;
-}
-
-/*título marrom, eu não sei se gostei, testei outras cores mas não 
-consegui entrar em acordo ainda */
-.login-card .card-title {
+h2 {
   color: #33281d;
-  font-size: 2rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
-/*esse aqui tá ok*/
-.login-card p {
+.text-muted {
   color: #66675c !important;
 }
+
+
+.card {
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+  background-color: #d8d5c5;
+  box-shadow: 0 8px 20px rgba(78, 31, 0, 0.25), inset 0 0 0 2px #77786c;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  background-color: #45483f;
+  color: #d4bd3d;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #8f8030;
+  padding: 16px 20px;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.card-footer {
+  background-color: #d8d5c5;
+  border-top: 2px solid #77786c;
+  padding: 16px 24px;
+}
+
 
 .form-label {
   color: #694002;
@@ -59,7 +57,6 @@ consegui entrar em acordo ainda */
   font-size: 0.85rem;
   letter-spacing: 1px;
 }
-/*uppercase - tudo maiusculo*/
 
 .form-control {
   padding: 12px;
@@ -74,14 +71,21 @@ consegui entrar em acordo ainda */
   border-color: #c5b33d;
   box-shadow: 0 0 0 0.2rem rgba(197, 179, 61, 0.25);
   background-color: #ffffff;
+  outline: none;
 }
 
-/*placeholders com cor ok tmb*/
 .form-control::placeholder {
   color: #929287;
 }
 
-/*botão e efeito quando passa a seta por cima e clica(3 próx blocos)*/
+.form-control[readonly] {
+  background-color: #e4e3d9;
+  color: #5c5d55;
+  border-color: #929287;
+  cursor: not-allowed;
+}
+
+
 .btn-primary {
   background-color: #c4ad32;
   border: 2px solid #8d7b20;
@@ -89,7 +93,7 @@ consegui entrar em acordo ainda */
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 12px;
+  padding: 10px 24px;
   border-radius: 6px;
   transition: all 0.2s ease;
 }
@@ -106,32 +110,27 @@ consegui entrar em acordo ainda */
   transform: translateY(1px);
 }
 
-/* Link de cadastro */
-.login-card a {
-  color: #8b741c;
-  font-weight: 700;
-  text-decoration: none;
-  transition: color 0.2s ease;
+
+.btn-warning {
+  background-color: #c05b24;
+  border: 2px solid #8e4219;
+  color: #ffffff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
-.login-card a:hover {
-  color: #c05b24;
-  text-decoration: underline;
+.btn-warning:hover {
+  background-color: #d4682c;
+  border-color: #8e4219;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
-/*
-personalização do título do box :3, recomendo para nosso tema do Wall-e, 
-copiem as configurações amigos para nosso look mecânico
-*/
-.login-card::before {
-  content: "MANUTENÇÃO DE EQUIPAMENTOS";
-  display: block;
-  padding: 8px;
-  background-color: #45483f;
-  color: #d4bd3d;
-  text-align: center;
-  font-size: 0.7rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-  border-bottom: 2px solid #8f8030;
+.btn-warning:active {
+  transform: translateY(1px);
 }

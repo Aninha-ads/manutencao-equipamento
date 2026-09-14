@@ -1,0 +1,125 @@
+.page-bg {
+  min-height: 100vh;
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 20px 0;
+}
+
+h2 {
+  color: #33281d;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.text-muted {
+  color: #66675c !important;
+}
+
+.card {
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+  background-color: #d8d5c5;
+  box-shadow: 0 8px 20px rgba(78, 31, 0, 0.25), inset 0 0 0 2px #77786c;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #45483f;
+  color: #d4bd3d;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-bottom: 2px solid #8f8030;
+  padding: 16px 20px;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.card-footer {
+  background-color: #d8d5c5;
+  border-top: 2px solid #77786c;
+  padding: 16px 24px;
+}
+
+.form-label {
+  color: #694002;
+  font-weight: 700;
+  text-transform: uppercase; 
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.form-control, .form-select {
+  padding: 12px;
+  border: 2px solid #77786c;
+  border-radius: 6px;
+  background-color: #efeee6;
+  color: #30332d;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #c5b33d;
+  box-shadow: 0 0 0 0.2rem rgba(197, 179, 61, 0.25);
+  background-color: #ffffff;
+  outline: none;
+}
+
+.form-control[readonly] {
+  background-color: #e4e3d9;
+  color: #5c5d55;
+  border-color: #929287;
+  cursor: not-allowed;
+}
+
+/* Botão Cancelar (Cinza Metálico) */
+.btn-secondary {
+  background-color: #77786c;
+  border: 2px solid #5c5d55;
+  color: #ffffff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #5c5d55;
+  border-color: #45483f;
+  color: #d4bd3d;
+  transform: translateY(-1px);
+}
+
+/* Botão Redirecionar (Laranja Ferrugem de Alerta) */
+.btn-warning {
+  background-color: #c05b24;
+  border: 2px solid #8e4219;
+  color: #ffffff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-warning:hover {
+  background-color: #d4682c;
+  border-color: #8e4219;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn-warning:active {
+  transform: translateY(1px);
+}

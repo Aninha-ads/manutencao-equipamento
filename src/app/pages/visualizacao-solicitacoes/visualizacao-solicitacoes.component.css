@@ -1,14 +1,143 @@
-.badge-cinza { background-color: #6c757d; color: white; }
-.badge-marrom { background-color: #8B4513; color: white; }
-.badge-vermelho { background-color: #dc3545; color: white; }
-.badge-amarelo { background-color: #ffc107; color: black; }
-.badge-roxo { background-color: #6f42c1; color: white; }
-.badge-azul { background-color: #0d6efd; color: white; }
-.badge-alaranjado { background-color: #fd7e14; color: black; }
-.badge-verde { background-color: #198754; color: white; }
+.page-bg {
+  min-height: 100vh;
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 20px 0;
+}
+
+h3 {
+  color: #33281d;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.card {
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+  background-color: #d8d5c5;
+  box-shadow: 0 8px 20px rgba(78, 31, 0, 0.25), inset 0 0 0 2px #77786c;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+label, span {
+  color: #694002;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.form-control, .form-select {
+  padding: 10px;
+  border: 2px solid #77786c;
+  border-radius: 6px;
+  background-color: #efeee6;
+  color: #30332d;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #c5b33d;
+  box-shadow: 0 0 0 0.2rem rgba(197, 179, 61, 0.25);
+  background-color: #ffffff;
+  outline: none;
+}
+
+.btn-primary {
+  background-color: #c4ad32;
+  border: 2px solid #8d7b20;
+  color: #854700;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #d5bd3b;
+  border-color: #75651a;
+  color: #1f211c;
+  transform: translateY(-1px);
+}
+
+.table {
+  margin-bottom: 0;
+  --bs-table-bg: #d8d5c5;
+  --bs-table-color: #33281d;
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-dark th {
+  background-color: #45483f !important;
+  color: #d4bd3d !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  border-bottom: 2px solid #8f8030 !important;
+  padding: 16px;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: rgba(119, 120, 108, 0.15); 
+  color: #33281d;
+}
+
+.table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: rgba(196, 173, 50, 0.2); 
+}
 
 .badge {
   padding: 8px 12px;
-  font-size: 0.85em;
-  border-radius: 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.btn-outline-primary {
+  color: #854700;
+  border-color: #8d7b20;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: #c4ad32;
+  color: #1f211c;
+  border-color: #75651a;
+}
+
+.btn-outline-success {
+  color: #45483f;
+  border-color: #77786c;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.btn-outline-success:hover {
+  background-color: #77786c;
+  color: #d4bd3d;
+  border-color: #45483f;
+}
+
+.btn-outline-dark {
+  color: #33281d;
+  border-color: #33281d;
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.btn-outline-dark:hover {
+  background-color: #33281d;
+  color: #d4bd3d;
 }
