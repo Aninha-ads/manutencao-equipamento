@@ -9,9 +9,9 @@ import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/
 import { VisualizarServicoComponent } from './pages/visualizar-servico/visualizar-servico.component';
 import { EfetuarManutencaoComponent } from './pages/manutencoes/efetuar-manutencao/efetuar-manutencao.component';
 import { RedirecionarManutencaoComponent } from './pages/manutencoes/redirecionar-manutencao/redirecionar-manutencao.component';
-import { OrcamentoSolicitacaoComponent } from './pages/orcamento-solicitacao/orcamento-solicitacao.component';
-import { ManterFuncionariosComponent } from './pages/manter-funcionarios/manter-funcionarios.component';
-import { CategoriaComponent } from './pages/categoria/categoria.component';
+import { OrcamentoSolicitacaoComponent } from './features/solicitacao-orcamento/orcamento-solicitacao.component';
+import { ManterFuncionariosComponent } from './features/manter-funcionarios/manter-funcionarios.component';
+import { CategoriaComponent } from './features/cadastro-categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
 import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
 export const routes: Routes = [

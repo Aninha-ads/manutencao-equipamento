@@ -77,7 +77,9 @@
         </div>
         <div class="col-md-1">
           <label for="uf" class="form-label">UF</label>
-          <input type="text" class="form-control" id="uf" name="uf" [(ngModel)]="cliente.uf" maxlegth="2" required>
+              <input type="text" id="uf" name="uf" class="form-control campo-uf" [(ngModel)]="cliente.uf"
+                (ngModelChange)="atualizarUf($event)" maxlength="2" pattern="[A-Za-z]{2}"
+                style="text-transform: uppercase" required>
         </div>
       </div>
       <br>

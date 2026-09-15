@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 
 export interface ClienteRegistro {
@@ -25,6 +26,7 @@ export interface ClienteRegistro {
 })
 export class CadastroClienteComponent {
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   cliente: ClienteRegistro = {
     nome: '', email: '', cpf: '', telefone: '',
@@ -41,12 +43,19 @@ export class CadastroClienteComponent {
           this.cliente.logradouro = dados.logradouro;
           this.cliente.bairro = dados.bairro;
           this.cliente.cidade = dados.localidade;
-          this.cliente.uf = dados.uf;
+          this.atualizarUf(dados.uf);
         } else {
           alert('CEP não encontrado');
         }
       });
     }
+  }
+
+  atualizarUf(valor: string): void {
+    this.cliente.uf = valor
+      .replace(/[^a-zA-Z]/g, '')
+      .slice(0, 2)
+      .toUpperCase();
   }
 
   gerarSenhaAleatoria(): string {
@@ -63,5 +72,6 @@ export class CadastroClienteComponent {
 
     console.log(payloadParaSalvar);
     alert('Sucesso no cadastro.');
+    this.router.navigate(['/painel-cliente']);
   }
 }

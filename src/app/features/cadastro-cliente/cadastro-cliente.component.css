@@ -94,9 +94,13 @@
   margin-bottom: 18px;
 
   color: #553900; /*não sei se ficou boa essa cor*/
-
+  
   font-size: 20px;
   font-weight: bold;
+}
+#uf {
+  width: 50px;
+  text-transform: uppercase;
 }
 
 /*botão*/
