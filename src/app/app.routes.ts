@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PainelClienteComponent } from './pages/painel-cliente/painel-cliente.component';
 import { CadastroClienteComponent } from './features/cadastro-cliente/cadastro-cliente.component';
+import { HomeComponent } from './home/home.component'; 
 import { LoginComponent } from './pages/login/login';
 import { PainelFuncionarioComponent } from './pages/painel-funcionario/painel-funcionario.component';
 import { EfetuarOrcamentoComponent } from './pages/orcamentos/efetuar-orcamento/efetuar-orcamento.component';
@@ -75,6 +76,11 @@ export const routes: Routes = [
   {
     path: 'categoria',
     component: CategoriaComponent
+  },
+
+  {
+    path: 'home',
+    component: HomeComponent
   },
 
   {
