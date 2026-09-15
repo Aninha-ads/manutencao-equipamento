@@ -1,18 +1,34 @@
 
 <div class="page-bg">
-
   <div class="container mt-4">
-   
-  </div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h3 class="mb-1">Painel do Cliente</h3>
+        <p class="text-muted mb-0">Acompanhe o histórico e o estado das suas solicitações.</p>
+      </div>
 
+      <a class="btn btn-primary" routerLink="/orcamento/novo">
+        Nova solicitação
+      </a>
+    </div>
 
-
-
-  <div class="container mt-4">
-    <div class="row mb-3">
-      <div class="col-md-12">
-        <h3>Painel do Cliente</h3>
-        <p class="text-muted">Acompanhe o histórico e o estado das suas solicitações.</p>
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row align-items-end g-3">
+          <div class="col-12 col-md-5">
+            <label for="filtroEstado" class="form-label fw-bold">Filtrar por estado</label>
+            <select
+              id="filtroEstado"
+              class="form-select"
+              [(ngModel)]="filtroEstado">
+              @for (estado of estados; track estado) {
+                <option [value]="estado">
+                  {{ estado === 'TODOS' ? 'Todos os estados' : estado }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -24,22 +40,31 @@
               <tr>
                 <th style="width: 10%">ID</th>
                 <th style="width: 25%">Data e Hora</th>
-                <th style="width: 45%">Descrição</th>
-                <th style="width: 20%" class="text-center">Estado</th>
+                <th style="width: 20%">Equipamento</th>
+                <th style="width: 30%">Descrição</th>
+                <th style="width: 15%" class="text-center">Estado</th>
+                <th style="width: 15%" class="text-center">Ação</th>
               </tr>
             </thead>
             <tbody>
-              @for (solicitacao of solicitacoes; track solicitacao.id) {
+              @for (solicitacao of solicitacoesFiltradas; track solicitacao.id) {
                 <tr>
                   <td class="fw-bold">{{ solicitacao.id }}</td>
-                  <!-- Corrigido de py-BR para pt-BR -->
                   <td>{{ solicitacao.dataHora | date:'dd/MM/yyyy HH:mm':'':'pt-BR' }}</td>
+                  <td>{{ solicitacao.equipamento }}</td>
                   <td>{{ solicitacao.descricao }}</td>
                   <td class="text-center fw-bold">{{ solicitacao.estado }}</td>
+                  <td class="text-center">
+                    <a
+                      class="btn btn-sm btn-outline-primary"
+                      routerLink="/visualizar-servico">
+                      Detalhes
+                    </a>
+                  </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="4" class="text-center py-4 text-muted">
+                  <td colspan="6" class="text-center py-4 text-muted">
                     Nenhuma solicitação encontrada no momento.
                   </td>
                 </tr>

@@ -41,15 +41,25 @@
         <div class="row mb-4">
           <div class="col-md-6">
             <label class="form-label">Funcionário Responsável Atual</label>
-            <input type="text" class="form-control" value="Maria" readonly>
+            <input type="text" class="form-control" [value]="funcionarioAtual.nome" readonly>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <label for="funcionarioDestino" class="form-label">Redirecionar para</label>
-            <select id="funcionarioDestino" name="funcionarioDestino" class="form-select">
+            <select
+              id="funcionarioDestino"
+              name="funcionarioDestino"
+              class="form-select"
+              [(ngModel)]="funcionarioDestinoId">
+
               <option value="">Selecione um funcionário</option>
-              <option value="2">Mário</option>
+
+              @for (funcionario of funcionariosDisponiveis; track funcionario.id) {
+                <option [value]="funcionario.id">
+                  {{ funcionario.nome }}
+                </option>
+              }
             </select>
             <small class="form-text text-muted">Selecione outro funcionário para assumir a manutenção.</small>
           </div>

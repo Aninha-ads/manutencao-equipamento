@@ -48,6 +48,10 @@ export const routes: Routes = [
     component: VisualizacaoSolicitacoesComponent
   },
   {
+    path: 'orcamento/novo',
+    component: OrcamentoSolicitacaoComponent
+  },
+  {
     path: 'orcamento/:id',
     component: OrcamentoSolicitacaoComponent
   },

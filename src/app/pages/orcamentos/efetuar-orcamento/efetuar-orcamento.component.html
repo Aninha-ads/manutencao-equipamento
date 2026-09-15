@@ -1,4 +1,5 @@
-<div class="container mt-4 mb-5">
+<div class="orcamento-page">
+    <div class="container mt-4 mb-5">
 
     <div class="mb-4">
         <h2>Efetuar Orçamento</h2>
@@ -22,7 +23,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="20/08/2026 14:30"
+                        [value]="solicitacao.dataHora"
                         readonly>
                 </div>
 
@@ -31,7 +32,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="Notebook"
+                        [value]="solicitacao.categoria"
                         readonly>
                 </div>
 
@@ -40,7 +41,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="ABERTA"
+                        [value]="solicitacao.estado"
                         readonly>
                 </div>
 
@@ -53,7 +54,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="Notebook Dell Inspiron 15"
+                        [value]="solicitacao.equipamento"
                         readonly>
                 </div>
 
@@ -67,7 +68,8 @@
                     <textarea
                         class="form-control"
                         rows="3"
-                        readonly>Notebook não liga e não apresenta nenhum sinal ao pressionar o botão de energia.</textarea>
+                        [value]="solicitacao.defeito"
+                        readonly></textarea>
                 </div>
 
             </div>
@@ -92,7 +94,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="João da Silva"
+                        [value]="cliente.nome"
                         readonly>
                 </div>
 
@@ -101,7 +103,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="123.456.789-00"
+                        [value]="cliente.cpf"
                         readonly>
                 </div>
 
@@ -114,7 +116,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="joao@email.com"
+                        [value]="cliente.email"
                         readonly>
                 </div>
 
@@ -123,7 +125,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="(41) 99999-9999"
+                        [value]="cliente.telefone"
                         readonly>
                 </div>
 
@@ -136,7 +138,7 @@
                     <input
                         type="text"
                         class="form-control"
-                        value="Rua das Flores, 100 - Centro - Curitiba/PR - CEP 80000-000"
+                        [value]="cliente.endereco"
                         readonly>
                 </div>
 
@@ -169,7 +171,11 @@
                             id="valorOrcamento"
                             type="text"
                             class="form-control"
-                            placeholder="0,00">
+                            name="valorOrcamento"
+                            [(ngModel)]="valorOrcamento"
+                            placeholder="0,00"
+                            inputmode="decimal"
+                            required>
                     </div>
 
                     <small class="form-text text-muted">
@@ -183,20 +189,22 @@
 
         <div class="card-footer d-flex justify-content-end gap-2">
 
-            <button
-                type="button"
-                class="btn btn-secondary">
+            <a
+                class="btn btn-secondary"
+                routerLink="/painel-cliente">
                 Cancelar
-            </button>
+            </a>
 
             <button
                 type="button"
-                class="btn btn-primary">
+                class="btn btn-primary"
+                (click)="registrarOrcamento()">
                 Registrar Orçamento
             </button>
 
         </div>
 
+        </div>
     </div>
 
 </div>

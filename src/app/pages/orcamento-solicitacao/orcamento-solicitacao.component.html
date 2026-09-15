@@ -1,27 +1,67 @@
-<div class="container mt-5">
-  <h3>Efetuar Orçamento (Solicitação #{{ solicitacaoId }})</h3>
+<div class="orcamento-solicitacao-page">
+  <div class="container mt-5 mb-5">
+    <h3>Solicitar orçamento</h3>
+    <p class="text-muted">Informe o equipamento e os detalhes do serviço que você precisa.</p>
 
-  <form #formOrcamento="ngForm" (ngSubmit)="salvarOrcamento()">
-    <div class="row mt-4">
-      <div class="col-md-4">
-        <label class="form-label fw-bold" for="valor">Valor do Orçamento (R$)</label>
-        <input
-          id="valor"
-          type="number"
-          class="form-control"
-          name="valor"
-          [(ngModel)]="valorOrcamento"
-          required
-          min="1"
-        >
+  <form #formSolicitacao="ngForm" (ngSubmit)="salvarSolicitacao()">
+    <div class="card shadow-sm mt-4">
+      <div class="card-header">
+        <strong>Nova solicitação #{{ solicitacaoId }}</strong>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="categoria">Categoria</label>
+            <select
+              id="categoria"
+              name="categoria"
+              class="form-select"
+              [(ngModel)]="categoria"
+              required>
+              <option value="">Selecione uma categoria</option>
+              @for (item of categorias; track item) {
+                <option [value]="item">{{ item }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold" for="equipamento">Equipamento</label>
+            <input
+              id="equipamento"
+              type="text"
+              class="form-control"
+              name="equipamento"
+              [(ngModel)]="equipamento"
+              placeholder="Ex.: Notebook Dell Inspiron"
+              required>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold" for="descricao">Detalhes da solicitação</label>
+            <textarea
+              id="descricao"
+              class="form-control"
+              name="descricao"
+              rows="5"
+              [(ngModel)]="descricao"
+              placeholder="Descreva o problema ou o serviço necessário"
+              required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-end gap-2">
+        <a class="btn btn-secondary" routerLink="/painel-cliente">Cancelar</a>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!formSolicitacao.form.valid">
+          Registrar solicitação
+        </button>
       </div>
     </div>
-
-    <div class="mt-4">
-      <button type="submit" class="btn btn-primary" [disabled]="!formOrcamento.form.valid">
-        Aprovar Orçamento
-      </button>
-      <a class="btn btn-secondary ms-2" routerLink="/painel-funcionario">Cancelar</a>
-    </div>
   </form>
+  </div>
 </div>

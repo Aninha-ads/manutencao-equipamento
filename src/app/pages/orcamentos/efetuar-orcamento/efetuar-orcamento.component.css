@@ -1,0 +1,41 @@
+.orcamento-page {
+	min-height: 100vh;
+	padding: 1px 0;
+	background: #f1ead7;
+}
+
+.orcamento-page .card {
+	border: 1px solid #d1c4a7;
+	border-radius: 8px;
+	box-shadow: 0 5px 16px rgba(61, 47, 25, 0.12);
+}
+
+.orcamento-page .card-header {
+	color: #4a351b;
+	background: #e5d7b8;
+	border-bottom-color: #d1c4a7;
+}
+
+.orcamento-page .card-footer {
+	background: #faf7ef;
+	border-top-color: #d1c4a7;
+}
+
+.orcamento-page .form-control {
+	border-color: #c9bb9d;
+}
+
+.orcamento-page .form-control:focus {
+	border-color: #9b762e;
+	box-shadow: 0 0 0 0.2rem rgba(181, 139, 50, 0.2);
+}
+
+.orcamento-page .btn-primary {
+	background-color: #85651f;
+	border-color: #705519;
+}
+
+.orcamento-page .btn-primary:hover {
+	background-color: #b58b32;
+	border-color: #85651f;
+}

@@ -19,7 +19,13 @@ export class CategoriaComponent {
     nome: ''
   };
 
-  listaCategorias: Categoria[] = [];
+    listaCategorias: Categoria[] = [
+    { id: 1, nome: 'Notebook' },
+    { id: 2, nome: 'Impressora' },
+    { id: 3, nome: 'Desktop' },
+    { id: 4, nome: 'Monitor' },
+    { id: 5, nome: 'Tablet' }
+  ];
   salvarCategoria(): void {
     const nome = this.categoriaAtual.nome.trim();
 
