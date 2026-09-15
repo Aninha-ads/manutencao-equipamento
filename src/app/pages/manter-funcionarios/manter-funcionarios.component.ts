@@ -17,6 +17,8 @@ interface Funcionario {
 })
 //nn sei fazer todo esse semi-back direito
 export class ManterFuncionariosComponent {
+  private readonly chaveFuncionarios = 'funcionarios';
+
   // funcionário atualmente logado
   funcionarioLogadoId = 1;
   // controle do formulário
@@ -44,6 +46,16 @@ export class ManterFuncionariosComponent {
     }
   ];
 
+  constructor() {
+    const funcionariosSalvos = localStorage.getItem(this.chaveFuncionarios);
+
+    if (funcionariosSalvos) {
+      this.funcionarios = JSON.parse(funcionariosSalvos) as Funcionario[];
+    } else {
+      this.salvarFuncionarios();
+    }
+  }
+
   // Valida os dados e adiciona um novo funcionário à lista.
   adicionarFuncionario(): void {
     // Remove espaços extras e padroniza o e-mail para evitar duplicidades.
@@ -70,6 +82,7 @@ export class ManterFuncionariosComponent {
       nascimento: this.nascimento};
 
     this.funcionarios.push(novoFuncionario);
+    this.salvarFuncionarios();
     alert('Funcionário cadastrado com sucesso!');
     this.limparFormulario();
   }
@@ -121,6 +134,7 @@ export class ManterFuncionariosComponent {
     funcionario.email = email;
     funcionario.nome = nome;
     funcionario.nascimento = this.nascimento;
+    this.salvarFuncionarios();
     alert('Funcionário atualizado com sucesso!');
     this.limparFormulario();}
 
@@ -149,6 +163,7 @@ export class ManterFuncionariosComponent {
     this.funcionarios = this.funcionarios.filter(
       f => f.id !== funcionario.id
     );
+    this.salvarFuncionarios();
     alert('Funcionário removido com sucesso!');
   }
 
@@ -174,5 +189,9 @@ export class ManterFuncionariosComponent {
     return Math.max(
       ...this.funcionarios.map(f => f.id)
     ) + 1;
+  }
+
+  private salvarFuncionarios(): void {
+    localStorage.setItem(this.chaveFuncionarios, JSON.stringify(this.funcionarios));
   }
 }

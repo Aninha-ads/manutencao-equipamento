@@ -1,28 +1,70 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
+interface SolicitacaoManutencao {
+  id: number;
+  dataHora: string;
+  categoria: string;
+  equipamento: string;
+  descricao: string;
+  estado: string;
+}
 
 @Component({
   selector: 'app-orcamento-solicitacao',
   standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './orcamento-solicitacao.component.html',
+  styleUrl: './orcamento-solicitacao.component.css',
 })
 export class OrcamentoSolicitacaoComponent implements OnInit {
-  solicitacaoId = 0;
-  valorOrcamento: number | null = null;
+  private readonly chaveSolicitacoes = 'solicitacoes';
 
-  private route = inject(ActivatedRoute);
+  solicitacaoId = 0;
+  categoria = '';
+  equipamento = '';
+  descricao = '';
+  categorias = ['Notebook', 'Impressora', 'Desktop', 'Monitor', 'Outro'];
+
   private router = inject(Router);
 
   ngOnInit(): void {
-    this.solicitacaoId = +this.route.snapshot.params['id'];
+    const solicitacoes = this.carregarSolicitacoes();
+    this.solicitacaoId = solicitacoes.length === 0
+      ? 1
+      : Math.max(...solicitacoes.map(solicitacao => solicitacao.id)) + 1;
   }
 
-  salvarOrcamento(): void {
-    console.log(
-      `Orçamento da solicitação ${this.solicitacaoId} salvo com valor R$ ${this.valorOrcamento}`,
-    );
-    this.router.navigate(['/painel-funcionario']);
+  salvarSolicitacao(): void {
+    const equipamentoInformado = this.equipamento.trim();
+    const descricaoInformada = this.descricao.trim();
+
+    if (!this.categoria || !equipamentoInformado || !descricaoInformada) {
+      alert('Preencha a categoria, o equipamento e os detalhes da solicitação.');
+      return;
+    }
+
+    const solicitacoes = this.carregarSolicitacoes();
+    const novaSolicitacao: SolicitacaoManutencao = {
+      id: this.solicitacaoId,
+      dataHora: new Date().toISOString(),
+      categoria: this.categoria,
+      equipamento: equipamentoInformado,
+      descricao: descricaoInformada,
+      estado: 'Pendente'
+    };
+
+    solicitacoes.push(novaSolicitacao);
+    localStorage.setItem(this.chaveSolicitacoes, JSON.stringify(solicitacoes));
+    alert('Sua solicitação de orçamento foi enviada com sucesso!');
+    this.router.navigate(['/painel-cliente']);
+  }
+
+  private carregarSolicitacoes(): SolicitacaoManutencao[] {
+    const solicitacoesSalvas = localStorage.getItem(this.chaveSolicitacoes);
+    return solicitacoesSalvas
+      ? JSON.parse(solicitacoesSalvas) as SolicitacaoManutencao[]
+      : [];
   }
 }

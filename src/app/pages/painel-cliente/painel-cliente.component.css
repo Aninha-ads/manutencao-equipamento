@@ -1,25 +1,30 @@
 .page-bg {
-  min-height: 100vh; /* Garante que ocupe 100% da altura da tela */
-  background-image: url('/login-bg.png'); /* Busca a imagem na pasta public */
+  min-height: 100vh;
+  background-color: #d8c49a;
+  background-image: url('/login-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Trava o fundo durante a rolagem */
-  padding: 20px 0; /* Dá um respiro no topo e no fundo */
+  background-attachment: fixed;
+  padding: 30px 0;
 }
-h3 {
+
+.page-bg > .container {
+  max-width: 1140px;
+}
+
+.page-bg h3 {
   color: #33281d;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
-.text-muted {
+.page-bg .text-muted {
   color: #66675c !important;
 }
 
-/* Estrutura do Card (Moldura de Metal) */
-.card {
+.page-bg .card {
   border: 3px solid #b8a94a;
   border-radius: 14px;
   background-color: #d8d5c5;
@@ -27,15 +32,24 @@ h3 {
   overflow: hidden;
 }
 
-/* Customização da Tabela */
-.table {
+.page-bg .card-body {
+  padding: 20px;
+}
+
+.page-bg .table {
   margin-bottom: 0;
   --bs-table-bg: transparent;
   --bs-table-color: #33281d;
+  table-layout: fixed;
 }
 
-/* Cabeçalho da Tabela */
-.table-dark th {
+.page-bg .table th,
+.page-bg .table td {
+  overflow-wrap: anywhere;
+  vertical-align: middle;
+}
+
+.page-bg .table-dark th {
   background-color: #45483f !important;
   color: #d4bd3d !important;
   text-transform: uppercase;
@@ -45,13 +59,48 @@ h3 {
   padding: 16px;
 }
 
-/* Linhas zebradas (Cinza translúcido) */
-.table-striped > tbody > tr:nth-of-type(odd) > * {
+.page-bg .table-striped > tbody > tr:nth-of-type(odd) > * {
   --bs-table-accent-bg: rgba(119, 120, 108, 0.15); 
   color: #33281d;
 }
 
-/* Efeito ao passar o mouse (Amarelo translúcido) */
-.table-hover > tbody > tr:hover > * {
+.page-bg .table-hover > tbody > tr:hover > * {
   --bs-table-accent-bg: rgba(196, 173, 50, 0.2); 
+}
+
+.page-bg .form-select {
+  border: 2px solid #b8a94a;
+  color: #33281d;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.page-bg .btn-primary,
+.page-bg .btn-outline-primary {
+  border-color: #85651f;
+}
+
+.page-bg .btn-primary {
+  background-color: #85651f;
+}
+
+.page-bg .btn-primary:hover,
+.page-bg .btn-outline-primary:hover {
+  background-color: #b58b32;
+  border-color: #705519;
+}
+
+@media (max-width: 768px) {
+  .page-bg {
+    padding: 15px 0;
+  }
+
+  .page-bg .card-body {
+    padding: 15px;
+  }
+
+  .page-bg .table th,
+  .page-bg .table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
 }

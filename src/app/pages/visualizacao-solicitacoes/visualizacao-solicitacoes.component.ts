@@ -23,10 +23,27 @@ export class VisualizacaoSolicitacoesComponent {
   dataFim: string = '';
 
   solicitacoes: Solicitacao[] = [
-    { id: 1, dataHora: '15/08/2026 10:30', cliente: 'Ana', descricao: 'Tela quebrada', estado: 'ABERTA' },
-    { id: 2, dataHora: '16/08/2026 14:00', cliente: 'João', descricao: 'Bateria viciada', estado: 'ORÇADA' },
-    { id: 3, dataHora: '18/08/2026 09:15', cliente: 'Maria', descricao: 'Teclado falhando', estado: 'APROVADA' }
-  ];
+  { id: 1, dataHora: '15/08/2026 10:30', cliente: 'Ana', descricao: 'Tela quebrada', estado: 'ABERTA' },
+  { id: 2, dataHora: '16/08/2026 14:00', cliente: 'João', descricao: 'Bateria viciada', estado: 'ORÇADA' },
+  { id: 3, dataHora: '18/08/2026 09:15', cliente: 'Maria', descricao: 'Teclado falhando', estado: 'APROVADA' },
+  { id: 4, dataHora: '19/08/2026 11:20', cliente: 'Carlos', descricao: 'Notebook não liga', estado: 'REJEITADA' },
+  { id: 5, dataHora: '20/08/2026 15:45', cliente: 'Fernanda', descricao: 'Carregador não funciona', estado: 'REDIRECIONADA' },
+  { id: 6, dataHora: '21/08/2026 08:30', cliente: 'Pedro', descricao: 'Computador reiniciando sozinho', estado: 'ARRUMADA' },
+  { id: 7, dataHora: '22/08/2026 13:10', cliente: 'Juliana', descricao: 'Mouse não reconhecido', estado: 'PAGA' },
+  { id: 8, dataHora: '23/08/2026 16:25', cliente: 'Rafael', descricao: 'Sistema muito lento', estado: 'FINALIZADA' },
+  { id: 9, dataHora: '24/08/2026 10:05', cliente: 'Patrícia', descricao: 'Monitor sem imagem', estado: 'ABERTA' },
+  { id: 10, dataHora: '25/08/2026 09:40', cliente: 'Lucas', descricao: 'HD fazendo ruído', estado: 'ORÇADA' },
+  { id: 11, dataHora: '26/08/2026 14:35', cliente: 'Amanda', descricao: 'Wi-Fi não conecta', estado: 'APROVADA' },
+  { id: 12, dataHora: '27/08/2026 17:00', cliente: 'Bruno', descricao: 'Entrada USB danificada', estado: 'REJEITADA' },
+  { id: 13, dataHora: '28/08/2026 11:50', cliente: 'Camila', descricao: 'Webcam não funciona', estado: 'REDIRECIONADA' },
+  { id: 14, dataHora: '29/08/2026 08:55', cliente: 'Marcos', descricao: 'Superaquecimento do notebook', estado: 'ARRUMADA' },
+  { id: 15, dataHora: '30/08/2026 15:20', cliente: 'Beatriz', descricao: 'Teclas não respondem', estado: 'PAGA' },
+  { id: 16, dataHora: '31/08/2026 12:15', cliente: 'Gustavo', descricao: 'Computador não reconhece HD', estado: 'FINALIZADA' },
+  { id: 17, dataHora: '01/09/2026 09:25', cliente: 'Larissa', descricao: 'Tela piscando', estado: 'ABERTA' },
+  { id: 18, dataHora: '02/09/2026 14:50', cliente: 'Diego', descricao: 'Ventoinha com ruído excessivo', estado: 'ORÇADA' },
+  { id: 19, dataHora: '03/09/2026 10:10', cliente: 'Renata', descricao: 'Bluetooth não funciona', estado: 'APROVADA' },
+  { id: 20, dataHora: '04/09/2026 16:40', cliente: 'Felipe', descricao: 'Notebook desligando sozinho', estado: 'FINALIZADA' }
+];
 
   obterClasseEstado(estado: string): string {
     const mapaCores: { [key: string]: string } = {
