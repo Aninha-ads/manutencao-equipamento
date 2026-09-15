@@ -1,0 +1,224 @@
+
+.home-page {
+  display: block;
+  min-height: 100vh;
+  background-color: #e6d19d;
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #2d2925;
+  font-family: Arial, sans-serif;
+}
+
+
+.navbar {
+  background-color: #41453b !important; 
+  height: 70px;
+  padding: 0 35px;
+  border-bottom: 3px solid #c9ad2d;
+}
+
+/*Ícone de Engrenagem*/
+.navbar > i {
+  font-size: 30px;
+  color: #d6b52e;
+  margin-right: 15px;
+}
+
+/*NOME do sistema*/
+.navbar-brand {
+  color: #d6b52e;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/*Link da home*/
+.navbar .nav-link {
+  color: white !important;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 30px;
+}
+
+.navbar .nav-link:hover {
+  color: #d6b52e !important;
+}
+
+.navbar .nav-link i {
+  margin-right: 6px;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+  border-bottom: 2px solid #d6b52e;
+  padding-bottom: 4px;
+}
+
+
+
+
+/*CONTAINER*/
+.container {
+  max-width: 1000px;
+  margin: 55px auto;
+  text-align: center;
+}
+
+
+
+/*------CARD PRINCIPAL------*/
+
+.container > .card:first-child {
+  background-color: #deded0;
+  border: 3px solid #b5a42b;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: 35px !important;
+}
+
+/*Conteúdo do primeiro card*/
+.container > .card:first-child .card-body {
+  padding: 35px 50px;
+}
+
+/*Parte do bem-vindo*/
+.container > .card:first-child p:first-child {
+  color: #666b65;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
+
+/*manutencao de equipamentos*/
+.container > .card:first-child .card-title {
+  color: #2d2925;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom:20px;
+}
+
+/*texto principal*/
+.container > .card:first-child .card-text {
+  color: #666666;
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/*----CARDS DE LOGIN----*/
+.container > .card:not(:first-child) {
+  background-color: #deded0;
+  border: 3px solid #b5a42b;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  width: 48%; /*muda o tamanho do bloquinho*/
+  display: inline-block;
+
+
+  min-height: 300px;
+}
+
+/*Espaço entre os dois CARDS*/
+.container > .card:nth-child(2) {
+  margin-right: 2%;
+}
+
+/*Conteúdo dos CARDS*/
+.container > .card:not(:first-child) .card-body {
+  padding: 35px 30px;
+}
+
+/*Ícones*/
+.container > .card:not(:first-child) .bi {
+  display: block; 
+  font-size: 55px;
+  color: #42463c;
+  margin-bottom: 20px;
+
+}
+
+
+/*Títulos dos CARDS*/
+.container > .card:not(:first-child) .card-title {
+  color: #302a25;
+  font-size: 25px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom:18px;
+}
+
+
+/*TEXTOS*/
+.container > .card:not(:first-child) .card-text {
+  color: #666666;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 330px;
+  margin: 0 auto;
+}
+
+/*BOTÃO ACESSAR*/
+.btn-acessar {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 12px 35px;
+
+  background-color: #c9ae2d;
+  color: #3f3b2c;
+
+  border: 2px solid #8f7b18;
+  border-radius: 8px;
+
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1px;
+
+  /* destaque ao redor */
+  box-shadow: 0 0 0 5px rgba(201, 174, 45, 0.25), 0 4px 8px rgba(0, 0, 0, 0.25);
+
+  transition: 0.2s;
+}
+
+.btn-acessar:hover {
+  background-color: #b89d24;
+  color: rgb(0, 0, 0);
+
+  box-shadow: 0 0 0 7px rgba(201, 174, 45, 0.35), 0 5px 10px rgba(0, 0, 0, 0.3);
+
+  transform: translateY(-2px);
+}
+
+
+/*------- RESPONSIVIDADE -----------*/
+@media (max-width: 768px) {
+  .container {
+    margin: 30px 20px;
+  }
+
+  .container > .card:first-child .card-title {
+    font-size: 28px;
+  }
+
+  .container > .card:not(:first-child) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .navbar {
+    padding: 0 15px;
+  }
+
+  .navbar-brand {
+    font-size: 16px;
+  }
+}
+.bi {
+  font-size: 24px;
+  color: #c9ae2d;
+}

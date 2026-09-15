@@ -1,8 +1,13 @@
 <!--<h1>Hello World !!!</h1>-->
+@if (router.url !== '/login' && router.url !== '/login-funcionario' && router.url !== '/home') {
+          <app-navbar></app-navbar>
+}
+<!--
 @if (router.url !== '/login') {
     @if (router.url !== '/login-funcionario') {
           <app-navbar></app-navbar>
 }}
+-->
 <main>
     <router-outlet></router-outlet>
 </main>
