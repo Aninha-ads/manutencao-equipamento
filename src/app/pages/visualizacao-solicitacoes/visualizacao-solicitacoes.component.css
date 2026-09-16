@@ -141,3 +141,12 @@ label, span {
   background-color: #33281d;
   color: #d4bd3d;
 }
+.badge-cinza      { background-color: #6c757d; color: #fff; }
+.badge-marrom     { background-color: #795548; color: #fff; }
+.badge-vermelho   { background-color: #dc3545; color: #fff; }
+.badge-amarelo    { background-color: #ffc107; color: #212529; }
+.badge-roxo       { background-color: #6f42c1; color: #fff; }
+.badge-azul       { background-color: #0d6efd; color: #fff; }
+.badge-alaranjado { background-color: #fd7e14; color: #212529; }
+.badge-verde      { background-color: #198754; color: #fff; }
+.badge-secondary { background-color: #6c757d; color: #fff; }

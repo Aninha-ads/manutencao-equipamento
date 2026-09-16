@@ -21,14 +21,13 @@ export class LoginFuncionarioComponent {
 
   fazerLoginFuncionario(): void {
 
-    console.log('E-mail:', this.email);
-    console.log('Senha:', this.senha);
 
     if (this.email === '' || this.senha === '') {
       alert('Preencha todos os campos!');
       return;
     }
 
+    sessionStorage.setItem('funcionarioLogadoEmail', this.email.trim().toLowerCase());
     alert('Login realizado!');
 
     this.router.navigate(['/painel-funcionario']);
