@@ -14,6 +14,140 @@ import { ManterFuncionariosComponent } from './features/manter-funcionarios/mant
 import { CategoriaComponent } from './features/cadastro-categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
 import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
+import { ClienteLayoutComponent } from './pages/cliente-layout/cliente-layout.component';
+import { FuncionarioLayoutComponent } from './pages/funcionario-layout/funcionario-layout.component';
+
+//tive que fazer uma nota rota por causa do navbar que eu criei (a rota antiga está no final da página, se estiver tudo certinho pode apagar ela)
+export const routes: Routes = [
+
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home'
+  },
+
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+
+  {
+    path: 'login-funcionario',
+    component: LoginFuncionarioComponent
+  },
+
+  {
+    path: 'cadastro',
+    component: CadastroClienteComponent
+  },
+
+  // CLIENTE
+
+  {
+  path: '',
+  component: ClienteLayoutComponent,
+  children: [
+    {
+      path: 'painel-cliente',
+      component: PainelClienteComponent
+    },
+    {
+      path: 'visualizar-servico',
+      component: VisualizarServicoComponent
+    },
+    {
+      path: 'orcamento/novo',
+      component: OrcamentoSolicitacaoComponent
+    }
+  ]
+},
+
+  // FUNCIONÁRIO
+
+{
+  path: 'painel-funcionario',
+  component: FuncionarioLayoutComponent,
+  children: [
+    {
+      path: '',
+      component: PainelFuncionarioComponent
+    }
+  ]
+},
+
+{
+  path: 'manutencoes/efetuar',
+  component: FuncionarioLayoutComponent,
+  children: [
+    {
+      path: '',
+      component: EfetuarManutencaoComponent
+    }
+  ]
+},
+
+{
+  path: 'orcamentos/efetuar',
+  component: FuncionarioLayoutComponent,
+  children: [
+    {
+      path: '',
+      component: EfetuarOrcamentoComponent
+    }
+  ]
+},
+
+{
+  path: 'visualizacao-solicitacoes',
+  component: FuncionarioLayoutComponent,
+  children: [
+    {
+      path: '',
+      component: VisualizacaoSolicitacoesComponent
+    }
+  ]
+},
+
+  // OUTRAS PÁGINAS
+
+  {
+    path: 'orcamento/:id',
+    component: OrcamentoSolicitacaoComponent
+  },
+
+  {
+    path: 'orcamentos',
+    component: MostrarOrcamentoComponent
+  },
+
+  {
+    path: 'manutencoes/redirecionar',
+    component: RedirecionarManutencaoComponent
+  },
+
+  {
+    path: 'manter-funcionarios',
+    component: ManterFuncionariosComponent
+  },
+
+  {
+    path: 'categoria',
+    component: CategoriaComponent
+  },
+
+  {
+    path: 'home',
+    component: HomeComponent
+  },
+
+  {
+    path: '**',
+    redirectTo: 'home'
+  }
+
+];
+
+/*
 export const routes: Routes = [
   {
     path: '',
@@ -92,3 +226,4 @@ export const routes: Routes = [
     redirectTo: 'home'
   }
 ];
+*/
