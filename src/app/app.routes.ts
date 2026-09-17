@@ -108,6 +108,17 @@ export const routes: Routes = [
   ]
 },
 
+{
+  path: 'categoria',
+  component: FuncionarioLayoutComponent,
+  children: [
+    {
+      path: '',
+      component: CategoriaComponent
+    }
+  ]
+},
+
   // OUTRAS PÁGINAS
 
   {
@@ -128,11 +139,6 @@ export const routes: Routes = [
   {
     path: 'manter-funcionarios',
     component: ManterFuncionariosComponent
-  },
-
-  {
-    path: 'categoria',
-    component: CategoriaComponent
   },
 
   {
