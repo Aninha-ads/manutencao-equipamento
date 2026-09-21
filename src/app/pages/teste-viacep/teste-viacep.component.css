@@ -1,0 +1,9 @@
+pre {
+  font-size: 0.85rem;
+  max-height: 300px;
+  overflow: auto;
+}
+
+dt {
+  font-weight: 600;
+}

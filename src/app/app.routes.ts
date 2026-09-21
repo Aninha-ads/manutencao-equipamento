@@ -146,90 +146,17 @@ export const routes: Routes = [
     component: HomeComponent
   },
 
+  // TESTE VIACEP
   {
-    path: '**',
-    redirectTo: 'home'
-  }
-
-];
-
-/*
-export const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'home'
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-   {
-    path: 'login-funcionario',
-    component: LoginFuncionarioComponent  },
-  {
-    path: 'cadastro',
-    component: CadastroClienteComponent
-  },
-  {
-    path: 'painel-cliente',
-    component: PainelClienteComponent
-  },
-  {
-    path: 'painel-funcionario',
-    component: PainelFuncionarioComponent
-  },
-  {
-    path: 'orcamentos/efetuar',
-    component: EfetuarOrcamentoComponent
-  },
-  {
-    path: 'visualizacao-solicitacoes',
-    component: VisualizacaoSolicitacoesComponent
-  },
-  {
-    path: 'orcamento/novo',
-    component: OrcamentoSolicitacaoComponent
-  },
-  {
-    path: 'orcamento/:id',
-    component: OrcamentoSolicitacaoComponent
-  },
-  {
-    path: 'orcamentos',
-    component: MostrarOrcamentoComponent
-  },
-    {
-    path: 'visualizar-servico',
-    component: VisualizarServicoComponent
-  },
-  {
-    path: 'manutencoes/efetuar',
-    component: EfetuarManutencaoComponent
-  },
-  {
-      path: 'manutencoes/redirecionar',
-    component: RedirecionarManutencaoComponent
-  },
-
-  {
-    path: 'manter-funcionarios',
-    component: ManterFuncionariosComponent
-  },
-
-  {
-    path: 'categoria',
-    component: CategoriaComponent
-  },
-
-  {
-    path: 'home',
-    component: HomeComponent
+    path: 'teste-viacep',
+    loadComponent: () =>
+      import('./pages/teste-viacep/teste-viacep.component')
+        .then(m => m.TesteViacepComponent)
   },
 
   {
     path: '**',
     redirectTo: 'home'
   }
+
 ];
-*/
