@@ -1,10 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Categoria {
-  id: number;
-  nome: string;
-}
+import { CategoriaService } from '../../services/categoria.service'; 
+import { Categoria } from '../../models/categoria.model'; 
 
 @Component({
   selector: 'app-categoria',
@@ -12,44 +9,33 @@ interface Categoria {
   templateUrl: './categoria.component.html',
   styleUrl: './categoria.component.css',
 })
+export class CategoriaComponent implements OnInit {
+  categoriaAtual: Categoria = { id: 0, nome: '' };
+  listaCategorias: Categoria[] = [];
 
-export class CategoriaComponent {
-  categoriaAtual = {
-    id: 0,
-    nome: ''
-  };
+  constructor(private categoriaService: CategoriaService) {}
 
-    listaCategorias: Categoria[] = [
-    { id: 1, nome: 'Notebook' },
-    { id: 2, nome: 'Impressora' },
-    { id: 3, nome: 'Desktop' },
-    { id: 4, nome: 'Monitor' },
-    { id: 5, nome: 'Tablet' }
-  ];
+  ngOnInit(): void {
+    this.carregarCategorias();
+  }
+
+  carregarCategorias(): void {
+    this.categoriaService.listarCategorias().subscribe({
+      next: (dados) => (this.listaCategorias = dados),
+      error: (erro) => console.error('Erro ao carregar categorias', erro),
+    });
+  }
+
   salvarCategoria(): void {
-    const nome = this.categoriaAtual.nome.trim();
+    if (!this.categoriaAtual.nome.trim()) return;
 
-    if (!nome) {
-      return;
-    }
-
-    if (this.categoriaAtual.id === 0) {
-      const novoId = this.listaCategorias.length === 0
-        ? 1
-        : Math.max(...this.listaCategorias.map(categoria => categoria.id)) + 1;
-
-      this.listaCategorias.push({ id: novoId, nome });
-    } else {
-      const categoria = this.listaCategorias.find(
-        item => item.id === this.categoriaAtual.id
-      );
-
-      if (categoria) {
-        categoria.nome = nome;
-      }
-    }
-
-    this.categoriaAtual = { id: 0, nome: '' };
+    this.categoriaService.salvarCategoria(this.categoriaAtual).subscribe({
+      next: () => {
+        this.carregarCategorias(); 
+        this.categoriaAtual = { id: 0, nome: '' }; 
+      },
+      error: (erro) => console.error('Erro ao salvar categoria', erro),
+    });
   }
 
   editarCategoria(categoria: Categoria): void {
@@ -57,12 +43,14 @@ export class CategoriaComponent {
   }
 
   excluirCategoria(id: number): void {
-    this.listaCategorias = this.listaCategorias.filter(
-      categoria => categoria.id !== id
-    );
-
-    if (this.categoriaAtual.id === id) {
-      this.categoriaAtual = { id: 0, nome: '' };
-    }
+    this.categoriaService.excluirCategoria(id).subscribe({
+      next: () => {
+        this.carregarCategorias();
+        if (this.categoriaAtual.id === id) {
+          this.categoriaAtual = { id: 0, nome: '' };
+        }
+      },
+      error: (erro) => console.error('Erro ao excluir categoria', erro),
+    });
   }
 }
