@@ -13,6 +13,8 @@ import { ManterFuncionariosComponent } from './features/manter-funcionarios/mant
 import { CategoriaComponent } from './features/cadastro-categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
 import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
+import { HomeComponent } from './home/home.component';
+import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
 export const routes: Routes = [
   {
     path: '',
@@ -25,7 +27,14 @@ export const routes: Routes = [
   },
    {
     path: 'login-funcionario',
-    component: LoginFuncionarioComponent  },
+    component: LoginFuncionarioComponent
+    },
+
+    {
+    path: 'home',
+    component: HomeComponent  },
+  
+
   {
     path: 'cadastro',
     component: CadastroClienteComponent
@@ -79,7 +88,12 @@ export const routes: Routes = [
   },
 
   {
+  path: 'relatorios',
+  component: RelatoriosComponent
+  },
+
+  {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: 'home'
   }
 ];

@@ -1,0 +1,194 @@
+<div class="page-bg">
+
+  <div class="container py-4">
+
+    <!--Muita coisa aqui tem que ser feia no back
+    a geração do pdf em si, mas fica aqui o componente que 
+    faltou na nossa avaliação parcial :p -->
+
+    <div class="mb-4">
+      <h2 class="titulo-pagina">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        Relatórios
+      </h2>
+
+      <p class="text-muted">
+        Consulte e gere relatórios financeiros da empresa.
+      </p>
+    </div>
+
+
+    <!-- RF019!!! -
+     Relatório por data, é o que entendi do requisito -->
+    <div class="card relatorio-card shadow-sm mb-4">
+
+      <div class="card-header">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-calendar3"></i>
+
+          <div>
+            <h5 class="mb-0">
+              Relatório de Receitas
+            </h5>
+
+            <small>
+              Receita da empresa agrupada por dia
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <p class="descricao-relatorio">
+          Você pode visualizar a receita obtida pela empresa em um determinado
+          período!
+          As datas inicial e final são opcionais,
+          os valores serão agrupados por dia.
+        </p>
+
+        <div class="row g-3">
+
+          <!-- data 1 -->
+          <div class="col-12 col-md-6">
+
+            <label
+              for="dataInicial"
+              class="form-label fw-bold">
+
+              Data inicial
+
+            </label>
+
+            <input
+              type="date"
+              id="dataInicial"
+              class="form-control"
+              [(ngModel)]="dataInicial">
+
+            <small class="text-muted">
+              <!-- mensagem bem corporate -->
+              Deixe vazio para considerar todo o período disponível.
+            </small>
+
+          </div>
+
+
+          <!-- data 2 -->
+          <div class="col-12 col-md-6">
+
+            <label
+              for="dataFinal"
+              class="form-label fw-bold">
+
+              Data final
+
+            </label>
+
+            <input
+              type="date"
+              id="dataFinal"
+              class="form-control"
+              [(ngModel)]="dataFinal">
+
+            <small class="text-muted">
+              Deixe vazio para considerar todo o período disponível.
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- botão gerar pdf -FAZER BACK -->
+
+        <div class="d-flex justify-content-end mt-4">
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="gerarRelatorioReceitas()">
+
+            <i class="bi bi-file-earmark-pdf"></i>
+
+            Gerar relatório em PDF
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- RF020 relatório por categoria de todo o perído
+     (histórico da empresa pelo que entendi) -->
+    <div class="card relatorio-card shadow-sm mb-4">
+
+      <div class="card-header">
+
+        <div class="d-flex align-items-center gap-2">
+
+          <i class="bi bi-tags"></i>
+
+          <div>
+
+            <h5 class="mb-0">
+             Relatório de Receitas por Categoria
+            </h5>
+
+            <small>
+              Receita agrupada por categoria de equipamento
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card-body">
+
+        <p class="descricao-relatorio">
+          Visualize a receita total obtida pela empresa desde o
+          início dos registros, agrupada por categoria de equipamento!
+        </p>
+
+        
+        <div class="alert alert-secondary d-flex align-items-center gap-2">
+
+          <i class="bi bi-info-circle"></i>
+
+          <span>
+            Este relatório considera todo o período disponível
+            e não necessita de filtro de datas.
+          </span>
+
+        </div>
+
+
+        <!-- botão 2 -->
+
+        <div class="d-flex justify-content-end mt-4">
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="gerarRelatorioCategorias()">
+
+            <i class="bi bi-file-earmark-pdf"></i>
+
+            Gerar relatório em PDF
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+</div>
