@@ -1,0 +1,16 @@
+{
+  "clientes": [
+    { "id": 1, "cpf": "52998224725", "nome": "João", "email": "joao@email.com", "telefone": "41999990001", "senha": "1234", "ativo": true,
+      "endereco": { "cep": "80060000", "logradouro": "Rua XV de Novembro", "numero": "100", "complemento": "", "bairro": "Centro", "cidade": "Curitiba", "uf": "PR" } },
+    { "id": 2, "cpf": "11144477735", "nome": "José", "email": "jose@email.com", "telefone": "41999990002", "senha": "1234", "ativo": true,
+      "endereco": { "cep": "80010000", "logradouro": "Rua Marechal Deodoro", "numero": "200", "complemento": "Ap 12", "bairro": "Centro", "cidade": "Curitiba", "uf": "PR" } },
+    { "id": 3, "cpf": "12345678909", "nome": "Joana", "email": "joana@email.com", "telefone": "41999990003", "senha": "1234", "ativo": true,
+      "endereco": { "cep": "80250000", "logradouro": "Av. Sete de Setembro", "numero": "300", "complemento": "", "bairro": "Batel", "cidade": "Curitiba", "uf": "PR" } },
+    { "id": 4, "cpf": "39053344705", "nome": "Joaquina", "email": "joaquina@email.com", "telefone": "41999990004", "senha": "1234", "ativo": true,
+      "endereco": { "cep": "80420000", "logradouro": "Rua Comendador Araújo", "numero": "400", "complemento": "", "bairro": "Batel", "cidade": "Curitiba", "uf": "PR" } }
+  ],
+  "funcionarios": [
+    { "id": 1, "email": "maria@empresa.com", "nome": "Maria", "dataNascimento": "1985-03-10", "senha": "1234", "ativo": true },
+    { "id": 2, "email": "mario@empresa.com", "nome": "Mário", "dataNascimento": "1990-07-22", "senha": "1234", "ativo": true }
+  ]
+}
