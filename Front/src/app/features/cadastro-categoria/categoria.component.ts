@@ -42,7 +42,8 @@ export class CategoriaComponent implements OnInit {
     this.categoriaAtual = { ...categoria };
   }
 
-  excluirCategoria(id: number): void {
+  excluirCategoria(id: number | undefined): void {
+    if (id === undefined) return;
     this.categoriaService.excluirCategoria(id).subscribe({
       next: () => {
         this.carregarCategorias();
