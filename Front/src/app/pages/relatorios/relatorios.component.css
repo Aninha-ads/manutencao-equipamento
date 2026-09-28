@@ -1,1 +1,304 @@
+.page-bg {
+  min-height: 100vh;
 
+  background-image: url('/manter-funcionarios-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding: 20px;
+ }
+
+
+/* camada para deixar o conteúdo mais legível */
+.page-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-color: rgba(48, 49, 43, 0.30);
+
+  pointer-events: none;
+}
+
+
+/* conteúdo fica acima da camada */
+.page-bg > .container {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* título */
+
+.titulo-pagina {
+  color: #33281d;
+  font-size: 2rem;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  margin-bottom: 5px;
+}
+
+.titulo-pagina i {
+  color: #8d7b20;
+  margin-right: 8px;
+}
+
+.titulo-pagina + p {
+  color: #66675c !important;
+}
+
+
+/*cards relatórios*/
+
+.relatorio-card {
+  border: 3px solid #b8a94a;
+  border-radius: 14px;
+
+  background-color: #d8d5c5;
+
+  box-shadow:
+    0 8px 20px rgba(78, 31, 0, 0.45),
+    inset 0 0 0 2px #77786c;
+
+  overflow: hidden;
+}
+
+
+/* Cabeçalho do card */
+
+.relatorio-card .card-header {
+  background-color: #45483f;
+  color: #d4bd3d;
+
+  padding: 16px 20px;
+
+  border-bottom: 2px solid #8f8030;
+}
+
+
+/* Ícone do cabeçalho */
+
+.relatorio-card .card-header i {
+  color: #d4bd3d;
+  font-size: 1.8rem;
+}
+
+
+/* título do relatório */
+
+.relatorio-card .card-header h5 {
+  color: #d4bd3d;
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+/* subtítulo */
+
+.relatorio-card .card-header small {
+  color: #c3c1b4;
+}
+
+
+/* Corpo */
+
+.relatorio-card .card-body {
+  padding: 28px;
+}
+
+
+/* descriçãoa */
+
+.descricao-relatorio {
+  color: #55564d;
+
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  margin-bottom: 25px;
+}
+
+
+/* labels*/
+
+.form-label {
+  color: #694002;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+  font-size: 0.85rem;
+
+  letter-spacing: 1px;
+}
+
+
+/* inputs*/
+
+.form-control {
+  padding: 12px;
+
+  border: 2px solid #77786c;
+  border-radius: 6px;
+
+  background-color: #efeee6;
+  color: #30332d;
+
+  transition: all 0.2s ease;
+}
+
+
+.form-control:focus {
+  border-color: #c5b33d;
+
+  box-shadow:
+    0 0 0 0.2rem rgba(197, 179, 61, 0.25);
+
+  background-color: #ffffff;
+}
+
+
+/* texto auxiliar */
+
+.form-control + small {
+  color: #77786c !important;
+
+  display: block;
+  margin-top: 5px;
+}
+
+
+/* botão */
+
+.btn-primary {
+  background-color: #c4ad32;
+
+  border: 2px solid #8d7b20;
+
+  color: #854700;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  padding: 12px 18px;
+
+  border-radius: 6px;
+
+  transition: all 0.2s ease;
+}
+
+
+.btn-primary:hover {
+  background-color: #d5bd3b;
+
+  border-color: #75651a;
+
+  color: #1f211c;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+
+.btn-primary i {
+  margin-right: 7px;
+}
+
+
+/* Alertas */
+
+.relatorio-card .alert {
+  background-color: #c7c5b7;
+
+  border: 2px solid #8f8d7c;
+
+  border-radius: 7px;
+
+  color: #4c4d45;
+}
+
+
+.relatorio-card .alert i {
+  color: #8d7b20;
+}
+
+/*Estilo Wall-e copiado do login */
+
+.relatorio-card::before {
+  content: "MANUTENÇÃO DE EQUIPAMENTOS";
+
+  display: block;
+
+  padding: 7px;
+
+  background-color: #45483f;
+
+  color: #d4bd3d;
+
+  text-align: center;
+
+  font-size: 0.65rem;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  border-bottom: 2px solid #8f8030;
+}
+
+
+/* responsividade de milhões (triste) */
+
+@media (max-width: 768px) {
+
+  .page-bg {
+    padding: 20px 12px;
+  }
+
+  .titulo-pagina {
+    font-size: 1.5rem;
+  }
+
+  .relatorio-card .card-body {
+    padding: 20px;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 576px) {
+
+  .titulo-pagina {
+    font-size: 1.3rem;
+  }
+
+  .relatorio-card .card-header {
+    padding: 14px;
+  }
+
+  .relatorio-card .card-body {
+    padding: 16px;
+  }
+
+}
