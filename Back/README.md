@@ -1,6 +1,6 @@
 # Banco de dados — versão inicial
 
-Esta pasta contém a parte do banco da Semana 6. Foi usado PostgreSQL.
+Esta pasta contém a parte do banco da Semana 6. Foi usado MySQL 8.0.16 ou superior, para que as restrições CHECK sejam aplicadas.
 
 ## Arquivos
 
@@ -10,13 +10,17 @@ Esta pasta contém a parte do banco da Semana 6. Foi usado PostgreSQL.
 
 ## Como executar
 
-Crie um banco vazio chamado `manutencao_equipamento` no PostgreSQL. No pgAdmin, abra a ferramenta de consultas desse banco e execute os arquivos nesta ordem:
+Crie um banco vazio chamado `manutencao_equipamento` no MySQL. No MySQL Workbench, selecione esse banco como padrão (ou execute `USE manutencao_equipamento;`) e execute os arquivos nesta ordem:
 
 1. `schema.sql`
 2. `seed.sql`
 3. `verify.sql`
 
 Execute os dois primeiros apenas uma vez. O seed depende dos IDs gerados em um banco novo, na ordem dos cadastros. Para testar novamente, use outro banco vazio. Estes arquivos não atualizam um banco criado com a versão anterior.
+
+O schema usa InnoDB para aplicar as chaves estrangeiras e utf8mb4_0900_as_cs para diferenciar maiúsculas, minúsculas e acentos. A criação das tabelas faz commits implícitos no MySQL; o schema inteiro não pode ser desfeito com ROLLBACK. O seed usa uma transação para inserir os dados.
+
+Os campos de data e hora usam TIMESTAMP(6). O seed configura a sessão em UTC para preservar os instantes dos dados originais. Nas consultas, os horários são apresentados no fuso da sessão; execute `SET time_zone = '+00:00';` para consultá-los em UTC. Datas de nascimento usam apenas `AAAA-MM-DD`.
 
 ## Organização das tabelas
 
