@@ -56,10 +56,17 @@
                   <td class="text-center fw-bold">{{ solicitacao.estado }}</td>
                   <td class="text-center">
                     <a
-                      class="btn btn-sm btn-outline-primary"
-                      routerLink="/visualizar-servico">
+                      class="btn btn-sm btn-outline-primary me-1"
+                      [routerLink]="['/visualizar-servico', solicitacao.id]">
                       Detalhes
                     </a>
+                    @if (acaoPara(solicitacao.estado); as acao) {
+                      <a
+                        class="btn btn-sm btn-primary"
+                        [routerLink]="[acao.rota, solicitacao.id]">
+                        {{ acao.label }}
+                      </a>
+                    }
                   </td>
                 </tr>
               } @empty {
