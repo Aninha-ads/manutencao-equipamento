@@ -1,5 +1,8 @@
+//Aninha - gente, eu troquei o FormsModule por ReactiveForms, era uma exigência da Semana 7. 
+//Também troquei o estado inicial de 'Pendente' para 'ABERTA' - é o que o RF004 pede
+
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; //retirei FormsModule
 import { Router, RouterLink } from '@angular/router';
 
 interface SolicitacaoManutencao {
@@ -14,20 +17,26 @@ interface SolicitacaoManutencao {
 @Component({
   selector: 'app-orcamento-solicitacao',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './orcamento-solicitacao.component.html',
   styleUrl: './orcamento-solicitacao.component.css',
 })
 export class OrcamentoSolicitacaoComponent implements OnInit {
   private readonly chaveSolicitacoes = 'solicitacoes';
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
 
   solicitacaoId = 0;
-  categoria = '';
-  equipamento = '';
-  descricao = '';
   categorias = ['Notebook', 'Impressora', 'Desktop', 'Monitor', 'Outro'];
 
-  private router = inject(Router);
+  //adicionei o formgroup
+  form: FormGroup = this.fb.group({
+    categoria: ['', Validators.required],
+    equipamento: ['', [Validators.required, Validators.maxLength(30)]],
+    descricao: ['', Validators.required],
+  });
+  
+ // private router = inject(Router);
 
   ngOnInit(): void {
     const solicitacoes = this.carregarSolicitacoes();
@@ -37,6 +46,12 @@ export class OrcamentoSolicitacaoComponent implements OnInit {
   }
 
   salvarSolicitacao(): void {
+    if(this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
+    /*
     const equipamentoInformado = this.equipamento.trim();
     const descricaoInformada = this.descricao.trim();
 
@@ -44,15 +59,16 @@ export class OrcamentoSolicitacaoComponent implements OnInit {
       alert('Preencha a categoria, o equipamento e os detalhes da solicitação.');
       return;
     }
+      */
 
     const solicitacoes = this.carregarSolicitacoes();
     const novaSolicitacao: SolicitacaoManutencao = {
       id: this.solicitacaoId,
       dataHora: new Date().toISOString(),
-      categoria: this.categoria,
-      equipamento: equipamentoInformado,
-      descricao: descricaoInformada,
-      estado: 'Pendente'
+      categoria: this.form.value.categoria,
+      equipamento: this.form.value.equipamento.trim(),
+      descricao: this.form.value.descricao.trim(),
+      estado: 'ABERTA'
     };
 
     solicitacoes.push(novaSolicitacao);

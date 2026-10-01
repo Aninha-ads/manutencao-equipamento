@@ -3,7 +3,7 @@
     <h3>Solicitar orçamento</h3>
     <p class="text-muted">Informe o equipamento e os detalhes do serviço que você precisa.</p>
 
-  <form #formSolicitacao="ngForm" (ngSubmit)="salvarSolicitacao()">
+  <form [formGroup]="form" (ngSubmit)="salvarSolicitacao()">
     <div class="card shadow-sm mt-4">
       <div class="card-header">
         <strong>Nova solicitação #{{ solicitacaoId }}</strong>
@@ -15,15 +15,16 @@
             <label class="form-label fw-bold" for="categoria">Categoria</label>
             <select
               id="categoria"
-              name="categoria"
               class="form-select"
-              [(ngModel)]="categoria"
-              required>
+              formControlName="categoria">
               <option value="">Selecione uma categoria</option>
               @for (item of categorias; track item) {
                 <option [value]="item">{{ item }}</option>
               }
             </select>
+            @if (form.get('categoria')?.touched && form.get('categoria')?.invalid) {
+              <div class="text-danget small mt-1">Selecione uma categoria.</div>
+            }
           </div>
 
           <div class="col-md-6">
@@ -32,10 +33,12 @@
               id="equipamento"
               type="text"
               class="form-control"
-              name="equipamento"
-              [(ngModel)]="equipamento"
-              placeholder="Ex.: Notebook Dell Inspiron"
-              required>
+              formControlName="equipamento"
+              maxlegth="30"
+              placeholder="Ex.: Notebook Dell Inspiron">
+              @if (form.get('equipamento')?.touched && form.get('equipamento')?.invalid) {
+                <div class="text-danger small mt-1">Campo obrigatório (máx. 30 caracteres).</div>
+              }
           </div>
 
           <div class="col-12">
@@ -45,9 +48,11 @@
               class="form-control"
               name="descricao"
               rows="5"
-              [(ngModel)]="descricao"
-              placeholder="Descreva o problema ou o serviço necessário"
-              required></textarea>
+              formControlName="descricao"
+              placeholder="Descreva o problema ou o serviço necessário"></textarea>
+              @if (form.get('descricao')?.touched && form.get('descricao')?.invalid) {
+                <div class="text-danger small mt-1">Campo obrigatório.</div>
+              }
           </div>
         </div>
       </div>
@@ -57,7 +62,7 @@
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="!formSolicitacao.form.valid">
+          [disabled]="form.invalid">
           Registrar solicitação
         </button>
       </div>
