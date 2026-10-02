@@ -16,22 +16,22 @@ public class CategoriaController {
     private CategoriaService service;
 
     @GetMapping
-    public ResponseEntity> listar() {
+    public ResponseEntity<List<Categoria>> listar() {
         return ResponseEntity.ok(service.listarAtivas());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity buscar(@PathVariable Long id) {
+    public ResponseEntity<Categoria> buscar(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity criar(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> criar(@RequestBody Categoria categoria) {
         return ResponseEntity.ok(service.salvar(categoria));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.inativar(id);
         return ResponseEntity.noContent().build();
     }

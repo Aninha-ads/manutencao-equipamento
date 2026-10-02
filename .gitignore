@@ -6,3 +6,7 @@
 
 # Build output
 /dist/
+
+# Maven build output
+/Back/target/
+/Back/.mvn/repository/

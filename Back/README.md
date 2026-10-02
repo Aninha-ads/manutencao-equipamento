@@ -1,4 +1,31 @@
-# Banco de dados — versão inicial
+# Backend e banco de dados
+
+## Backend Spring Boot (INF01)
+
+O backend usa Maven, Spring Boot 3.5.16 e Java 17 ou superior. O `pom.xml` inclui Spring Web, Spring Data JPA, Bean Validation e o driver MySQL. As versões das dependências são gerenciadas pelo Spring Boot.
+
+O Maven Wrapper permite executar o projeto sem instalar Maven globalmente. A primeira execução precisa de internet para baixar Maven e as dependências.
+
+Na pasta `Back`, compile e gere o JAR no PowerShell:
+
+```powershell
+.\mvnw.cmd clean verify
+```
+
+Para iniciar, prepare o banco conforme as instruções abaixo e configure as credenciais:
+
+```powershell
+$env:DB_USERNAME = 'root'
+$env:DB_PASSWORD = 'sua-senha-local'
+$env:DB_URL = 'jdbc:mysql://localhost:3306/manutencao_equipamento'
+.\mvnw.cmd spring-boot:run
+```
+
+No Linux/macOS, use `sh ./mvnw clean verify` e `sh ./mvnw spring-boot:run`, com as mesmas variáveis de ambiente. A API inicia na porta 8080. As credenciais não devem ser salvas no repositório.
+
+O build não depende de um MySQL em execução. Para iniciar a aplicação, é necessário acesso ao banco. A aplicação não cria nem altera tabelas automaticamente e não executa os scripts SQL; eles continuam sendo executados manualmente.
+
+## Banco de dados — versão inicial
 
 Esta pasta contém a parte do banco da Semana 6. Foi usado MySQL 8.0.16 ou superior, para que as restrições CHECK sejam aplicadas.
 
@@ -54,4 +81,4 @@ Os campos de hash e salt ficam vazios por enquanto. Esses usuários ainda não s
 - Usar o campo ativo para desativar contas e categorias, com as regras de exclusão do sistema.
 - Acrescentar índices conforme as consultas da API precisarem.
 
-O arquivo verify.sql permite conferir os dados manualmente; ele não é uma suíte de testes automáticos. O projeto Spring Boot ainda será criado.
+O arquivo verify.sql permite conferir os dados manualmente; ele não é uma suíte de testes automáticos.

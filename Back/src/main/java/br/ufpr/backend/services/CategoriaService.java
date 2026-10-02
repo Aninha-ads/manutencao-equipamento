@@ -12,7 +12,7 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository repository;
 
-    public List listarAtivas() {
+    public List<Categoria> listarAtivas() {
         return repository.findByAtivoTrue();
     }
 
