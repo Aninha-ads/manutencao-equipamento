@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl,
+  ValidationErrors} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 interface SolicitacaoOrcamento {
@@ -17,13 +18,15 @@ interface Cliente {
   telefone: string;
   endereco: string;
 }
-
+//troca forms Module para Reactive FormsModule
 @Component({
   selector: 'app-efetuar-orcamento',
-  imports: [FormsModule, RouterLink],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './efetuar-orcamento.component.html',
   styleUrl: './efetuar-orcamento.component.css',
 })
+//aparece ainda o default que estava colocado antes
 export class EfetuarOrcamentoComponent {
   solicitacao: SolicitacaoOrcamento = {
     dataHora: '20/08/2026 14:30',
@@ -41,16 +44,61 @@ export class EfetuarOrcamentoComponent {
     endereco: 'Rua das Flores, 100 - Centro - Curitiba/PR - CEP 80000-000'
   };
 
-  valorOrcamento = '';
+  // Aceita valores positivos com até duas casas decimais.
+  valorPositivo(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value;
+
+    if (valor === null || valor === '') {
+      return null;
+    }
+
+    // Aceita vírgula ou ponto como separador decimal.
+    const texto = String(valor).trim().replace(',', '.');
+
+    // Impede letras, sinais, valores negativos e mais de 2 casas decimais.
+    if (!/^\d+(\.\d{1,2})?$/.test(texto)) {
+      return { formatoInvalido: true };
+    }
+
+    const numero = Number(texto);
+
+    if (!Number.isFinite(numero) || numero <= 0) {
+      return { valorPositivo: true };
+    }
+
+    return null;
+  }
+
+orcamentoForm;
+
+constructor(private fb: FormBuilder) {
+  this.orcamentoForm = this.fb.group({
+    valorOrcamento: [
+      '',
+      [
+        Validators.required,
+        this.valorPositivo.bind(this)
+      ]
+    ]
+  });
+}
+
+  get valorOrcamento() {
+    return this.orcamentoForm.controls.valorOrcamento; }
 
   registrarOrcamento(): void {
-    const valor = Number(this.valorOrcamento.replace(',', '.'));
-
-    if (!this.valorOrcamento.trim() || Number.isNaN(valor) || valor <= 0) {
-      alert('Informe um valor de orçamento válido.');
+    if (this.orcamentoForm.invalid) {
+      this.orcamentoForm.markAllAsTouched();
       return;
     }
 
-    alert(`Orçamento de R$ ${valor.toFixed(2).replace('.', ',')} registrado com sucesso!`);
+    const texto = String(this.valorOrcamento.value).trim().replace(',', '.');
+    const valor = Number(texto);
+
+    alert(
+      `Orçamento de R$ ${valor.toFixed(2).replace('.', ',')} registrado com sucesso!`
+    );
+
+    console.log('Valor registrado:', valor);
   }
 }

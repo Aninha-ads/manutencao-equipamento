@@ -148,63 +148,88 @@
     </div>
 
 
-    <!-- ORÇAMENTO -->
-    <div class="card">
+ //refatoração a partir da qui  
+<!-- orçamento -->
+<div class="card">
 
-        <div class="card-header">
-            <strong>Orçamento</strong>
-        </div>
+  <div class="card-header">
+    <strong>Orçamento</strong>
+  </div>
 
-        <div class="card-body">
+  <form
+    [formGroup]="orcamentoForm"
+    (ngSubmit)="registrarOrcamento()"
+    novalidate>
 
-            <div class="row">
+    <div class="card-body">
 
-                <div class="col-md-6">
-                    <label for="valorOrcamento" class="form-label">
-                        Valor do orçamento
-                    </label>
+      <div class="row">
 
-                    <div class="input-group">
-                        <span class="input-group-text">R$</span>
+        <div class="col-md-6">
+          <label for="valorOrcamento" class="form-label">
+            Valor do orçamento
+          </label>
 
-                        <input
-                            id="valorOrcamento"
-                            type="text"
-                            class="form-control"
-                            name="valorOrcamento"
-                            [(ngModel)]="valorOrcamento"
-                            placeholder="0,00"
-                            inputmode="decimal"
-                            required>
-                    </div>
+          <div class="input-group">
+            <span class="input-group-text">R$</span>
 
-                    <small class="form-text text-muted">
-                        Informe o valor total para execução do serviço.
-                    </small>
+            <input
+              id="valorOrcamento"
+              type="text"
+              class="form-control"
+              formControlName="valorOrcamento"
+              placeholder="0,00"
+              inputmode="decimal"
+              [class.is-invalid]="valorOrcamento.invalid && valorOrcamento.touched"
+            />
+          </div>
+//alerts
+          @if (valorOrcamento.touched && valorOrcamento.errors) {
+            <div class="text-danger small mt-1">
+              @if (valorOrcamento.hasError('required')) {
+                <div>O valor do orçamento é obrigatório.</div>
+              }
+
+              @if (valorOrcamento.hasError('formatoInvalido')) {
+                <div>
+                  Informe um valor numérico com até duas casas decimais.
                 </div>
+              }
 
+              @if (valorOrcamento.hasError('valorPositivo')) {
+                <div>
+                  O valor do orçamento deve ser maior que zero.
+                </div>
+              }
             </div>
+          }
 
+          <small class="form-text text-muted">
+            Informe o valor total para execução do serviço.
+          </small>
         </div>
 
-        <div class="card-footer d-flex justify-content-end gap-2">
+      </div>
 
-            <a
-                class="btn btn-secondary"
-                routerLink="/painel-cliente">
-                Cancelar
-            </a>
-
-            <button
-                type="button"
-                class="btn btn-primary"
-                (click)="registrarOrcamento()">
-                Registrar Orçamento
-            </button>
-
-        </div>
-
-        </div>
     </div>
 
+    <div class="card-footer d-flex justify-content-end gap-2">
+
+      <a
+        class="btn btn-secondary"
+        routerLink="/painel-cliente">
+        Cancelar
+      </a>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="orcamentoForm.invalid">
+        Registrar Orçamento
+      </button>
+
+    </div>
+
+  </form>
 </div>
+
