@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService } from '../../services/categoria.service'; 
 import { Categoria } from '../../models/categoria.model'; 
+import { InteracaoService } from '../../services/interacao.service';
 
 @Component({
   selector: 'app-categoria',
@@ -13,7 +14,10 @@ export class CategoriaComponent implements OnInit {
   categoriaAtual: Categoria = { id: 0, nome: '' };
   listaCategorias: Categoria[] = [];
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(
+    private categoriaService: CategoriaService,
+    private interacaoService: InteracaoService
+  ) {}
 
   ngOnInit(): void {
     this.carregarCategorias();
@@ -22,7 +26,7 @@ export class CategoriaComponent implements OnInit {
   carregarCategorias(): void {
     this.categoriaService.listarCategorias().subscribe({
       next: (dados) => (this.listaCategorias = dados),
-      error: (erro) => console.error('Erro ao carregar categorias', erro),
+      error: () => this.interacaoService.erro('Erro ao carregar categorias.'),
     });
   }
 
@@ -31,10 +35,11 @@ export class CategoriaComponent implements OnInit {
 
     this.categoriaService.salvarCategoria(this.categoriaAtual).subscribe({
       next: () => {
+        this.interacaoService.sucesso('Categoria salva com sucesso.');
         this.carregarCategorias(); 
         this.categoriaAtual = { id: 0, nome: '' }; 
       },
-      error: (erro) => console.error('Erro ao salvar categoria', erro),
+      error: () => this.interacaoService.erro('Erro ao salvar categoria.'),
     });
   }
 
@@ -44,14 +49,19 @@ export class CategoriaComponent implements OnInit {
 
   excluirCategoria(id: number | undefined): void {
     if (id === undefined) return;
+    
+    const categoria = this.listaCategorias.find(c => c.id === id);
+    if (!categoria || !this.interacaoService.confirmarExclusao(categoria.nome)) return;
+
     this.categoriaService.excluirCategoria(id).subscribe({
       next: () => {
+        this.interacaoService.sucesso('Categoria excluída com sucesso.');
         this.carregarCategorias();
         if (this.categoriaAtual.id === id) {
           this.categoriaAtual = { id: 0, nome: '' };
         }
       },
-      error: (erro) => console.error('Erro ao excluir categoria', erro),
+      error: () => this.interacaoService.erro('Erro ao excluir categoria.'),
     });
   }
 }
