@@ -1,44 +1,70 @@
 <!--Graças a Clarissa agora consigo comentar! Mas eu não gostei dessa forma também, poderia ser mais simples
 Enfim, vamos começar:
 - esse modal é para mostrar a mensagem de sucesso ou fracasso / Aprovar Serviço e Rejeitar Serviço
--->
 
-<div class="modal-header">
-  <h4 class="modal-title">Rejeitar Serviço</h4>
+ksksksks, oi, é a Clarissa, vi esse comentário agr, de nada!-->
 
-  <button
-    type="button"
-    class="btn-close"
-    aria-label="Fechar"
-    (click)="activeModal.dismiss()"
-  ></button>
-</div>
+<form
+  [formGroup]="rejeicaoForm"
+  (ngSubmit)="confirmarRejeicao()"
+  novalidate
+>
 
-<div class="modal-body">
-  <p>Escreva o motivo da rejeição do serviço:</p>
+  <div class="modal-header">
+    <h4 class="modal-title">Rejeitar Serviço</h4>
 
-  <textarea
-    class="form-control"
-    rows="4"
-    placeholder="Digite o motivo da rejeição..."
-    [(ngModel)]="motivoRejeicao"
-  ></textarea>
-</div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Fechar"
+      (click)="activeModal.dismiss()"
+    ></button>
+  </div>
 
-<div class="modal-footer">
-  <button
-    type="button"
-    class="btn btn-secondary"
-    (click)="activeModal.dismiss()"
-  >
-    Cancelar
-  </button>
+  <div class="modal-body">
 
-  <button
-    type="button"
-    class="btn btn-danger"
-    (click)="confirmarRejeicao()"
-  >
-    Confirmar rejeição
-  </button>
-</div>
+    <p>Escreva o motivo da rejeição do serviço:</p>
+
+    <textarea
+      class="form-control"
+      rows="4"
+      placeholder="Digite o motivo da rejeição..."
+      formControlName="motivoRejeicao"
+      [class.is-invalid]="motivoRejeicao.invalid && motivoRejeicao.touched"
+    ></textarea>
+
+    @if (motivoRejeicao.touched && motivoRejeicao.hasError('required')) {
+      <div class="text-danger mt-1">
+        O motivo da rejeição é obrigatório!!
+      </div>
+    }
+
+    @if (motivoRejeicao.touched && motivoRejeicao.hasError('pattern')) {
+      <div class="text-danger mt-1">
+        O motivo da rejeição não pode conter apenas espaços!!
+      </div>
+    }
+
+  </div>
+
+  <div class="modal-footer">
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="activeModal.dismiss()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-danger"
+      [disabled]="rejeicaoForm.invalid"
+    >
+      Confirmar rejeição
+    </button>
+
+  </div>
+
+</form>
