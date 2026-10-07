@@ -209,90 +209,157 @@
 
 
         <!-- ===================================================== -->
-        <!-- MANUTENÇÃO                                            -->
-        <!-- ===================================================== -->
+<!-- MANUTENÇÃO                                            -->
+<!-- ===================================================== -->
 
-        <div class="card">
+<div class="card">
 
-            <div class="card-header">
-                <strong>Manutenção</strong>
+    <div class="card-header">
+        <strong>Manutenção</strong>
+    </div>
+
+    <form
+        [formGroup]="manutencaoForm"
+        (ngSubmit)="efetuarManutencao()"
+        novalidate
+    >
+
+        <div class="card-body">
+
+            <!-- DESCRIÇÃO DA MANUTENÇÃO -->
+
+            <div class="mb-4">
+
+                <label
+                    for="descricaoManutencao"
+                    class="form-label">
+
+                    Descrição da Manutenção
+
+                </label>
+
+                <textarea
+                    id="descricaoManutencao"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Descreva o serviço realizado"
+                    formControlName="descricaoManutencao"
+                    [class.is-invalid]="
+                        descricaoManutencao.invalid &&
+                        descricaoManutencao.touched
+                    "
+                ></textarea>
+
+                @if (
+                    descricaoManutencao.touched &&
+                    descricaoManutencao.hasError('required')
+                ) {
+                    <div class="invalid-feedback">
+                        A descrição da manutenção é obrigatória.
+                    </div>
+                }
+
+                @if (
+                    descricaoManutencao.touched &&
+                    descricaoManutencao.hasError('pattern')
+                ) {
+                    <div class="invalid-feedback">
+                        A descrição não pode conter apenas espaços.
+                    </div>
+                }
+
+                @if (
+                    descricaoManutencao.touched &&
+                    descricaoManutencao.hasError('maxlength')
+                ) {
+                    <div class="invalid-feedback">
+                        A descrição deve ter no máximo 1000 caracteres.
+                    </div>
+                }
+
             </div>
 
 
-            <div class="card-body">
+            <!-- ORIENTAÇÕES -->
 
-                <!-- DESCRIÇÃO DA MANUTENÇÃO -->
+            <div class="mb-3">
 
-                <div class="mb-4">
+                <label
+                    for="orientacoesCliente"
+                    class="form-label">
 
-                    <label
-                        for="descricaoManutencao"
-                        class="form-label">
+                    Orientações para o Cliente
 
-                        Descrição da Manutenção
+                </label>
 
-                    </label>
+                <textarea
+                    id="orientacoesCliente"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Informe as orientações para o cliente"
+                    formControlName="orientacoesCliente"
+                    [class.is-invalid]="
+                        orientacoesCliente.invalid &&
+                        orientacoesCliente.touched
+                    "
+                ></textarea>
 
-                    <textarea
-                        id="descricaoManutencao"
-                        name="descricaoManutencao"
-                        class="form-control"
-                        rows="4"
-                        placeholder="Descreva o serviço realizado"></textarea>
+                @if (
+                    orientacoesCliente.touched &&
+                    orientacoesCliente.hasError('required')
+                ) {
+                    <div class="invalid-feedback">
+                        As orientações para o cliente são obrigatórias.
+                    </div>
+                }
 
-                </div>
+                @if (
+                    orientacoesCliente.touched &&
+                    orientacoesCliente.hasError('pattern')
+                ) {
+                    <div class="invalid-feedback">
+                        As orientações não podem conter apenas espaços.
+                    </div>
+                }
 
-
-                <!-- ORIENTAÇÕES -->
-
-                <div class="mb-3">
-
-                    <label
-                        for="orientacoesCliente"
-                        class="form-label">
-
-                        Orientações para o Cliente
-
-                    </label>
-
-                    <textarea
-                        id="orientacoesCliente"
-                        name="orientacoesCliente"
-                        class="form-control"
-                        rows="4"
-                        placeholder="Informe as orientações para o cliente"></textarea>
-
-                </div>
-
-            </div>
-
-
-            <!-- BOTÕES -->
-
-            <div class="card-footer d-flex justify-content-end gap-2">
-
-                <button
-                    type="button"
-                    class="btn btn-warning"
-                    routerLink="/manutencoes/redirecionar">
-
-                    Redirecionar Manutenção
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="btn btn-primary">
-
-                    Efetuar Manutenção
-
-                </button>
+                @if (
+                    orientacoesCliente.touched &&
+                    orientacoesCliente.hasError('maxlength')
+                ) {
+                    <div class="invalid-feedback">
+                        As orientações devem ter no máximo 1000 caracteres.
+                    </div>
+                }
 
             </div>
 
         </div>
 
-    </div>        
+
+        <!-- BOTÕES -->
+
+        <div class="card-footer d-flex justify-content-end gap-2">
+
+            <button
+                type="button"
+                class="btn btn-warning"
+                routerLink="/manutencoes/redirecionar">
+
+                Redirecionar Manutenção
+
+            </button>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="manutencaoForm.invalid">
+
+                Efetuar Manutenção
+
+            </button>
+
+        </div>
+
+    </form>
 
 </div>

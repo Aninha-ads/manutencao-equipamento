@@ -1,75 +1,194 @@
 <div class="page-bg">
+
   <div class="container mt-4 mb-5">
+    <!-- TÍTULO -->
     <div class="mb-4">
       <h2>Redirecionar Manutenção</h2>
-      <p class="text-muted">Selecione o funcionário que ficará responsável pela continuidade da manutenção.</p>
+      <p class="text-muted">
+        Selecione o funcionário que ficará responsável pela continuidade
+        da manutenção.
+      </p>
     </div>
-
+    <!-- ===================================================== -->
+    <!-- DADOS DA SOLICITAÇÃO                                  -->
+    <!-- ===================================================== -->
     <div class="card mb-4">
       <div class="card-header">
         <strong>Dados da Solicitação</strong>
       </div>
       <div class="card-body">
         <div class="row mb-3">
+          <!-- EQUIPAMENTO -->
           <div class="col-md-6">
-            <label class="form-label">Equipamento</label>
-            <input type="text" class="form-control" value="Notebook Dell Inspiron 15" readonly>
+            <label class="form-label">
+              Equipamento
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value="Notebook Dell Inspiron 15"
+              readonly>
           </div>
+
+          <!-- CATEGORIA -->
           <div class="col-md-3">
-            <label class="form-label">Categoria</label>
-            <input type="text" class="form-control" value="Notebook" readonly>
+            <label class="form-label">
+              Categoria
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value="Notebook"
+              readonly>
           </div>
+
+          <!-- ESTADO -->
           <div class="col-md-3">
-            <label class="form-label">Estado Atual</label>
-            <input type="text" class="form-control" value="APROVADA" readonly>
+            <label class="form-label">
+              Estado Atual
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value="APROVADA"
+              readonly>
           </div>
         </div>
+
+        <!-- DESCRIÇÃO DO DEFEITO -->
         <div class="row">
           <div class="col-md-12">
-            <label class="form-label">Descrição do Defeito</label>
-            <textarea class="form-control" rows="3" readonly>Notebook não liga e não apresenta sinal ao pressionar o botão de energia.</textarea>
+            <label class="form-label">
+              Descrição do Defeito
+            </label>
+            <textarea
+              class="form-control"
+              rows="3"
+              readonly>Notebook não liga e não apresenta sinal ao pressionar o botão de energia.</textarea>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ===================================================== -->
+    <!-- REDIRECIONAMENTO                                     -->
+    <!-- ===================================================== -->
     <div class="card">
       <div class="card-header">
         <strong>Redirecionamento</strong>
       </div>
-      <div class="card-body">
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <label class="form-label">Funcionário Responsável Atual</label>
-            <input type="text" class="form-control" [value]="funcionarioAtual.nome" readonly>
+
+      <!-- FORMULÁRIO REATIVO -->
+      <form
+        [formGroup]="redirecionamentoForm"
+        (ngSubmit)="redirecionarManutencao()"
+        novalidate
+      >
+        <div class="card-body">
+          <!-- FUNCIONÁRIO ATUAL -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="form-label">
+                Funcionário Responsável Atual
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="funcionarioAtual.nome"
+                readonly>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <label for="funcionarioDestino" class="form-label">Redirecionar para</label>
-            <select
-              id="funcionarioDestino"
-              name="funcionarioDestino"
-              class="form-select"
-              [(ngModel)]="funcionarioDestinoId">
 
-              <option value="">Selecione um funcionário</option>
+          <!-- FUNCIONÁRIO DESTINO -->
+          <div class="row">
+            <div class="col-md-6">
+              <label
+                for="funcionarioDestino"
+                class="form-label">
+                Redirecionar para
+              </label>
 
-              @for (funcionario of funcionariosDisponiveis; track funcionario.id) {
-                <option [value]="funcionario.id">
-                  {{ funcionario.nome }}
+              <select
+                id="funcionarioDestino"
+                class="form-select"
+                formControlName="funcionarioDestinoId"
+                [class.is-invalid]="
+                  funcionarioDestinoId.invalid &&
+                  funcionarioDestinoId.touched
+                "
+              >
+                <!-- OPÇÃO PADRÃO -->
+                <option [ngValue]="null">
+                  Selecione um funcionário
                 </option>
+                <!-- FUNCIONÁRIOS DISPONÍVEIS -->
+                @for (
+                  funcionario of funcionariosDisponiveis;
+                  track funcionario.id
+                ) {
+                  <option [ngValue]="funcionario.id">
+                   {{ funcionario.nome }}
+                  </option>
+                }
+              </select>
+
+              <!-- ERRO: CAMPO OBRIGATÓRIO -->
+              @if (
+                funcionarioDestinoId.touched &&
+                funcionarioDestinoId.hasError('required')
+              ) {
+                <div class="invalid-feedback">
+                  Selecione um funcionário para realizar
+                  o redirecionamento.
+                </div>
               }
-            </select>
-            <small class="form-text text-muted">Selecione outro funcionário para assumir a manutenção.</small>
+              <!-- ERRO: FUNCIONÁRIO INVÁLIDO -->
+              @if (
+                funcionarioDestinoId.touched &&
+                funcionarioDestinoId.hasError('funcionarioInvalido')
+              ) {
+                <div class="invalid-feedback">
+                  O funcionário selecionado não é válido.
+                </div>
+              }
+              <!-- ERRO: MESMO FUNCIONÁRIO -->
+              @if (
+                funcionarioDestinoId.touched &&
+                funcionarioDestinoId.hasError('mesmoFuncionario')
+              ) {
+                <div class="invalid-feedback">
+                  O funcionário de destino deve ser diferente
+                  do funcionário atual.
+                </div>
+             }
+             <small class="form-text text-muted">
+                Selecione outro funcionário para assumir
+                a manutenção.
+              </small>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="card-footer d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-secondary" routerLink="/manutencoes/efetuar">Cancelar</button>
-        <button type="button" class="btn btn-warning">Redirecionar Manutenção</button>
-      </div>
+        <!-- ================================================= -->
+        <!-- BOTÕES                                             -->
+        <!-- ================================================= -->
+        <div class="card-footer d-flex justify-content-end gap-2">
+          <!-- CANCELAR -->
+          <button
+            type="button"
+            class="btn btn-secondary"
+            routerLink="/manutencoes/efetuar">
+            Cancelar
+          </button>
+
+          <!-- REDIRECIONAR -->
+          <button
+            type="submit"
+            class="btn btn-warning"
+            [disabled]="redirecionamentoForm.invalid">
+            Redirecionar Manutenção
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

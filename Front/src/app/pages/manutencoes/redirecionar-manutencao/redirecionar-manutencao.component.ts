@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 interface Funcionario {
@@ -10,12 +14,16 @@ interface Funcionario {
 
 @Component({
   selector: 'app-redirecionar-manutencao',
-  imports: [FormsModule, RouterLink],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './redirecionar-manutencao.component.html',
   styleUrl: './redirecionar-manutencao.component.css',
 })
 export class RedirecionarManutencaoComponent {
+
   private readonly chaveFuncionarios = 'funcionarios';
+
+  private fb = inject(FormBuilder);
 
   private funcionariosPadrao: Funcionario[] = [
     {
@@ -36,20 +44,95 @@ export class RedirecionarManutencaoComponent {
   ];
 
   funcionarios: Funcionario[] = this.carregarFuncionarios();
+
   funcionarioAtual: Funcionario = this.funcionarios[0];
+
   funcionariosDisponiveis: Funcionario[] = this.funcionarios.filter(
     funcionario => funcionario.id !== this.funcionarioAtual.id
   );
-  funcionarioDestinoId = '';
+
+  redirecionamentoForm = this.fb.group({
+    funcionarioDestinoId: this.fb.nonNullable.control<number | null>(
+      null,
+      [
+        Validators.required,
+        this.funcionarioDestinoValido.bind(this)
+      ]
+    )
+  });
+
+  get funcionarioDestinoId() {
+    return this.redirecionamentoForm.controls.funcionarioDestinoId;
+  }
 
   private carregarFuncionarios(): Funcionario[] {
-    const funcionariosSalvos = localStorage.getItem(this.chaveFuncionarios);
+
+    const funcionariosSalvos = localStorage.getItem(
+      this.chaveFuncionarios
+    );
 
     if (funcionariosSalvos) {
       return JSON.parse(funcionariosSalvos) as Funcionario[];
     }
 
-    localStorage.setItem(this.chaveFuncionarios, JSON.stringify(this.funcionariosPadrao));
+    localStorage.setItem(
+      this.chaveFuncionarios,
+      JSON.stringify(this.funcionariosPadrao)
+    );
+
     return this.funcionariosPadrao;
+  }
+
+  private funcionarioDestinoValido(control: any) {
+
+    const id = control.value;
+
+    if (id === null || id === '') {
+      return null;
+    }
+
+    const funcionario = this.funcionariosDisponiveis.find(
+      funcionario => funcionario.id === Number(id)
+    );
+
+    if (!funcionario) {
+      return {
+        funcionarioInvalido: true
+      };
+    }
+
+    if (funcionario.id === this.funcionarioAtual.id) {
+      return {
+        mesmoFuncionario: true
+      };
+    }
+
+    return null;
+  }
+
+  redirecionarManutencao(): void {
+
+    if (this.redirecionamentoForm.invalid) {
+      this.redirecionamentoForm.markAllAsTouched();
+      return;
+    }
+
+    const funcionarioDestino = this.funcionariosDisponiveis.find(
+      funcionario =>
+        funcionario.id === Number(this.funcionarioDestinoId.value)
+    );
+
+    if (!funcionarioDestino) {
+      return;
+    }
+
+    console.log('Redirecionamento:', {
+      funcionarioAtual: this.funcionarioAtual,
+      funcionarioDestino: funcionarioDestino
+    });
+
+    alert(
+      `Manutenção redirecionada para ${funcionarioDestino.nome}.`
+    );
   }
 }
