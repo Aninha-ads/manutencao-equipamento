@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 interface Funcionario {
   id: number;
@@ -20,6 +22,18 @@ interface Funcionario {
   styleUrl: './redirecionar-manutencao.component.css',
 })
 export class RedirecionarManutencaoComponent {
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  ngOnInit(): void {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.registro = buscarSolicitacao(params.get('id'));
+      this.cdr.markForCheck();
+      
+    });
+  }
+
 
   private readonly chaveFuncionarios = 'funcionarios';
 
@@ -111,6 +125,7 @@ export class RedirecionarManutencaoComponent {
   }
 
   redirecionarManutencao(): void {
+    if (!this.registro) return;
 
     if (this.redirecionamentoForm.invalid) {
       this.redirecionamentoForm.markAllAsTouched();

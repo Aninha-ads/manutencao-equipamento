@@ -43,6 +43,7 @@
               </span>
             </td>
             <td class="text-center">
+              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/visualizar-servico', solicitacao.id]" [queryParams]="{ origem: 'visualizacao-solicitacoes' }">Detalhes</a>
               @switch (estadoAtual(solicitacao)) {
                 @case ('ABERTA') {
                   <button class="btn btn-sm btn-outline-primary" routerLink="/orcamentos/efetuar" [queryParams]="{ id: solicitacao.id }">Efetuar Orçamento</button>

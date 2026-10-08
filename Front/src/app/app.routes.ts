@@ -4,7 +4,6 @@ import { CadastroClienteComponent } from './features/cadastro-cliente/cadastro-c
 import { LoginComponent } from './pages/login/login';
 import { PainelFuncionarioComponent } from './pages/painel-funcionario/painel-funcionario.component';
 import { EfetuarOrcamentoComponent } from './pages/orcamentos/efetuar-orcamento/efetuar-orcamento.component';
-import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
 import { VisualizarServicoComponent } from './pages/visualizar-servico/visualizar-servico.component';
 import { EfetuarManutencaoComponent } from './pages/manutencoes/efetuar-manutencao/efetuar-manutencao.component';
 import { RedirecionarManutencaoComponent } from './pages/manutencoes/redirecionar-manutencao/redirecionar-manutencao.component';
@@ -55,15 +54,15 @@ export const routes: Routes = [
     component: VisualizacaoSolicitacoesComponent
   },
   {
-    path: 'orcamento/:id',
+    path: 'orcamento/novo',
     component: OrcamentoSolicitacaoComponent
   },
   {
-    path: 'orcamentos',
-    component: MostrarOrcamentoComponent
+    path: 'orcamentos/:id',
+    component: VisualizarServicoComponent
   },
     {
-    path: 'visualizar-servico',
+    path: 'visualizar-servico/:id',
     component: VisualizarServicoComponent
   },
   {

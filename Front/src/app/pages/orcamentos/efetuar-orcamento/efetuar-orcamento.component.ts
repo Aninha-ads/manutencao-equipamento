@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl,
   ValidationErrors} from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 interface SolicitacaoOrcamento {
   dataHora: string;
@@ -26,22 +28,28 @@ interface Cliente {
   templateUrl: './efetuar-orcamento.component.html',
   styleUrl: './efetuar-orcamento.component.css',
 })
-//aparece ainda o default que estava colocado antes
 export class EfetuarOrcamentoComponent {
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  ngOnInit(): void {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.registro = buscarSolicitacao(params.get('id'));
+      if (this.registro) {
+        this.solicitacao = { ...this.registro, categoria: this.registro.categoria ?? 'Não informada', defeito: this.registro.descricao };
+        this.cliente = { nome: this.registro.cliente ?? 'Não informado', cpf: this.registro.cpf ?? 'Não informado', email: this.registro.email ?? 'Não informado', telefone: this.registro.telefone ?? 'Não informado', endereco: this.registro.endereco ?? 'Não informado' };
+      }
+      this.cdr.markForCheck();
+    });
+  }
+
   solicitacao: SolicitacaoOrcamento = {
-    dataHora: '20/08/2026 14:30',
-    categoria: 'Notebook',
-    estado: 'ABERTA',
-    equipamento: 'Notebook Dell Inspiron 15',
-    defeito: 'Notebook não liga e não apresenta nenhum sinal ao pressionar o botão de energia.'
+    dataHora: '', categoria: '', estado: '', equipamento: '', defeito: ''
   };
 
   cliente: Cliente = {
-    nome: 'João da Silva',
-    cpf: '123.456.789-00',
-    email: 'joao@email.com',
-    telefone: '(41) 99999-9999',
-    endereco: 'Rua das Flores, 100 - Centro - Curitiba/PR - CEP 80000-000'
+    nome: '', cpf: '', email: '', telefone: '', endereco: ''
   };
 
   // Aceita valores positivos com até duas casas decimais.
@@ -87,6 +95,7 @@ constructor(private fb: FormBuilder) {
     return this.orcamentoForm.controls.valorOrcamento; }
 
   registrarOrcamento(): void {
+    if (!this.registro) return;
     if (this.orcamentoForm.invalid) {
       this.orcamentoForm.markAllAsTouched();
       return;

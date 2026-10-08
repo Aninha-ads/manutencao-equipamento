@@ -80,14 +80,15 @@
 
                   <a
                     class="btn btn-orcamento me-2"
-                    routerLink="/visualizacao-solicitacoes"
+                    [routerLink]="['/visualizar-servico', solicitacao.id]"
+                    [queryParams]="{ origem: 'painel-funcionario' }"
                   >
-                    Visualizar Solicitações
+                    Detalhes
                   </a>
 
                   <a
                     class="btn btn-orcamento"
-                    [routerLink]="['/orcamento', solicitacao.id]"
+                    routerLink="/orcamentos/efetuar" [queryParams]="{ id: solicitacao.id }"
                   >
                     Efetuar Orçamento
                   </a>

@@ -1,3 +1,4 @@
+@if (registro; as registro) {
 <div class="page-bg">
 
   <div class="container mt-4">
@@ -32,7 +33,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="01/09/2026 14:30"
+                            [value]="registro.dataHora"
                             readonly>
                     </div>
 
@@ -45,7 +46,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="Notebook"
+                            [value]="registro.categoria ?? 'Não informada'"
                             readonly>
                     </div>
                     <!-- ESTADO -->
@@ -57,7 +58,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="APROVADA"
+                            [value]="registro.estado"
                             readonly>
                     </div>
                 </div>
@@ -75,7 +76,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="Notebook Dell Inspiron 15"
+                            [value]="registro.equipamento"
                             readonly>
 
                     </div>
@@ -94,7 +95,7 @@
                         <textarea
                             class="form-control"
                             rows="3"
-                            readonly>Notebook não liga e não apresenta sinal ao pressionar o botão de energia.</textarea>
+                            readonly>{{ registro.descricao }}</textarea>
                     </div>
                 </div>
             </div>
@@ -123,7 +124,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="João da Silva"
+                            [value]="registro.cliente ?? 'Não informado'"
                             readonly>
 
                     </div>
@@ -139,7 +140,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="123.456.789-00"
+                            [value]="registro.cpf ?? 'Não informado'"
                             readonly>
 
                     </div>
@@ -159,7 +160,7 @@
                         <input
                             type="email"
                             class="form-control"
-                            value="joao@email.com"
+                            [value]="registro.email ?? 'Não informado'"
                             readonly>
 
                     </div>
@@ -175,7 +176,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="(41) 99999-9999"
+                            [value]="registro.telefone ?? 'Não informado'"
                             readonly>
 
                     </div>
@@ -196,7 +197,7 @@
                         <input
                             type="text"
                             class="form-control"
-                            value="Rua das Flores, 100 - Centro - Curitiba/PR"
+                            [value]="registro.endereco ?? 'Não informado'"
                             readonly>
 
                     </div>
@@ -343,7 +344,7 @@
             <button
                 type="button"
                 class="btn btn-warning"
-                routerLink="/manutencoes/redirecionar">
+                routerLink="/manutencoes/redirecionar" [queryParams]="{ id: registro.id }">
 
                 Redirecionar Manutenção
 
@@ -363,3 +364,9 @@
     </form>
 
 </div>
+
+</div>
+</div>
+} @else {
+<div class="container py-4" role="alert">Solicitação não encontrada. <a routerLink="/visualizacao-solicitacoes">Voltar às solicitações</a></div>
+}

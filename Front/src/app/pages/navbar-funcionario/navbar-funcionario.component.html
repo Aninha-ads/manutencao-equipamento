@@ -1,112 +1,19 @@
-<!--<p>navbar-funcionario works!</p>-->
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-    <a class="navbar-brand" outerLink="/painel-funcionario">
-      Manutenção de Equipamentos
-    </a>
-
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarFuncionarioContent"
-      aria-controls="navbarFuncionarioContent"
-      aria-expanded="false"
-      aria-label="Alternar navegação">
-
+    <a class="navbar-brand" routerLink="/painel-funcionario">Manutenção de Equipamentos</a>
+    <button class="navbar-toggler" type="button" (click)="menuAberto = !menuAberto"
+      [attr.aria-expanded]="menuAberto" aria-controls="menu-funcionario" aria-label="Alternar navegação">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div
-      class="collapse navbar-collapse"
-      id="navbarFuncionarioContent">
-
-      <ul class="navbar-nav me-auto">
-
-        <!-- Início -->
-        <li class="nav-item active">
-          <a class="nav-link" routerLink="/painel-funcionario">
-            Início
-          </a>
-        </li>
-
-        <!-- Solicitações -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/visualizacao-solicitacoes">
-            Solicitações
-          </a>
-        </li>
-
-        <!-- Cadastros -->
-        <li class="nav-item dropdown">
-
-          <a
-            class="nav-link dropdown-toggle"
-            href="/categoria"
-            id="cadastrosDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-
-            Cadastros
-          </a>
-
-          <div
-            class="dropdown-menu"
-            aria-labelledby="cadastrosDropdown">
-
-            <a class="dropdown-item" routerLink="/categoria">
-              Categorias
-            </a>
-
-            <a class="dropdown-item" routerLink="/manter-funcionario">
-              Funcionários
-            </a>
-
-          </div>
-
-        </li>
-
-        <!-- Relatórios -->
-        <li class="nav-item dropdown">
-
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="relatoriosDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-
-            Relatórios
-          </a>
-          
-          <div
-            class="dropdown-menu"
-            aria-labelledby="relatoriosDropdown">
-
-            <a class="dropdown-item">
-              Receitas
-            </a>
-
-            <a class="dropdown-item">
-              Receitas por Categoria
-            </a>
-
-          </div>
-
-        </li>
-
+    <div class="collapse navbar-collapse" [class.show]="menuAberto" id="menu-funcionario">
+      <ul class="navbar-nav me-auto" (click)="menuAberto = false">
+        <li class="nav-item"><a class="nav-link" routerLink="/painel-funcionario">Início</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/visualizacao-solicitacoes">Solicitações</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/categoria">Categorias</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/manter-funcionarios">Funcionários</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/relatorios">Relatórios</a></li>
       </ul>
-
-      <button class="btn btn-outline-dark" type="button">
-        Sair
-      </button>
-
+      <button class="btn btn-outline-dark" type="button" (click)="sair()">Sair</button>
     </div>
-
   </nav>
 </header>

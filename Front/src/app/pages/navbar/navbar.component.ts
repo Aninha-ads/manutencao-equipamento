@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,4 +8,8 @@ import { RouterLink } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+  private auth = inject(AuthService);
+  menuAberto = false;
+  sair(): void { this.auth.logout(); }
+}

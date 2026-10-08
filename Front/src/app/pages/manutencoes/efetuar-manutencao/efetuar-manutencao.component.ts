@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-efetuar-manutencao',  //http://localhost:4200/manutencoes/efetuar
@@ -9,6 +11,18 @@ import { RouterLink } from '@angular/router';
   styleUrl: './efetuar-manutencao.component.css',
 })
 export class EfetuarManutencaoComponent {
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  ngOnInit(): void {
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      this.registro = buscarSolicitacao(params.get('id'));
+      this.cdr.markForCheck();
+      
+    });
+  }
+
 
   private fb = inject(FormBuilder);
 
@@ -41,6 +55,7 @@ export class EfetuarManutencaoComponent {
   }
 
   efetuarManutencao(): void {
+    if (!this.registro) return;
 
     if (this.manutencaoForm.invalid) {
       this.manutencaoForm.markAllAsTouched();

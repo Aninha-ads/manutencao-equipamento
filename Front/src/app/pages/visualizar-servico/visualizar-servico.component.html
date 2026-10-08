@@ -1,3 +1,4 @@
+@if (solicitacao; as solicitacao) {
 <!-- 
      Olá a todos que vão ler meu código, finalmente descibri como colocar 
      comentários aqui no html de forma que não desconfigurem meu arquivo todo,
@@ -439,7 +440,7 @@
         Rejeitar serviço
       </button>
       <a
-        routerLink="/painel-cliente"
+        [routerLink]="rotaVoltar"
         class="btn btn-dark btn-voltar"
       >
       <!--IMPORTANTE !!!!! Por enquanto, "Voltar" tá encaminhando pro
@@ -456,3 +457,6 @@
   </main>
 
 </div>
+} @else {
+<div class="container py-4" role="alert">Solicitação não encontrada. <a routerLink="/painel-cliente">Voltar às solicitações</a></div>
+}

@@ -1,45 +1,16 @@
-<!--<p>navbar works!</p>-->
-<!--justify-content-between" style="background-color:azure-->
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-        <a class="navbar-brand" outerLink="/painel-cliente">
-            Manutenção de Equipamentos
-        </a>
-
-        <button class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarContent"
-                aria-controls="navbarContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarContent">
-
-            <ul class="navbar-nav me-auto">
-
-                <li class="nav-item active">
-                    <a class="nav-link" routerLink="/painel-cliente">
-                        Início
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/orcamento/novo">
-                        Nova Solicitação
-                    </a>
-                </li>
-
-            </ul>
-
-            <button class="btn btn-outline-dark" type="button">
-                Sair
-            </button>
-
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" routerLink="/painel-cliente">Manutenção de Equipamentos</a>
+    <button class="navbar-toggler" type="button" (click)="menuAberto = !menuAberto"
+      [attr.aria-expanded]="menuAberto" aria-controls="menu-cliente" aria-label="Alternar navegação">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="menuAberto" id="menu-cliente">
+      <ul class="navbar-nav me-auto" (click)="menuAberto = false">
+        <li class="nav-item"><a class="nav-link" routerLink="/painel-cliente">Início</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/orcamento/novo">Nova Solicitação</a></li>
+      </ul>
+      <button class="btn btn-outline-dark" type="button" (click)="sair()">Sair</button>
+    </div>
+  </nav>
 </header>

@@ -1,3 +1,4 @@
+@if (registro; as registro) {
 <div class="page-bg">
 
   <div class="container mt-4 mb-5">
@@ -26,7 +27,7 @@
             <input
               type="text"
               class="form-control"
-              value="Notebook Dell Inspiron 15"
+              [value]="registro.equipamento"
               readonly>
           </div>
 
@@ -38,7 +39,7 @@
             <input
               type="text"
               class="form-control"
-              value="Notebook"
+              [value]="registro.categoria ?? 'Não informada'"
               readonly>
           </div>
 
@@ -50,7 +51,7 @@
             <input
               type="text"
               class="form-control"
-              value="APROVADA"
+              [value]="registro.estado"
               readonly>
           </div>
         </div>
@@ -64,7 +65,7 @@
             <textarea
               class="form-control"
               rows="3"
-              readonly>Notebook não liga e não apresenta sinal ao pressionar o botão de energia.</textarea>
+              readonly>{{ registro.descricao }}</textarea>
           </div>
         </div>
       </div>
@@ -176,7 +177,7 @@
           <button
             type="button"
             class="btn btn-secondary"
-            routerLink="/manutencoes/efetuar">
+            routerLink="/manutencoes/efetuar" [queryParams]="{ id: registro.id }">
             Cancelar
           </button>
 
@@ -192,3 +193,6 @@
     </div>
   </div>
 </div>
+} @else {
+<div class="container py-4" role="alert">Solicitação não encontrada. <a routerLink="/visualizacao-solicitacoes">Voltar às solicitações</a></div>
+}
