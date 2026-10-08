@@ -58,7 +58,7 @@ estou colocando aqui-->
 
       <div class="card-body">
         <form
-          #funcionarioForm="ngForm"
+          [formGroup]="form"
           (ngSubmit)="modoEdicao
             ? atualizarFuncionario()
             : adicionarFuncionario()" >
@@ -74,12 +74,14 @@ estou colocando aqui-->
 
               <input
                 id="email"
-                name="email"
                 type="email"
                 class="form-control"
-                [(ngModel)]="email"
-                placeholder="funcionario@empresa.com"
-                required             >
+                formControlName="email"
+                placeholder="funcionario@empresa.com">
+
+                @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                  <div class="text-danger small mt-1">Informe um email válido</div>
+                }
 
               <div class="form-text">
                 O e-mail será utilizado para acessar o sistema.
@@ -96,12 +98,14 @@ estou colocando aqui-->
 
               <input
                 id="nome"
-                name="nome"
                 type="text"
                 class="form-control"
-                [(ngModel)]="nome"
-                placeholder="Nome completo"
-                required>
+                formControlName="nome"
+                placeholder="Nome completo">
+
+                @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
+                  <div class="text-danger small mt-1">Informe o nome</div>
+                }
 
             </div>
             <!-- nascimento -->
@@ -116,11 +120,13 @@ estou colocando aqui-->
 
               <input
                 id="nascimento"
-                name="nascimento"
                 type="date"
                 class="form-control"
-                [(ngModel)]="nascimento"
-                required>
+                funControlName="nascimento">
+
+                @if (form.get('nascimento')?.touched && form.get('nascimento')?.invalid) {
+                  <div class="text-danger small mt-1">Informe a data de nascimento</div>
+                }
             </div>
 
             <!-- senha -->
@@ -133,12 +139,15 @@ estou colocando aqui-->
 
               <input
                 id="senha"
-                name="senha"
                 type="password"
                 class="form-control"
-                [(ngModel)]="senha"
+                formControlName="senha"
                 [required]="!modoEdicao"
                 placeholder="Digite a senha">
+
+                @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
+                  <div class="text-danger small mt-1">Informe a senha</div>
+                }
 
               @if (modoEdicao) {
                 <div class="form-text">
@@ -182,7 +191,7 @@ estou colocando aqui-->
               <button
                 type="submit"
                 class="btn btn-dark btn-sistema"
-                [disabled]="!funcionarioForm.valid">
+                [disabled]="form.invalid">
                 Cadastrar Funcionário
               </button>}
 

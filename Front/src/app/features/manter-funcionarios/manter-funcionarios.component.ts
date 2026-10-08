@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 interface Funcionario {
   id: number;
@@ -11,13 +11,14 @@ interface Funcionario {
 @Component({
   selector: 'app-manter-funcionarios',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe],
   templateUrl: './manter-funcionarios.component.html',
   styleUrl: './manter-funcionarios.component.css'
 })
 //nn sei fazer todo esse semi-back direito
 export class ManterFuncionariosComponent {
   private readonly chaveFuncionarios = 'funcionarios';
+  private fb = inject(FormBuilder);
 
   // funcionário atualmente logado
   funcionarioLogadoId = 1;
@@ -25,10 +26,12 @@ export class ManterFuncionariosComponent {
   modoEdicao = false;
   funcionarioEditandoId: number | null = null;
   // dados do formulário
-  email = '';
-  nome = '';
-  nascimento = '';
-  senha = '';
+  form: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    nome: ['', Validators.required],
+    nascimento: ['', Validators.required],
+    senha: ['', Validators.required], // obrigatória só no cadastro; ajustada em alternarModoEdicao()
+  });
 
   // dados fictícios para o protótipo
   funcionarios: Funcionario[] = [
@@ -59,13 +62,13 @@ export class ManterFuncionariosComponent {
   // Valida os dados e adiciona um novo funcionário à lista.
   adicionarFuncionario(): void {
     // Remove espaços extras e padroniza o e-mail para evitar duplicidades.
-    const email = this.email.trim().toLowerCase();
-    const nome = this.nome.trim();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    // O cadastro exige e-mail, nome, data de nascimento e senha.
-    if (!email || !nome || !this.nascimento || !this.senha.trim()) {
-      alert('Preencha todos os campos.');
-      return;}
+    const email = (this.form.value.email as string).trim().toLowerCase();
+    const nome = (this.form.value.nome as string).trim();
 
     // Compara os e-mails sem diferenciar letras maiúsculas e minúsculas.
     const emailExiste = this.funcionarios.some(
@@ -73,13 +76,15 @@ export class ManterFuncionariosComponent {
 
     if (emailExiste) {
       alert('Este e-mail já está cadastrado.');
-      return;}
+      return;
+    }
 
     const novoFuncionario: Funcionario = {
       id: this.proximoId(),
       email,
       nome,
-      nascimento: this.nascimento};
+      nascimento: this.form.value.nascimento
+    };
 
     this.funcionarios.push(novoFuncionario);
     this.salvarFuncionarios();
@@ -90,34 +95,34 @@ export class ManterFuncionariosComponent {
   editarFuncionario(funcionario: Funcionario): void {
     this.modoEdicao = true;
     this.funcionarioEditandoId = funcionario.id;
-    this.email = funcionario.email;
-    this.nome = funcionario.nome;
-    this.nascimento = funcionario.nascimento;
-    // A senha existente não é exibida por segurança.
-    this.senha = '';
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+    this.form.patchValue({
+      email: funcionario.email,
+      nome: funcionario.nome,
+      nascimento: funcionario.nascimento,
+      senha: '' // a senha existente não é exibida, por segurança
     });
+    this.atualizarValidadorSenha();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   // Valida e atualiza os dados do funcionário selecionado.
   atualizarFuncionario(): void {
-
-    // Sem um funcionário selecionado, não existe registro para atualizar.
     if (this.funcionarioEditandoId === null) {
-      return;}
-    const email = this.email.trim().toLowerCase();
-    const nome = this.nome.trim();
+      return;
+    }
 
-    // Na edição, todos os campos visíveis continuam sendo obrigatórios.
-    if (!email || !nome || !this.nascimento) {
-      alert('Preencha os campos obrigatórios.');
-      return;}
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const email = (this.form.value.email as string).trim().toLowerCase();
+    const nome = (this.form.value.nome as string).trim();
 
     // Ignora o próprio registro, mas bloqueia e-mail usado por outro funcionário.
     const emailExiste = this.funcionarios.some(
       funcionario => funcionario.id !== this.funcionarioEditandoId
-        && funcionario.email.toLowerCase() === email);
+        && funcionario.email.toLowerCase() === email
+    );
 
     if (emailExiste) {
       alert('Este e-mail já está cadastrado para outro funcionário.');
@@ -125,18 +130,19 @@ export class ManterFuncionariosComponent {
     }
 
     // Garante que o funcionário ainda existe antes de alterar seus dados.
-    const funcionario = this.funcionarios.find(
-      f => f.id === this.funcionarioEditandoId);
-
+    const funcionario = this.funcionarios.find(f => f.id === this.funcionarioEditandoId);
     if (!funcionario) {
-      return;}
+      return;
+    }
 
     funcionario.email = email;
     funcionario.nome = nome;
-    funcionario.nascimento = this.nascimento;
+    funcionario.nascimento = this.form.value.nascimento;
+
     this.salvarFuncionarios();
     alert('Funcionário atualizado com sucesso!');
-    this.limparFormulario();}
+    this.limparFormulario();
+  }
 
   // Remove um funcionário somente depois de validar as regras de segurança.
   removerFuncionario(funcionario: Funcionario): void {
@@ -160,25 +166,35 @@ export class ManterFuncionariosComponent {
       return;
     }
     // Remove somente o funcionário escolhido, preservando os demais registros.
-    this.funcionarios = this.funcionarios.filter(
-      f => f.id !== funcionario.id
-    );
+    this.funcionarios = this.funcionarios.filter(f => f.id !== funcionario.id);
     this.salvarFuncionarios();
     alert('Funcionário removido com sucesso!');
   }
 
   // Cancela a edição e retorna o formulário ao modo de cadastro.
   cancelarEdicao(): void {
-    this.limparFormulario();}
-  
+    this.limparFormulario();
+  }
+
   // Limpa os dados e reinicia o estado do formulário.
   limparFormulario(): void {
-    this.email = '';
-    this.nome = '';
-    this.nascimento = '';
-    this.senha = '';
+    this.form.reset({ email: '', nome: '', nascimento: '', senha: '' });
     this.modoEdicao = false;
     this.funcionarioEditandoId = null;
+    this.atualizarValidadorSenha();
+  }
+
+  // Alterna a obrigatoriedade da senha: obrigatória no cadastro, opcional na edição.
+  private atualizarValidadorSenha(): void {
+    const senhaControl = this.form.get('senha');
+
+    if (this.modoEdicao) {
+      senhaControl?.clearValidators();
+    } else {
+      senhaControl?.setValidators(Validators.required);
+    }
+
+    senhaControl?.updateValueAndValidity();
   }
 
   // Calcula um identificador maior que todos os registros existentes.
@@ -186,9 +202,7 @@ export class ManterFuncionariosComponent {
     if (this.funcionarios.length === 0) {
       return 1;
     }
-    return Math.max(
-      ...this.funcionarios.map(f => f.id)
-    ) + 1;
+    return Math.max(...this.funcionarios.map(f => f.id)) + 1;
   }
 
   private salvarFuncionarios(): void {
