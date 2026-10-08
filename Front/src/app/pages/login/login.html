@@ -13,7 +13,7 @@
         Entre com sua conta
       </p>
 
-      <form>
+      <form [formGroup]="form" (ngSubmit)="fazerLogin()">
 
         <div class="mb-3">
           <label for="email" class="form-label">
@@ -26,8 +26,11 @@
             name="email"
             class="form-control"
             placeholder="Digite seu e-mail"
-            [(ngModel)]="email"
+            formControlName="email"
           >
+          @if (form.get('email')?.touched && form.get('email')?.invalid) {
+            <div class="text-danger small mt-1">Informe um email válido!</div>
+          }
         </div>
 
         <div class="mb-3">
@@ -41,14 +44,16 @@
             name="senha"
             class="form-control"
             placeholder="Digite sua senha"
-            [(ngModel)]="senha"
+            formControlName="senha"
           >
+          @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
+            <div class="text-danger small mt-1">Informe a senha</div>
+          }
         </div>
 
         <button
           type="button"
           class="btn btn-primary w-100"
-          (click)="fazerLogin()"
         >
           Entrar
         </button>

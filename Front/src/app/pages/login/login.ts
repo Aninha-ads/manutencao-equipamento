@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 /*pelo que eu pesquisei, aqui 'informa' meu angular de que essa aplicação é um componente*/
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     RouterLink
   ],
   templateUrl: './login.html',
@@ -19,20 +19,22 @@ por enquanto, basicamente ele mostra uma mensagenzinha depois de um login com su
 e se não preencher os campos, ele manda preencher com outro alerta.
 */
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
 
-  email: string = '';
-  senha: string = '';
-
-  constructor(private router: Router) {}
+  form: FormGroup = this.fb.group({
+    email: ['',[Validators.required, Validators.email]],
+    senha: ['', Validators.required],
+  });
 
   fazerLogin(): void {
-    console.log('E-mail:', this.email);
-    console.log('Senha:', this.senha);
-
-    if (this.email === '' || this.senha === '') {
-      alert('Preencha todos os campos!');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
+
+    console.log('E-mail:', this.form.value.email);
+    console.log('Senha:', this.form.value.senha);
 
     alert('Login realizado!');
       this.router.navigate(['/painel-cliente']);
