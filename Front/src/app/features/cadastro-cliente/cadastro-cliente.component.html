@@ -1,89 +1,238 @@
 <div class="pag-cadastro">
   <div class="container">
     <h3>Autocadastro de Cliente</h3>
-    <form (ngSubmit)="onSubmit()">
-      <div class="row">
+    <form
+      [formGroup]="cadastroForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <!-- nome -->
+      <div class="row mb-3">
         <div class="col-md-12">
           <label for="nome" class="form-label">Nome Completo</label>
-          <input type="text" class="form-control" id="nome" name="nome" [(ngModel)]="cliente.nome" required>
+          <input
+            type="text"
+            id="nome"
+            class="form-control"
+            formControlName="nome"
+            [class.is-invalid]="campos.nome.touched && campos.nome.invalid"
+          >
+          <!-- Verifica se o cmpo foi preenchido e lança aviso de erro caso não 
+           seja preenchido ou passe o limite de caracteres -->
+          @if (campos.nome.touched && campos.nome.invalid) {
+            <div class="invalid-feedback">
+              @if (campos.nome.hasError('required') || campos.nome.hasError('apenasEspacos')) {
+                Informe seu nome completo.
+              } @else if (campos.nome.hasError('maxlength')) {
+                O nome deve ter no máximo 150 caracteres.
+              }
+            </div>
+          }
         </div>
       </div>
-      <div class="row">
+      <!--email,cpf e telefone no mesmo esquema do nome
+      ifs, erros e avisos tals, só que cpf e telefone com dígitos -->
+      <div class="row mb-3">
         <div class="col-md-6">
           <label for="email" class="form-label">E-mail</label>
-          <input type="email" class="form-control" id="email" name="email" [(ngModel)]="cliente.email" required>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            [class.is-invalid]="campos.email.touched && campos.email.invalid"
+          >
+          @if (campos.email.touched && campos.email.invalid) {
+            <div class="invalid-feedback">
+              @if (campos.email.hasError('required') || campos.email.hasError('apenasEspacos')) {
+                Informe seu e-mail.
+              } @else if (campos.email.hasError('email')) {
+                Informe um endereço de e-mail válido.
+              } @else if (campos.email.hasError('maxlength')) {
+                O e-mail deve ter no máximo 254 caracteres.
+              }
+            </div>
+          }
         </div>
         <div class="col-md-3">
           <label for="cpf" class="form-label">CPF</label>
-          <input type="text" 
-          class="form-control" 
-          id="cpf" 
-          name="cpf" 
-          [(ngModel)]="cliente.cpf" 
-          mask="000.000.000-00"
-          placeholder="000.000.000-00"
-          appGeralValidator="cpf"
-          required>
+          <input
+            type="text"
+            id="cpf"
+            class="form-control"
+            formControlName="cpf"
+            mask="000.000.000-00"
+            placeholder="000.000.000-00"
+            [class.is-invalid]="campos.cpf.touched && campos.cpf.invalid"
+          >
+          @if (campos.cpf.touched && campos.cpf.invalid) {
+            <div class="invalid-feedback">
+              @if (campos.cpf.hasError('required')) {
+                Informe o CPF.
+              } @else if (campos.cpf.hasError('cpfInvalido')) {
+                CPF inválido. Confira os números digitados.
+              }
+            </div>
+          }
         </div>
         <div class="col-md-3">
           <label for="telefone" class="form-label">Telefone</label>
-          <input type="text" 
-          class="form-control" 
-          id="telefone" 
-          name="telefone" 
-          [(ngModel)]="cliente.telefone" 
-          mask="(00) 00000-0000"
-          placeholder="(00) 00000-0000"
-          required>
+          <input
+            type="text"
+            id="telefone"
+            class="form-control"
+            formControlName="telefone"
+            mask="(00) 00000-0000"
+            placeholder="(00) 00000-0000"
+            [class.is-invalid]="campos.telefone.touched && campos.telefone.invalid"
+          >
+          @if (campos.telefone.touched && campos.telefone.invalid) {
+            <div class="invalid-feedback">
+              @if (campos.telefone.hasError('required')) {
+                Informe o telefone.
+              } @else if (campos.telefone.hasError('quantidadeDigitos')) {
+                Informe um telefone com 11 dígitos, incluindo o DDD.
+              }
+            </div>
+          }
         </div>
       </div>
       <hr>
       <h5>Endereço</h5>
-      <div class="row">
+      <!-- cep, logradouro e número -->
+      <div class="row mb-3">
         <div class="col-md-3">
           <label for="cep" class="form-label">CEP</label>
-          <input 
-          type="text" 
-          class="form-control" 
-          id="cep" 
-          name="cep" 
-          [(ngModel)]="cliente.cep"  
-          mask="00000-000"
-          placeholder="00000-000"
-          (blur)="buscarCep()"
-          required>
+          <input
+            type="text"
+            id="cep"
+            class="form-control"
+            formControlName="cep"
+            mask="00000-000"
+            placeholder="00000-000"
+            (blur)="buscarCep()"
+            [class.is-invalid]="campos.cep.touched && campos.cep.invalid"
+          >
+          @if (campos.cep.touched && campos.cep.invalid) {
+            <div class="invalid-feedback">
+              @if (campos.cep.hasError('required')) {
+                Informe o CEP.
+              } @else if (campos.cep.hasError('quantidadeDigitos')) {
+                O CEP deve conter 8 dígitos.
+              }
+            </div>
+          }
+          @if (erroCep) {
+            <div class="text-danger small mt-1">
+              {{ erroCep }}
+            </div>
+          }
         </div>
         <div class="col-md-7">
           <label for="logradouro" class="form-label">Logradouro / Rua</label>
-          <input type="text" class="form-control" id="logradouro" name="logradouro" [(ngModel)]="cliente.logradouro" required>
+          <input
+            type="text"
+            id="logradouro"
+            class="form-control"
+            formControlName="logradouro"
+            [class.is-invalid]="campos.logradouro.touched && campos.logradouro.invalid"
+          >
+          @if (campos.logradouro.touched && campos.logradouro.invalid) {
+            <div class="invalid-feedback">
+              Informe o logradouro.
+            </div>
+          }
         </div>
         <div class="col-md-2">
           <label for="numero" class="form-label">Número</label>
-          <input type="text" class="form-control" id="numero" name="numero" [(ngModel)]="cliente.numero" required>
+          <input
+            type="text"
+            id="numero"
+            class="form-control"
+            formControlName="numero"
+            [class.is-invalid]="campos.numero.touched && campos.numero.invalid"
+          >
+          @if (campos.numero.touched && campos.numero.invalid) {
+            <div class="invalid-feedback">
+              Informe o número.
+            </div>
+          }
         </div>
       </div>
-      <div class="row">
+      <!-- complemento, bairro cidade e Estado (UF) -->
+      <div class="row mb-3">
         <div class="col-md-4">
           <label for="complemento" class="form-label">Complemento</label>
-          <input type="text" class="form-control" id="complemento" name="complemento" [(ngModel)]="cliente.complemento">
+          <input
+            type="text"
+            id="complemento"
+            class="form-control"
+            formControlName="complemento"
+            [class.is-invalid]="campos.complemento.touched && campos.complemento.invalid"
+          >
+          @if (campos.complemento.hasError('maxlength') && campos.complemento.touched) {
+            <div class="invalid-feedback">
+              O complemento deve ter no máximo 150 caracteres.
+            </div>
+          }
         </div>
         <div class="col-md-4">
           <label for="bairro" class="form-label">Bairro</label>
-          <input type="text" class="form-control" id="bairro" name="bairro" [(ngModel)]="cliente.bairro" required>
+          <input
+            type="text"
+            id="bairro"
+            class="form-control"
+            formControlName="bairro"
+            [class.is-invalid]="campos.bairro.touched && campos.bairro.invalid"
+          >
+          @if (campos.bairro.touched && campos.bairro.invalid) {
+            <div class="invalid-feedback">
+              Informe o bairro.
+            </div>
+          }
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="cidade" class="form-label">Cidade</label>
-          <input type="text" class="form-control" id="cidade" name="cidade" [(ngModel)]="cliente.cidade" required>
+          <input
+            type="text"
+            id="cidade"
+            class="form-control"
+            formControlName="cidade"
+            [class.is-invalid]="campos.cidade.touched && campos.cidade.invalid"
+          >
+          @if (campos.cidade.touched && campos.cidade.invalid) {
+            <div class="invalid-feedback">
+              Informe a cidade.
+            </div>
+          }
         </div>
         <div class="col-md-1">
           <label for="uf" class="form-label">UF</label>
-              <input type="text" id="uf" name="uf" class="form-control campo-uf" [(ngModel)]="cliente.uf"
-                (ngModelChange)="atualizarUf($event)" maxlength="2" pattern="[A-Za-z]{2}"
-                style="text-transform: uppercase" required>
+          <input
+            type="text"
+            id="uf"
+            class="form-control campo-uf"
+            formControlName="uf"
+            maxlength="2"
+            style="text-transform: uppercase"
+            (input)="atualizarUf(campos.uf.value)"
+            [class.is-invalid]="campos.uf.touched && campos.uf.invalid"
+          >
+          @if (campos.uf.touched && campos.uf.invalid) {
+            <div class="invalid-feedback">
+              Informe uma UF com duas letras.
+            </div>
+          }
         </div>
       </div>
-      <br>
-      <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+      <!-- Botão para enviar-->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="enviando"
+      >
+        Finalizar Cadastro
+      </button>
     </form>
   </div>
 </div>
