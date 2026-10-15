@@ -104,7 +104,7 @@ estou colocando aqui-->
                 placeholder="Nome completo">
 
                 @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
-                  <div class="text-danger small mt-1">Informe o nome</div>
+                  <div class="text-danger small mt-1">Campo obrigatório</div>
                 }
 
             </div>
@@ -125,7 +125,7 @@ estou colocando aqui-->
                 funControlName="nascimento">
 
                 @if (form.get('nascimento')?.touched && form.get('nascimento')?.invalid) {
-                  <div class="text-danger small mt-1">Informe a data de nascimento</div>
+                  <div class="text-danger small mt-1">Campo obrigatório</div>
                 }
             </div>
 
@@ -146,7 +146,7 @@ estou colocando aqui-->
                 placeholder="Digite a senha">
 
                 @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
-                  <div class="text-danger small mt-1">Informe a senha</div>
+                  <div class="text-danger small mt-1">Campo obrigatório</div>
                 }
 
               @if (modoEdicao) {
@@ -176,7 +176,8 @@ estou colocando aqui-->
 
               <button
                 type="submit"
-                class="btn btn-warning btn-sistema">
+                class="btn btn-warning btn-sistema"
+                [disabled]="form.invalid">
                 Atualizar Funcionário
               </button>
 
