@@ -28,10 +28,10 @@ export class PainelClienteComponent implements OnInit{
   }
 
   private carregarSolicitacoes(): void {
-    const lista = listarSolicitacoes();
+    //const lista = listarSolicitacoes();
 
     //lista ordenada, data/hora
-    this.solicitacoes = [...lista].sort(
+    this.solicitacoes = listarSolicitacoes().sort(
       (a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
     );
   }
@@ -59,11 +59,11 @@ export class PainelClienteComponent implements OnInit{
   acaoPara(estado: string): {label: string; rota: string} | null {
     switch (estado) {
       case 'ORCADA':
-        return { label: 'Aprovar/Rejeitar', rota: '/visualizar-servico' };
+        return { label: 'Aprovar/Rejeitar', rota: '/orcamentos/mostrar-orcamento' };
       case 'REJEITADA':
-        return { label: 'Resgatar Serviço', rota: '/visualizar-servico' };
+        return { label: 'Resgatar Serviço', rota: '/resgatar-servico' };
       case 'ARRUMADA':
-        return { label: 'Pagar Serviço', rota: '/visualizar-servico' };
+        return { label: 'Pagar Serviço', rota: '/pagar-servico' };
       case 'APROVADA':
         return null; 
       default:
