@@ -14,6 +14,8 @@ import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicita
 import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
 import { HomeComponent } from './home/home.component';
 import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
+import { ResgatarServicoComponent } from './pages/resgatar-servico/resgatar-servico.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -83,6 +85,11 @@ export const routes: Routes = [
     path: 'categoria',
     component: CategoriaComponent
     
+  },
+
+  {
+    path: 'registrar-servico/:id',
+    component: ResgatarServicoComponent
   },
 
   {
