@@ -1,14 +1,19 @@
 package br.ufpr.backend.repositories;
 
-import br.ufpr.backend.models.*;
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import static org.assertj.core.api.Assertions.*;
+import br.ufpr.backend.models.Cliente;
+import br.ufpr.backend.models.Endereco;
+import br.ufpr.backend.models.Funcionario;
+import br.ufpr.backend.models.Usuario;
 
 @DataJpaTest(properties = {
     "spring.jpa.hibernate.ddl-auto=none",
