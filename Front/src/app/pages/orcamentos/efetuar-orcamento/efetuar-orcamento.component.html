@@ -1,4 +1,9 @@
 @if (registro; as registro) {
+  @if (!permissaoValida) {
+  <div class="alert alert-warning">
+    Esta solicitação não está no estado ABERTA e não pode receber um novo orçamento.
+  </div>
+}
 <div class="orcamento-page">
     <div class="container mt-4 mb-5">
 
@@ -225,7 +230,7 @@
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="orcamentoForm.invalid">
+        [disabled]="orcamentoForm.invalid || !permissaoValida">
         Registrar Orçamento
       </button>
 

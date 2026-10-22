@@ -1,9 +1,8 @@
-import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { buscarSolicitacao, listarSolicitacoes } from '../../../core/services/solicitacoes-prototipo';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl,
-  ValidationErrors} from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 interface SolicitacaoOrcamento {
   dataHora: string;
@@ -30,6 +29,7 @@ interface Cliente {
 })
 export class EfetuarOrcamentoComponent {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
   registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
@@ -51,6 +51,11 @@ export class EfetuarOrcamentoComponent {
   cliente: Cliente = {
     nome: '', cpf: '', email: '', telefone: '', endereco: ''
   };
+
+  //solicitação aberta
+  get permissaoValida(): boolean {
+    return this.registro?.estado === 'ABERTA';
+  }
 
   // Aceita valores positivos com até duas casas decimais.
   valorPositivo(control: AbstractControl): ValidationErrors | null {
@@ -96,6 +101,10 @@ constructor(private fb: FormBuilder) {
 
   registrarOrcamento(): void {
     if (!this.registro) return;
+    if(!this.permissaoValida) {
+      alert('Essa solicitacao nao esta disponivel para orcamento');
+      return;
+    }
     if (this.orcamentoForm.invalid) {
       this.orcamentoForm.markAllAsTouched();
       return;
@@ -103,11 +112,31 @@ constructor(private fb: FormBuilder) {
 
     const texto = String(this.valorOrcamento.value).trim().replace(',', '.');
     const valor = Number(texto);
+    const agora = new Date().toISOString();
+    const funcionario = sessionStorage.getItem('funcionarioLogadoEmail') ?? 'Não informado';
+
+    this.registro.estado = 'ORCADA';
+    this.registro.valorOrcamento = valor;
+    this.registro.historico = [
+      ...(this.registro.historico ?? []),
+      {
+        dataHora: agora,
+        estado: 'ORCADA',
+        funcionario,
+        descricao: `Orçamento registrado no valor de R$ ${valor.toFixed(2).replace('.',',')}.`
+      }
+    ];
+
+    const solicitacoes = listarSolicitacoes();
+    const index = solicitacoes.findIndex(s => s.id === this.registro!.id);
+    localStorage.setItem('solicitacoes', JSON.stringify(solicitacoes));
 
     alert(
       `Orçamento de R$ ${valor.toFixed(2).replace('.', ',')} registrado com sucesso!`
     );
 
     console.log('Valor registrado:', valor);
+
+    this.router.navigate(['/painel-funcionario']);
   }
 }
