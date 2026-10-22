@@ -1,11 +1,11 @@
 package app.repositories;
 
-import app.models.Funcionario;
+import br.ufpr.backend.models.Funcionario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
-    List<Funcionario> findByAtivoTrue();
+public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
+    List<Funcionario> findByUsuarioAtivoTrue();
 }

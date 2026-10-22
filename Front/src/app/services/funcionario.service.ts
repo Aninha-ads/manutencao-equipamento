@@ -1,37 +1,27 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { defer, of, throwError } from 'rxjs';
 import { Funcionario } from '../models/funcionario.model';
-
-@Injectable({
-  providedIn: 'root',
-})
+import { DadosService } from '../core/services/dados.service';
+import { FuncionarioTela } from '../core/models/dados-tela.model';
+@Injectable({ providedIn: 'root' })
 export class FuncionarioService {
-  private httpClient = inject(HttpClient);
+  private dados = inject(DadosService);
 
-  BASE_URL = 'http://localhost:3000/funcionarios';
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
-  listarTodos(): Observable<Funcionario[]> {
-    return this.httpClient.get<Funcionario[]>(this.BASE_URL, this.httpOptions);
+  private converter(f: FuncionarioTela): Funcionario {
+    return { id: f.id, nome: f.nome, email: f.email, dataNascimento: f.nascimento, ativo: true };
+  }
+  private listar() { return this.dados.listarFuncionarios().map(f => this.converter(f)); }
+  private paraTela(f: Funcionario): FuncionarioTela {
+    return { id: f.id ?? 0, nome: f.nome, email: f.email, nascimento: f.dataNascimento };
   }
 
-  buscarPorId(id: number): Observable<Funcionario> {
-    return this.httpClient.get<Funcionario>(this.BASE_URL + '/' + id, this.httpOptions);
-  }
-
-  inserir(cliente: Funcionario): Observable<Funcionario> {
-    return this.httpClient.post<Funcionario>(this.BASE_URL, JSON.stringify(cliente), this.httpOptions);
-  }
-
-  alterar(cliente: Funcionario): Observable<Funcionario> {
-    return this.httpClient.put<Funcionario>(this.BASE_URL + '/' + cliente.id, JSON.stringify(cliente), this.httpOptions);
-  }
-
-  // extra (não está nos slides): login e checagem de e-mail único
-  buscarPorEmail(email: string): Observable<Funcionario[]> {
-    return this.httpClient.get<Funcionario[]>(this.BASE_URL + '?email=' + email, this.httpOptions);
-  }
+  listarTodos() { return defer(() => of(this.listar())); }
+  buscarPorId(id: number) { return defer(() => {
+    const registro = this.listar().find(c => c.id === id);
+    return registro ? of(registro) : throwError(() => new Error('Registro não encontrado'));
+  }); }
+  private salvar(dados: Funcionario, novo: boolean) { return this.dados.salvarFuncionario(this.paraTela(dados), novo).then(f => this.converter(f)); }
+  inserir(dados: Funcionario) { return defer(() => this.salvar(dados, true)); }
+  alterar(dados: Funcionario) { return defer(() => this.salvar(dados, false)); }
+  buscarPorEmail(email: string) { return defer(() => of(this.listar().filter(c => c.email.toLowerCase() === email.trim().toLowerCase()))); }
 }

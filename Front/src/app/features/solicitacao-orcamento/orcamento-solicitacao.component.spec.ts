@@ -1,78 +1,55 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter, Router } from '@angular/router';
 import { vi } from 'vitest';
-
+import { DadosService } from '../../core/services/dados.service';
+import { dadosTeste } from '../../testing/dados-teste';
 import { OrcamentoSolicitacaoComponent } from './orcamento-solicitacao.component';
 
-describe('OrcamentoSolicitacaoComponent', () => {
+describe('Abertura de solicitação no SQL', () => {
   let componente: OrcamentoSolicitacaoComponent;
-  let dispositivoTeste: ComponentFixture<OrcamentoSolicitacaoComponent>;
-
+  let http: HttpTestingController;
   beforeEach(async () => {
-    localStorage.clear();
-
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [OrcamentoSolicitacaoComponent],
-    }).compileComponents();
-
-    dispositivoTeste = TestBed.createComponent(OrcamentoSolicitacaoComponent);
-    componente = dispositivoTeste.componentInstance;
-    componente.ngOnInit();
-    await dispositivoTeste.whenStable();
-  });
-
-  afterEach(() => {
-    localStorage.clear();
-    vi.restoreAllMocks();
-  });
-
-  it('deve criar o componente', () => {
-    expect(componente).toBeTruthy();
-  });
-
-  it('deve gerar o primeiro ID quando não há solicitações salvas', () => {
-    expect(componente.solicitacaoId).toBe(1);
-  });
-
-  it('deve gerar o próximo ID com base nas solicitações existentes', () => {
-    localStorage.setItem('solicitacoes', JSON.stringify([
-      { id: 3, dataHora: '', categoria: 'Monitor', equipamento: 'Monitor', descricao: 'Falha', estado: 'Pendente' },
-      { id: 7, dataHora: '', categoria: 'Notebook', equipamento: 'Notebook', descricao: 'Falha', estado: 'Pendente' }
-    ]));
-
-    const novoComponente = TestBed.createComponent(OrcamentoSolicitacaoComponent).componentInstance;
-    novoComponente.ngOnInit();
-
-    expect(novoComponente.solicitacaoId).toBe(8);
-  });
-
-  it('deve impedir o registro com campos vazios', () => {
-    const alerta = vi.spyOn(window, 'alert').mockImplementation(() => undefined);
-
-    componente.salvarSolicitacao();
-
-    expect(alerta).toHaveBeenCalledWith(
-      'Preencha a categoria, o equipamento e os detalhes da solicitação.'
-    );
-    expect(localStorage.getItem('solicitacoes')).toBeNull();
-  });
-
-  it('deve salvar uma solicitação preenchida', () => {
-    const alerta = vi.spyOn(window, 'alert').mockImplementation(() => undefined);
-    componente.categoria = 'Notebook';
-    componente.equipamento = ' Notebook Dell ';
-    componente.descricao = ' Não liga ';
-
-    componente.salvarSolicitacao();
-
-    const solicitacoesSalvas = JSON.parse(localStorage.getItem('solicitacoes') ?? '[]');
-    expect(solicitacoesSalvas).toHaveLength(1);
-    expect(solicitacoesSalvas[0]).toMatchObject({
-      id: 1,
-      categoria: 'Notebook',
-      equipamento: 'Notebook Dell',
-      descricao: 'Não liga',
-      estado: 'Pendente'
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
     });
-    expect(alerta).toHaveBeenCalledWith('Sua solicitação de orçamento foi enviada com sucesso!');
+    http = TestBed.inject(HttpTestingController);
+    const carregar = TestBed.inject(DadosService).carregar();
+    http.expectOne('/api/dados').flush(dadosTeste());
+    await carregar;
+    componente = TestBed.createComponent(OrcamentoSolicitacaoComponent).componentInstance;
+    vi.spyOn(window, 'alert').mockImplementation(() => undefined);
+  });
+  afterEach(() => { http.verify(); vi.restoreAllMocks(); });
+
+  it('impede registro com campos vazios', async () => {
+    await componente.salvarSolicitacao();
+    expect(componente.form.invalid).toBe(true);
+    http.expectNone('/api/solicitacoes');
+  });
+  it('envia IDs do banco e só confirma depois da gravação', async () => {
+    componente.clienteId = 3;
+    componente.form.setValue({ categoria: 'Notebook', equipamento: ' Notebook Dell ', descricao: ' Não liga ' });
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const salvar = componente.salvarSolicitacao();
+    const pedido = http.expectOne('/api/solicitacoes');
+    expect(pedido.request.body).toEqual({ clienteId: 3, categoriaId: 1, equipamento: 'Notebook Dell', descricao: 'Não liga' });
+    expect(navegar).not.toHaveBeenCalled();
+    pedido.flush({ id: 42 });
+    await Promise.resolve();
+    http.expectOne('/api/dados').flush(dadosTeste());
+    await salvar;
+    expect(navegar).toHaveBeenCalledWith(['/painel-cliente']);
+  });
+  it('mantém o usuário na tela quando o banco recusa o cadastro', async () => {
+    componente.clienteId = 3;
+    componente.form.setValue({ categoria: 'Notebook', equipamento: 'Notebook', descricao: 'Falha' });
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const salvar = componente.salvarSolicitacao();
+    http.expectOne('/api/solicitacoes').flush('Falha', { status: 409, statusText: 'Conflict' });
+    await salvar;
+    expect(navegar).not.toHaveBeenCalled();
   });
 });

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping({"/categorias", "/api/categorias"})
 @CrossOrigin(origins = "http://localhost:4200")
 public class CategoriaController {
 
@@ -21,7 +21,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> buscar(@PathVariable Long id) {
+    public ResponseEntity<Categoria> buscar(@PathVariable Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
@@ -31,7 +31,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         service.inativar(id);
         return ResponseEntity.noContent().build();
     }

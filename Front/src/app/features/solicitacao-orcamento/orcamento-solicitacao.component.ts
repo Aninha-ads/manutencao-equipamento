@@ -1,18 +1,11 @@
+import { DadosService } from '../../core/services/dados.service';
 //Aninha - gente, eu troquei o FormsModule por ReactiveForms, era uma exigência da Semana 7. 
 //Também troquei o estado inicial de 'Pendente' para 'ABERTA' - é o que o RF004 pede
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; //retirei FormsModule
 import { Router, RouterLink } from '@angular/router';
 
-interface SolicitacaoManutencao {
-  id: number;
-  dataHora: string;
-  categoria: string;
-  equipamento: string;
-  descricao: string;
-  estado: string;
-}
 
 @Component({
   selector: 'app-orcamento-solicitacao',
@@ -21,13 +14,14 @@ interface SolicitacaoManutencao {
   templateUrl: './orcamento-solicitacao.component.html',
   styleUrl: './orcamento-solicitacao.component.css',
 })
-export class OrcamentoSolicitacaoComponent implements OnInit {
-  private readonly chaveSolicitacoes = 'solicitacoes';
+export class OrcamentoSolicitacaoComponent {
+  private dados = inject(DadosService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  solicitacaoId = 0;
-  categorias = ['Notebook', 'Impressora', 'Desktop', 'Monitor', 'Outro'];
+  clientes = this.dados.listarClientes();
+  clienteId: number | null = null;
+  categorias = this.dados.listarCategorias().map(c => c.nome);
 
   //adicionei o formgroup
   form: FormGroup = this.fb.group({
@@ -38,49 +32,28 @@ export class OrcamentoSolicitacaoComponent implements OnInit {
   
  // private router = inject(Router);
 
-  ngOnInit(): void {
-    const solicitacoes = this.carregarSolicitacoes();
-    this.solicitacaoId = solicitacoes.length === 0
-      ? 1
-      : Math.max(...solicitacoes.map(solicitacao => solicitacao.id)) + 1;
-  }
 
-  salvarSolicitacao(): void {
+  async salvarSolicitacao(): Promise<void> {
     if(this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     
-    /*
-    const equipamentoInformado = this.equipamento.trim();
-    const descricaoInformada = this.descricao.trim();
 
-    if (!this.categoria || !equipamentoInformado || !descricaoInformada) {
-      alert('Preencha a categoria, o equipamento e os detalhes da solicitação.');
+    // A identificação autenticada substituirá esta seleção explícita quando o login estiver integrado.
+    const categoria = this.dados.listarCategorias().find(c => c.nome === this.form.value.categoria);
+    if (!categoria || !this.clienteId) { alert('Selecione cliente e categoria válidos.'); return; }
+    try {
+      await this.dados.criarSolicitacao({
+        clienteId: Number(this.clienteId), categoriaId: categoria.id,
+        equipamento: this.form.value.equipamento.trim(), descricao: this.form.value.descricao.trim()
+      });
+    } catch {
+      alert('Não foi possível salvar a solicitação no banco. Tente novamente.');
       return;
     }
-      */
-
-    const solicitacoes = this.carregarSolicitacoes();
-    const novaSolicitacao: SolicitacaoManutencao = {
-      id: this.solicitacaoId,
-      dataHora: new Date().toISOString(),
-      categoria: this.form.value.categoria,
-      equipamento: this.form.value.equipamento.trim(),
-      descricao: this.form.value.descricao.trim(),
-      estado: 'ABERTA'
-    };
-
-    solicitacoes.push(novaSolicitacao);
-    localStorage.setItem(this.chaveSolicitacoes, JSON.stringify(solicitacoes));
     alert('Sua solicitação de orçamento foi enviada com sucesso!');
     this.router.navigate(['/painel-cliente']);
   }
 
-  private carregarSolicitacoes(): SolicitacaoManutencao[] {
-    const solicitacoesSalvas = localStorage.getItem(this.chaveSolicitacoes);
-    return solicitacoesSalvas
-      ? JSON.parse(solicitacoesSalvas) as SolicitacaoManutencao[]
-      : [];
-  }
 }

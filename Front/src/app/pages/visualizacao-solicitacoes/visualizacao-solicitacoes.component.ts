@@ -1,5 +1,6 @@
-import { listarSolicitacoes } from '../../core/services/solicitacoes-prototipo';
-import { Component } from '@angular/core';
+import { EstadoSolicitacao } from '../../models/solicitacao.model';
+import { DadosService } from '../../core/services/dados.service';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -8,7 +9,7 @@ export interface Solicitacao {
   dataHora: string;
   cliente: string;
   descricao: string;
-  estado: string;
+  estado: EstadoSolicitacao;
   funcionarioDestinoId?: number;
 }
 
@@ -20,18 +21,19 @@ export interface Solicitacao {
   styleUrl: './visualizacao-solicitacoes.component.css'
 })
 export class VisualizacaoSolicitacoesComponent {
+  private dados = inject(DadosService);
   filtroAtual: string = 'TODAS';
   dataInicio: string = '';
   dataFim: string = '';
 
-  solicitacoes: Solicitacao[] = listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? 'Não informado' }));
+  solicitacoes: Solicitacao[] = this.dados.listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? 'Não informado' }));
 
   erroFiltro = '';
   private filtroAplicado = 'TODAS';
   private inicioAplicado = '';
   private fimAplicado = '';
   // Funcionário simulado para demonstrar a regra de redirecionamento do RF013.
-  funcionarioLogadoId: number | null = 1;
+  funcionarioLogadoId: number | null = this.dados.listarFuncionarios()[0]?.id ?? null;
 
   dataAbertura(valor: string): Date {
     const p = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec(valor);
@@ -45,8 +47,7 @@ export class VisualizacaoSolicitacoesComponent {
   }
 
   estadoAtual(solicitacao: Solicitacao): string {
-    const estado = solicitacao.estado.toUpperCase();
-    return ['PENDENTE', 'AGUARDANDO ATENDIMENTO'].includes(estado) ? 'ABERTA' : estado;
+    return solicitacao.estado;
   }
 
   aplicarFiltro(): void {
@@ -79,15 +80,20 @@ export class VisualizacaoSolicitacoesComponent {
     }).sort((a, b) => this.dataAbertura(a.dataHora).getTime() - this.dataAbertura(b.dataHora).getTime());
   }
 
-  finalizarSolicitacao(solicitacao: Solicitacao): void {
+  async finalizarSolicitacao(solicitacao: Solicitacao): Promise<void> {
     if (this.estadoAtual(solicitacao) !== 'PAGA' || !confirm('Finalizar esta solicitação?')) return;
-    solicitacao.estado = 'FINALIZADA';
+    try {
+      await this.dados.mudarEstado(solicitacao.id, 'FINALIZADA', this.funcionarioLogadoId ?? undefined);
+      this.solicitacoes = this.dados.listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? '' }));
+    } catch {
+      alert('Não foi possível finalizar a solicitação no banco. Tente novamente.');
+    }
   }
 
   obterClasseEstado(estado: string): string {
     const mapaCores: { [key: string]: string } = {
       'ABERTA': 'badge-cinza',
-      'ORÇADA': 'badge-marrom',
+      'ORCADA': 'badge-marrom',
       'REJEITADA': 'badge-vermelho',
       'APROVADA': 'badge-amarelo',
       'REDIRECIONADA': 'badge-roxo',

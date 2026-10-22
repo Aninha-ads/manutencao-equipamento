@@ -1,6 +1,6 @@
 package app.controllers;
 
-import app.models.Funcionario;
+import br.ufpr.backend.models.Funcionario;
 import app.services.FuncionarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +29,17 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Funcionario> buscarPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizar(@PathVariable Long id, @RequestBody Funcionario dados) {
+    public ResponseEntity<Funcionario> atualizar(@PathVariable Integer id, @RequestBody Funcionario dados) {
         return ResponseEntity.ok(service.atualizar(id, dados));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> desativar(@PathVariable Long id) {
+    public ResponseEntity<Object> desativar(@PathVariable Integer id) {
         try {
             service.desativar(id);
             return ResponseEntity.noContent().build();

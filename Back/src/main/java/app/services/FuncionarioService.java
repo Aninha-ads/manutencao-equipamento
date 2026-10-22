@@ -1,6 +1,6 @@
 package app.services;
 
-import app.models.Funcionario;
+import br.ufpr.backend.models.Funcionario;
 import app.repositories.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -15,33 +15,30 @@ public class FuncionarioService {
     }
 
     public Funcionario criar(Funcionario funcionario) {
-        funcionario.setAtivo(true);
+        funcionario.getUsuario().setAtivo(true);
         return repository.save(funcionario);
     }
 
     public List<Funcionario> listarAtivos() {
-        return repository.findByAtivoTrue();
+        return repository.findByUsuarioAtivoTrue();
     }
 
-    public Funcionario buscarPorId(Long id) {
+    public Funcionario buscarPorId(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
     }
 
-    public Funcionario atualizar(Long id, Funcionario dadosAtualizados) {
+    public Funcionario atualizar(Integer id, Funcionario dadosAtualizados) {
         Funcionario existente = buscarPorId(id);
-        existente.setNome(dadosAtualizados.getNome());
-        existente.setEmail(dadosAtualizados.getEmail());
-        existente.setPerfil(dadosAtualizados.getPerfil());
+        existente.getUsuario().setNome(dadosAtualizados.getUsuario().getNome());
+        existente.getUsuario().setEmail(dadosAtualizados.getUsuario().getEmail());
+        existente.setDataNascimento(dadosAtualizados.getDataNascimento());
         return repository.save(existente);
     }
 
-    public void desativar(Long id) {
+    public void desativar(Integer id) {
         Funcionario existente = buscarPorId(id);
-        if ("ADMIN".equals(existente.getPerfil())) {
-            throw new RuntimeException("Proteção: Não é possível desativar um administrador.");
-        }
-        existente.setAtivo(false);
+        existente.getUsuario().setAtivo(false);
         repository.save(existente);
     }
 }

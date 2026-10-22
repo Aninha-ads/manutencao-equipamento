@@ -1,4 +1,5 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, LOCALE_ID } from '@angular/core';
+import { DadosService } from './core/services/dados.service';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideNgxMask } from 'ngx-mask';
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideNgxMask(),
     provideHttpClient(),
+    provideAppInitializer(() => inject(DadosService).carregar()),
     { provide: LOCALE_ID, useValue: 'pt-BR' } // Coloca o idioma aqui
   ]
 };

@@ -1,8 +1,8 @@
 
-package br.ufpr.backend.controller;
+package app.controllers;
 
-import br.ufpr.backend.model.Categoria;
-import br.ufpr.backend.repository.CategoriaRepository;
+import br.ufpr.backend.models.Categoria;
+import br.ufpr.backend.repositories.CategoriaRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,5 +1,6 @@
-import { listarSolicitacoes } from '../../core/services/solicitacoes-prototipo';
-import { Component } from '@angular/core';
+import { EstadoSolicitacao } from '../../models/solicitacao.model';
+import { DadosService } from '../../core/services/dados.service';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 //dados fictícios para a vizualização, não dá para fazzer nada com eles ainda
 //APENAS vizualização 
@@ -8,7 +9,7 @@ interface Solicitacao {
   dataHora: string;
   cliente: string;
   equipamento: string;
-  estado: string;
+  estado: EstadoSolicitacao;
 }
 
 @Component({
@@ -21,10 +22,11 @@ interface Solicitacao {
   styleUrl: './painel-funcionario.component.css'
 })
 export class PainelFuncionarioComponent {
+  private dados = inject(DadosService);
 //colocando dados dentro da tabela, pode mudar qualquer uma dessas coisas se quiser
 //queria colocar figurinhas junto com os produtos, mas fica pro próximo commit
 //ou você coloca se quiser, Ana
-  solicitacoes: Solicitacao[] = listarSolicitacoes()
+  solicitacoes: Solicitacao[] = this.dados.listarSolicitacoes()
     .filter(s => s.estado === 'ABERTA')
     .map(s => ({ ...s, cliente: s.cliente ?? 'Não informado' }));
 

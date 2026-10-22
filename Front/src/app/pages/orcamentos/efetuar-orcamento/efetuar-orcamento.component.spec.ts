@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EfetuarOrcamentoComponent} from './efetuar-orcamento.component';
 
@@ -6,7 +7,7 @@ describe('EfetuarOrcamentoComponent', () => {
   let fixture: ComponentFixture<EfetuarOrcamentoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [EfetuarOrcamentoComponent],
     })
     .compileComponents();

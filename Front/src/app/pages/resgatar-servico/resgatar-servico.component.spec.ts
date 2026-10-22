@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ResgatarServicoComponent } from './resgatar-servico.component';
@@ -7,7 +8,7 @@ describe('ResgatarServicoComponent', () => {
   let fixture: ComponentFixture<ResgatarServicoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [ResgatarServicoComponent],
     }).compileComponents();
 

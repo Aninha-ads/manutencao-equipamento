@@ -1,12 +1,5 @@
-export type EstadoSolicitacao =
-  | 'ABERTA'
-  | 'ORCADA'
-  | 'REJEITADA'
-  | 'APROVADA'
-  | 'REDIRECIONADA'
-  | 'ARRUMADA'
-  | 'PAGA'
-  | 'FINALIZADA';
+import { EstadoSolicitacao } from '../../models/solicitacao.model';
+export type { EstadoSolicitacao } from '../../models/solicitacao.model';
 
 export interface Solicitacao {
   id: number;

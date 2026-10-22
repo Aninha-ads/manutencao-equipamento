@@ -3,10 +3,19 @@
     <h3>Solicitar orçamento</h3>
     <p class="text-muted">Informe o equipamento e os detalhes do serviço que você precisa.</p>
 
-  <form [formGroup]="form" (ngSubmit)="salvarSolicitacao()">
+  <div class="mb-3">
+  <label for="cliente-solicitacao" class="form-label">Cliente</label>
+  <select id="cliente-solicitacao" class="form-select" (change)="clienteId = +$any($event.target).value">
+    <option value="">Selecione o cliente</option>
+    @for (cliente of clientes; track cliente.id) {
+      <option [value]="cliente.id">{{ cliente.nome }}</option>
+    }
+  </select>
+</div>
+<form [formGroup]="form" (ngSubmit)="salvarSolicitacao()">
     <div class="card shadow-sm mt-4">
       <div class="card-header">
-        <strong>Nova solicitação #{{ solicitacaoId }}</strong>
+        <strong>Nova solicitação</strong>
       </div>
 
       <div class="card-body">

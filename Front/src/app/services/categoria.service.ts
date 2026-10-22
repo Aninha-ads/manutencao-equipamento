@@ -1,30 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { defer, of } from 'rxjs';
 import { Categoria } from '../models/categoria.model';
-
-@Injectable({
-  providedIn: 'root'
-})
+import { DadosService } from '../core/services/dados.service';
+@Injectable({ providedIn: 'root' })
 export class CategoriaService {
-  private readonly API_URL = 'http://localhost:8080/categorias';
-
-  constructor(private http: HttpClient) { }
-
-  listarCategorias(): Observable<Categoria[]> {
-    return this.http.get<Categoria[]>(this.API_URL);
-  }
-
-  salvarCategoria(categoria: Categoria): Observable<Categoria> {
-
-    if (categoria.id && categoria.id > 0) {
-      return this.http.put<Categoria>(`${this.API_URL}/${categoria.id}`, categoria);
-    }
-   
-    return this.http.post<Categoria>(this.API_URL, categoria);
-  }
-
-  excluirCategoria(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${id}`);
-  }
+  private dados = inject(DadosService);
+  listarCategorias() { return defer(() => of(this.dados.listarCategorias())); }
+  salvarCategoria(categoria: Categoria) { return defer(() => this.dados.salvarCategoria(categoria)); }
+  excluirCategoria(id: number) { return defer(() => this.dados.excluirCategoria(id)); }
 }

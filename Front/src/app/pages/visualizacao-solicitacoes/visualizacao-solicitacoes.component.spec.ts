@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VisualizacaoSolicitacoesComponent } from './visualizacao-solicitacoes.component';
@@ -7,7 +8,7 @@ describe('VisualizacaoSolicitacoesComponent', () => {
   let fixture: ComponentFixture<VisualizacaoSolicitacoesComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [VisualizacaoSolicitacoesComponent],
     }).compileComponents();
 

@@ -1,37 +1,19 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { defer, of, throwError } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
-
-@Injectable({
-  providedIn: 'root',
-}) 
+import { DadosService } from '../core/services/dados.service';
+@Injectable({ providedIn: 'root' })
 export class ClienteService {
-  private httpClient = inject(HttpClient);
-  BASE_URL = 'http://localhost:3000/clientes';
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
+  private dados = inject(DadosService);
+  private listar() { return this.dados.listarClientes(); }
 
-  listarTodos(): Observable<Cliente[]> {
-    return this.httpClient.get<Cliente[]>(this.BASE_URL, this.httpOptions);
-  }
-
-  buscarPorId(id: number): Observable<Cliente> {
-    return this.httpClient.get<Cliente>(this.BASE_URL + '/' + id, this.httpOptions);
-  }
-
-  inserir(cliente: Cliente): Observable<Cliente> {
-    return this.httpClient.post<Cliente>(this.BASE_URL, JSON.stringify(cliente), this.httpOptions);
-  }
-
-  alterar(cliente: Cliente): Observable<Cliente> {
-    return this.httpClient.put<Cliente>(this.BASE_URL + '/' + cliente.id, JSON.stringify(cliente), this.httpOptions);
-  }
-
-  // extra (não está nos slides): login e checagem de e-mail único
-  buscarPorEmail(email: string): Observable<Cliente[]> {
-    return this.httpClient.get<Cliente[]>(this.BASE_URL + '?email=' + email, this.httpOptions);
-  }
+  listarTodos() { return defer(() => of(this.listar())); }
+  buscarPorId(id: number) { return defer(() => {
+    const registro = this.listar().find(c => c.id === id);
+    return registro ? of(registro) : throwError(() => new Error('Registro não encontrado'));
+  }); }
+  private salvar(dados: Cliente, novo: boolean) { return this.dados.salvarCliente(dados, novo); }
+  inserir(dados: Cliente) { return defer(() => this.salvar(dados, true)); }
+  alterar(dados: Cliente) { return defer(() => this.salvar(dados, false)); }
+  buscarPorEmail(email: string) { return defer(() => of(this.listar().filter(c => c.email.toLowerCase() === email.trim().toLowerCase()))); }
 }
-

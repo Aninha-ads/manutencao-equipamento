@@ -1,3 +1,7 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { DadosService } from '../../core/services/dados.service';
+import { dadosTeste } from '../../testing/dados-teste';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManterFuncionariosComponent } from './manter-funcionarios.component';
@@ -8,12 +12,17 @@ describe('ManterFuncionariosComponent', () => {
   let fixture: ComponentFixture<ManterFuncionariosComponent>;
 
   beforeEach(async () => {
+    localStorage.clear();
     // Configura o componente standalone antes de cada teste.
     await TestBed.configureTestingModule({
       imports: [ManterFuncionariosComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     // Cria uma nova instância limpa do componente para cada cenário.
+    const carregar = TestBed.inject(DadosService).carregar();
+    TestBed.inject(HttpTestingController).expectOne('/api/dados').flush(dadosTeste());
+    await carregar;
     fixture = TestBed.createComponent(ManterFuncionariosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -59,13 +68,13 @@ describe('ManterFuncionariosComponent', () => {
 
     // Coloca o segundo funcionário em modo de edição e informa o e-mail do primeiro.
     component.editarFuncionario(component.funcionarios[1]);
-    component.email = ' MARIA@EMPRESA.COM ';
+    component.form.patchValue({ email: 'maria@example.test' });
 
     // Tenta salvar a edição com um e-mail já utilizado.
     component.atualizarFuncionario();
 
     // O e-mail original deve ser preservado e o alerta deve ser exibido.
-    expect(component.funcionarios[1].email).toBe('mario@empresa.com');
+    expect(component.funcionarios[1].email).toBe('mario@example.test');
     expect(alerta).toHaveBeenCalledWith('Este e-mail já está cadastrado para outro funcionário.');
     alerta.mockRestore();
   });

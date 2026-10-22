@@ -16,7 +16,7 @@ public class CategoriaService {
         return repository.findByAtivoTrue();
     }
 
-    public Categoria buscarPorId(Long id) {
+    public Categoria buscarPorId(Integer id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("CategoriaNaoEncontrada"));
     }
 
@@ -24,7 +24,7 @@ public class CategoriaService {
         return repository.save(categoria);
     }
 
-    public void inativar(Long id) {
+    public void inativar(Integer id) {
         Categoria categoria = buscarPorId(id);
         categoria.setAtivo(false);
         repository.save(categoria);

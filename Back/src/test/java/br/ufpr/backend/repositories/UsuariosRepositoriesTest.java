@@ -12,7 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import br.ufpr.backend.models.Cliente;
 import br.ufpr.backend.models.Endereco;
-import br.ufpr.backend.models.Funcionargio;
+import br.ufpr.backend.models.Funcionario;
 import br.ufpr.backend.models.Usuario;
 
 @DataJpaTest(properties = {

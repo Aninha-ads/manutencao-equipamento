@@ -1,4 +1,4 @@
-import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { DadosService } from '../../../core/services/dados.service';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl,
@@ -29,13 +29,14 @@ interface Cliente {
   styleUrl: './efetuar-orcamento.component.css',
 })
 export class EfetuarOrcamentoComponent {
+  private dados = inject(DadosService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
-  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  registro = this.dados.buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
   ngOnInit(): void {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      this.registro = buscarSolicitacao(params.get('id'));
+      this.registro = this.dados.buscarSolicitacao(params.get('id'));
       if (this.registro) {
         this.solicitacao = { ...this.registro, categoria: this.registro.categoria ?? 'Não informada', defeito: this.registro.descricao };
         this.cliente = { nome: this.registro.cliente ?? 'Não informado', cpf: this.registro.cpf ?? 'Não informado', email: this.registro.email ?? 'Não informado', telefone: this.registro.telefone ?? 'Não informado', endereco: this.registro.endereco ?? 'Não informado' };

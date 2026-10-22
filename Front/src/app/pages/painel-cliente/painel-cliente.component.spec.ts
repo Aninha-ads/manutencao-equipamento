@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PainelClienteComponent } from './painel-cliente.component';
 
@@ -6,7 +7,7 @@ describe('PainelClienteComponent', () => {
   let fixture: ComponentFixture<PainelClienteComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [PainelClienteComponent],
     })
     .compileComponents();
