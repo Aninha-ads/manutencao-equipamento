@@ -15,6 +15,7 @@ import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funci
 import { HomeComponent } from './home/home.component';
 import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
 import { ResgatarServicoComponent } from './pages/resgatar-servico/resgatar-servico.component';
+import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
 
 export const routes: Routes = [
   {
@@ -50,6 +51,9 @@ export const routes: Routes = [
   {
     path: 'orcamentos/efetuar',
     component: EfetuarOrcamentoComponent
+  },
+  { path: 'orcamentos/mostrar-orcamento/:id', 
+    component: MostrarOrcamentoComponent 
   },
   {
     path: 'visualizacao-solicitacoes',
