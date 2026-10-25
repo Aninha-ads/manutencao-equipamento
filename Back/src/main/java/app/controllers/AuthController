@@ -1,0 +1,34 @@
+package app.controllers;
+
+import app.dto.FuncionarioRequestDTO;
+import app.dto.FuncionarioResponseDTO;
+import app.dto.LoginDTO;
+import app.services.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
+public class AuthController {
+
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/cadastro")
+    public ResponseEntity<FuncionarioResponseDTO> autocadastro(@Valid @RequestBody FuncionarioRequestDTO dto) {
+        FuncionarioResponseDTO response = authService.cadastrar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<FuncionarioResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
+        FuncionarioResponseDTO response = authService.login(dto);
+        return ResponseEntity.ok(response);
+    }
+}
