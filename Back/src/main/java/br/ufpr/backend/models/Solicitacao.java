@@ -1,5 +1,5 @@
 
-package br.ufpr.backend.model;
+package br.ufpr.backend.models;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;

@@ -1,8 +1,8 @@
 
 package br.ufpr.backend.controller;
 
-import br.ufpr.backend.model.Categoria;
-import br.ufpr.backend.repository.CategoriaRepository;
+import br.ufpr.backend.models.Categoria;
+import br.ufpr.backend.repositories.CategoriaRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,11 +10,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categorias")
 @CrossOrigin(origins = "http://localhost:4200")
-public class CategoriaController {
+public class ApiCategoriaController {
 
     private final CategoriaRepository repository;
 
-    public CategoriaController(CategoriaRepository repository) {
+    public ApiCategoriaController(CategoriaRepository repository) {
         this.repository = repository;
     }
 
