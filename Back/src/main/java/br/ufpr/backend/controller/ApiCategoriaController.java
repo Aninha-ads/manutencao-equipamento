@@ -1,5 +1,5 @@
 
-package br.ufpr.backend.controller;
+package app.controllers;
 
 import br.ufpr.backend.models.Categoria;
 import br.ufpr.backend.repositories.CategoriaRepository;

@@ -1,5 +1,6 @@
-import { listarSolicitacoes } from '../../core/services/solicitacoes-prototipo';
-import { Component, OnInit } from '@angular/core';
+import { EstadoSolicitacao } from '../../models/solicitacao.model';
+import { DadosService } from '../../core/services/dados.service';
+import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -9,7 +10,7 @@ interface Solicitacao {
   dataHora: string;
   equipamento: string;
   descricao: string;
-  estado: string;
+  estado: EstadoSolicitacao;
 }
 
 @Component({
@@ -19,6 +20,7 @@ interface Solicitacao {
   styleUrl: './painel-cliente.component.css',
 })
 export class PainelClienteComponent implements OnInit{
+  private dados = inject(DadosService);
   filtroEstado = 'TODOS';
   solicitacoes: Solicitacao[] = [];
 
@@ -28,10 +30,10 @@ export class PainelClienteComponent implements OnInit{
   }
 
   private carregarSolicitacoes(): void {
-    //const lista = listarSolicitacoes();
+    //const lista = this.dados.listarSolicitacoes();
 
     //lista ordenada, data/hora
-    this.solicitacoes = listarSolicitacoes().sort(
+    this.solicitacoes = this.dados.listarSolicitacoes().sort(
       (a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
     );
   }

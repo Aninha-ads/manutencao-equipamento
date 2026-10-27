@@ -82,3 +82,31 @@ Os campos de hash e salt ficam vazios por enquanto. Esses usuários ainda não s
 - Acrescentar índices conforme as consultas da API precisarem.
 
 O arquivo verify.sql permite conferir os dados manualmente; ele não é uma suíte de testes automáticos.
+
+## Integração com o Angular
+
+A massa de demonstração vem exclusivamente das tabelas preenchidas por `database/seed.sql`.
+O frontend não cria dados iniciais nem lê clientes, funcionários, categorias ou solicitações do `localStorage`.
+Dados antigos do navegador são ignorados. Não é necessário executar novamente o seed em um banco já preparado.
+
+Com o MySQL preparado, inicie o Spring Boot conforme as instruções acima e execute `npm start` na pasta `Front`.
+O proxy do Angular encaminha `/api/**` para `http://localhost:8080`. Em produção, configure o servidor para
+encaminhar `/api` ao backend. O antigo JSON Server foi removido.
+
+`GET /api/dados` reúne clientes, funcionários ativos, categorias ativas e solicitações com seus históricos.
+A aplicação carrega essa resposta antes de abrir as telas e a atualiza após as gravações.
+Se a API estiver indisponível, mostra um erro com a opção de tentar novamente, sem substituir o SQL por mocks.
+
+Os endpoints `/api/clientes`, `/api/funcionarios`, `/api/categorias` e `/api/solicitacoes` recebem as gravações.
+IDs novos são gerados pelo banco. Funcionários removidos são inativados, preservando as referências de solicitações.
+A abertura, o resgate e a finalização de solicitações gravam o histórico na mesma transação.
+Os estados retornados são os códigos da tabela `estado_solicitacao`, sem rótulos acentuados no código.
+
+O login continua sendo uma etapa separada: a abertura exige selecionar explicitamente um cliente existente,
+e a interface de funcionário mantém o primeiro funcionário ativo como contexto de demonstração.
+Esses contextos devem ser substituídos pela identidade da sessão ao implementar autenticação.
+Os endpoints ainda não fazem autenticação ou autorização.
+
+Para validar a integração sem depender de um MySQL local, execute `.\mvnw.cmd test`.
+`DadosServiceTest` executa o schema e o seed em H2 com adaptações de sintaxe, verifica a origem dos dados,
+os relacionamentos, as gravações e o histórico. Isso não substitui um teste final com o MySQL configurado.

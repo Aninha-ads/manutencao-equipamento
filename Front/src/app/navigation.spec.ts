@@ -1,3 +1,6 @@
+import { DadosService } from './core/services/dados.service';
+import { dadosTeste } from './testing/dados-teste';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -13,13 +16,12 @@ import { PainelClienteComponent } from './pages/painel-cliente/painel-cliente.co
 import { NavbarFuncionarioComponent } from './pages/navbar-funcionario/navbar-funcionario.component';
 
 describe('Navegação das solicitações', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     registerLocaleData(localePt);
-    localStorage.setItem('solicitacoes', JSON.stringify([
-      { id: 7, dataHora: '2026-09-01T10:00:00', equipamento: 'Monitor selecionado', descricao: 'Tela piscando', estado: 'ABERTA' },
-      { id: 12, dataHora: '2026-09-02T10:00:00', equipamento: 'Impressora selecionada', descricao: 'Sem impressão', estado: 'APROVADA' }
-    ]));
-    TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient()] });
+    TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()] });
+    const carregar = TestBed.inject(DadosService).carregar();
+    TestBed.inject(HttpTestingController).expectOne('/api/dados').flush(dadosTeste());
+    await carregar;
   });
 
   afterEach(() => localStorage.clear());

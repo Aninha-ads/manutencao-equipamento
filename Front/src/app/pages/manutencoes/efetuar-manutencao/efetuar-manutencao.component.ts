@@ -1,4 +1,4 @@
-import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { DadosService } from '../../../core/services/dados.service';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -11,13 +11,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   styleUrl: './efetuar-manutencao.component.css',
 })
 export class EfetuarManutencaoComponent {
+  private dados = inject(DadosService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
-  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  registro = this.dados.buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
   ngOnInit(): void {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      this.registro = buscarSolicitacao(params.get('id'));
+      this.registro = this.dados.buscarSolicitacao(params.get('id'));
       this.cdr.markForCheck();
       
     });

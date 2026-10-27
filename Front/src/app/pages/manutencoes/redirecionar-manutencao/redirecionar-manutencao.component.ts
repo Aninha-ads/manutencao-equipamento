@@ -1,4 +1,5 @@
-import { buscarSolicitacao } from '../../../core/services/solicitacoes-prototipo';
+import { FuncionarioTela as Funcionario } from '../../../core/models/dados-tela.model';
+import { DadosService } from '../../../core/services/dados.service';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -8,11 +9,6 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-interface Funcionario {
-  id: number;
-  nome: string;
-  email: string;
-}
 
 @Component({
   selector: 'app-redirecionar-manutencao',
@@ -22,47 +18,27 @@ interface Funcionario {
   styleUrl: './redirecionar-manutencao.component.css',
 })
 export class RedirecionarManutencaoComponent {
+  private dados = inject(DadosService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
-  registro = buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
+  registro = this.dados.buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
   ngOnInit(): void {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      this.registro = buscarSolicitacao(params.get('id'));
+      this.registro = this.dados.buscarSolicitacao(params.get('id'));
       this.cdr.markForCheck();
       
     });
   }
 
 
-  private readonly chaveFuncionarios = 'funcionarios';
-
   private fb = inject(FormBuilder);
+  funcionarios = this.dados.listarFuncionarios();
 
-  private funcionariosPadrao: Funcionario[] = [
-    {
-      id: 1,
-      nome: 'Maria Souza',
-      email: 'maria.teste@empresa.com'
-    },
-    {
-      id: 2,
-      nome: 'Mario Oliveira',
-      email: 'mario.teste@empresa.com'
-    },
-    {
-      id: 3,
-      nome: 'Pedro Silva',
-      email: 'pedro.teste@empresa.com'
-    }
-  ];
-
-  funcionarios: Funcionario[] = this.carregarFuncionarios();
-
-  funcionarioAtual: Funcionario = this.funcionarios[0];
+  funcionarioAtual: Funcionario | undefined = this.funcionarios[0];
 
   funcionariosDisponiveis: Funcionario[] = this.funcionarios.filter(
-    funcionario => funcionario.id !== this.funcionarioAtual.id
+    funcionario => funcionario.id !== this.funcionarioAtual?.id
   );
 
   redirecionamentoForm = this.fb.group({
@@ -77,24 +53,6 @@ export class RedirecionarManutencaoComponent {
 
   get funcionarioDestinoId() {
     return this.redirecionamentoForm.controls.funcionarioDestinoId;
-  }
-
-  private carregarFuncionarios(): Funcionario[] {
-
-    const funcionariosSalvos = localStorage.getItem(
-      this.chaveFuncionarios
-    );
-
-    if (funcionariosSalvos) {
-      return JSON.parse(funcionariosSalvos) as Funcionario[];
-    }
-
-    localStorage.setItem(
-      this.chaveFuncionarios,
-      JSON.stringify(this.funcionariosPadrao)
-    );
-
-    return this.funcionariosPadrao;
   }
 
   private funcionarioDestinoValido(control: any) {
@@ -115,7 +73,7 @@ export class RedirecionarManutencaoComponent {
       };
     }
 
-    if (funcionario.id === this.funcionarioAtual.id) {
+    if (funcionario.id === this.funcionarioAtual?.id) {
       return {
         mesmoFuncionario: true
       };

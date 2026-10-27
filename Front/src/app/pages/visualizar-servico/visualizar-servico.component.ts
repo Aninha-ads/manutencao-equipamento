@@ -3,12 +3,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalRejeitarServicoComponent } from './modal-rejeitar-servico/modal-rejeitar-servico.component';
-import { buscarSolicitacao } from '../../core/services/solicitacoes-prototipo';
+import { DadosService } from '../../core/services/dados.service';
 @Component({
   selector: 'app-visualizar-servico', standalone: true, imports: [RouterLink],
   templateUrl: './visualizar-servico.component.html', styleUrl: './visualizar-servico.component.css'
 })
 export class VisualizarServicoComponent {
+  private dados = inject(DadosService);
   private modalService = inject(NgbModal);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
@@ -27,7 +28,7 @@ export class VisualizarServicoComponent {
     });
   }
   private carregar() {
-    const registro = buscarSolicitacao(this.route.snapshot.paramMap.get('id'));
+    const registro = this.dados.buscarSolicitacao(this.route.snapshot.paramMap.get('id'));
     return registro ? { ...registro, categoria: registro.categoria ?? 'Não informada',
       cliente: registro.cliente ?? 'Não informado', email: registro.email ?? 'Não informado',
       telefone: registro.telefone ?? 'Não informado', defeito: registro.descricao } : undefined;

@@ -1,12 +1,8 @@
+import { DadosService } from '../../core/services/dados.service';
+import { FuncionarioTela as Funcionario } from '../../core/models/dados-tela.model';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-interface Funcionario {
-  id: number;
-  email: string;
-  nome: string;
-  nascimento: string;
-}
 //componente seletor, importações etc.
 @Component({
   selector: 'app-manter-funcionarios',
@@ -17,11 +13,11 @@ interface Funcionario {
 })
 //nn sei fazer todo esse semi-back direito
 export class ManterFuncionariosComponent {
-  private readonly chaveFuncionarios = 'funcionarios';
+  private dados = inject(DadosService);
   private fb = inject(FormBuilder);
 
   // funcionário atualmente logado
-  funcionarioLogadoId = 1;
+  funcionarioLogadoId = this.dados.listarFuncionarios()[0]?.id ?? 0;
   // controle do formulário
   modoEdicao = false;
   funcionarioEditandoId: number | null = null;
@@ -33,34 +29,11 @@ export class ManterFuncionariosComponent {
     senha: ['', Validators.required], // obrigatória só no cadastro; ajustada em alternarModoEdicao()
   });
 
-  // dados fictícios para o protótipo
-  funcionarios: Funcionario[] = [
-    {
-      id: 1,
-      email: 'maria@empresa.com',
-      nome: 'Maria',
-      nascimento: '1990-05-15'
-    },
-    {
-      id: 2,
-      email: 'mario@empresa.com',
-      nome: 'Mário',
-      nascimento: '1988-10-20'
-    }
-  ];
-
-  constructor() {
-    const funcionariosSalvos = localStorage.getItem(this.chaveFuncionarios);
-
-    if (funcionariosSalvos) {
-      this.funcionarios = JSON.parse(funcionariosSalvos) as Funcionario[];
-    } else {
-      this.salvarFuncionarios();
-    }
-  }
+  // Funcionários carregados das tabelas funcionario e usuario.
+  funcionarios = this.dados.listarFuncionarios();
 
   // Valida os dados e adiciona um novo funcionário à lista.
-  adicionarFuncionario(): void {
+  async adicionarFuncionario(): Promise<void> {
     // Remove espaços extras e padroniza o e-mail para evitar duplicidades.
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -80,14 +53,13 @@ export class ManterFuncionariosComponent {
     }
 
     const novoFuncionario: Funcionario = {
-      id: this.proximoId(),
+      id: 0,
       email,
       nome,
       nascimento: this.form.value.nascimento
     };
 
-    this.funcionarios.push(novoFuncionario);
-    this.salvarFuncionarios();
+    if (!await this.persistir(() => this.dados.salvarFuncionario(novoFuncionario, true))) return;
     alert('Funcionário cadastrado com sucesso!');
     this.limparFormulario();
   }
@@ -105,7 +77,7 @@ export class ManterFuncionariosComponent {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   // Valida e atualiza os dados do funcionário selecionado.
-  atualizarFuncionario(): void {
+  async atualizarFuncionario(): Promise<void> {
     if (this.funcionarioEditandoId === null) {
       return;
     }
@@ -135,17 +107,13 @@ export class ManterFuncionariosComponent {
       return;
     }
 
-    funcionario.email = email;
-    funcionario.nome = nome;
-    funcionario.nascimento = this.form.value.nascimento;
-
-    this.salvarFuncionarios();
+    if (!await this.persistir(() => this.dados.salvarFuncionario({ ...funcionario, email, nome, nascimento: this.form.value.nascimento }))) return;
     alert('Funcionário atualizado com sucesso!');
     this.limparFormulario();
   }
 
   // Remove um funcionário somente depois de validar as regras de segurança.
-  removerFuncionario(funcionario: Funcionario): void {
+  async removerFuncionario(funcionario: Funcionario): Promise<void> {
 
     // RF018: impede que o funcionário logado remova o próprio usuário.
     if (funcionario.id === this.funcionarioLogadoId) {
@@ -166,8 +134,7 @@ export class ManterFuncionariosComponent {
       return;
     }
     // Remove somente o funcionário escolhido, preservando os demais registros.
-    this.funcionarios = this.funcionarios.filter(f => f.id !== funcionario.id);
-    this.salvarFuncionarios();
+    if (!await this.persistir(() => this.dados.removerFuncionario(funcionario.id))) return;
     alert('Funcionário removido com sucesso!');
   }
 
@@ -197,15 +164,14 @@ export class ManterFuncionariosComponent {
     senhaControl?.updateValueAndValidity();
   }
 
-  // Calcula um identificador maior que todos os registros existentes.
-  private proximoId(): number {
-    if (this.funcionarios.length === 0) {
-      return 1;
+  private async persistir(acao: () => Promise<unknown>): Promise<boolean> {
+    try {
+      await acao();
+      this.funcionarios = this.dados.listarFuncionarios();
+      return true;
+    } catch {
+      alert('Não foi possível salvar a alteração no banco. Verifique os dados e tente novamente.');
+      return false;
     }
-    return Math.max(...this.funcionarios.map(f => f.id)) + 1;
-  }
-
-  private salvarFuncionarios(): void {
-    localStorage.setItem(this.chaveFuncionarios, JSON.stringify(this.funcionarios));
   }
 }

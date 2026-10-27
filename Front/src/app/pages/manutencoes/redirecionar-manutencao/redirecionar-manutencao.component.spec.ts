@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RedirecionarManutencaoComponent } from './redirecionar-manutencao.component';http://localhost:4200/manutencoes/redirecionar
@@ -7,7 +8,7 @@ describe('RedirecionarManutencaoComponent', () => {
   let fixture: ComponentFixture<RedirecionarManutencaoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [RedirecionarManutencaoComponent],
     }).compileComponents();
 

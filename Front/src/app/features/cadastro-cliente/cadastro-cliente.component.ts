@@ -4,6 +4,7 @@ import {AbstractControl, FormBuilder, ReactiveFormsModule,
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
+import { AuthService } from '../services/auth.service';
 
 export interface ClienteRegistro {
   nome: string;
@@ -30,6 +31,7 @@ export class CadastroClienteComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   enviando = false;
   erroCep = '';
@@ -70,7 +72,7 @@ export class CadastroClienteComponent {
       }
 
       const resto = soma % 11;
-      return resto < 2 ? 0 : 11 - resto;
+      return resto < 2 ? 0 : 11resto;
     };
 
     // Primeiro dígito: pesos 10, 9, 8, ..., 2.
@@ -99,47 +101,6 @@ export class CadastroClienteComponent {
 
       const digitos = valor.replace(/\D/g, '');
 
-      return digitos.length === quantidade
-        ? null
-        : { quantidadeDigitos: { esperada: quantidade } };
-    };
-  }
-
-  cadastroForm = this.fb.group({
-    nome: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.textoObrigatorio,
-      Validators.maxLength(150)
-    ]),
-
-    email: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.textoObrigatorio,
-      Validators.email,
-      Validators.maxLength(254)
-    ]),
-
-    cpf: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.validarCpf
-    ]),
-
-    telefone: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.quantidadeDigitos(11)
-    ]),
-
-    cep: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.quantidadeDigitos(8)
-    ]),
-
-    logradouro: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.textoObrigatorio,
-      Validators.maxLength(200)
-    ]),
-
     numero: this.fb.nonNullable.control('', [
       Validators.required,
       this.textoObrigatorio,
@@ -148,120 +109,6 @@ export class CadastroClienteComponent {
 
     complemento: this.fb.nonNullable.control('', [
       Validators.maxLength(150)
-    ]),
+   ]),
 
-    bairro: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.textoObrigatorio,
-      Validators.maxLength(100)
-    ]),
-
-    cidade: this.fb.nonNullable.control('', [
-      Validators.required,
-      this.textoObrigatorio,
-      Validators.maxLength(100)
-    ]),
-
-    uf: this.fb.nonNullable.control('', [
-      Validators.required,
-      Validators.pattern(/^[A-Za-z]{2}$/)
-    ])
-  });
-
-  get campos() {
-    return this.cadastroForm.controls;
-  }
-
-  buscarCep(): void {
-    const controleCep = this.campos.cep;
-    const cepLimpo = controleCep.value.replace(/\D/g, '');
-
-    this.erroCep = '';
-
-    if (cepLimpo.length !== 8) {
-      controleCep.markAsTouched();
-      controleCep.updateValueAndValidity();
-      return;
-    }
-
-    this.http
-      .get<{
-        erro?: boolean;
-        logradouro?: string;
-        bairro?: string;
-        localidade?: string;
-        uf?: string;
-      }>(`https://viacep.com.br/ws/${cepLimpo}/json/`)
-      .subscribe({
-        next: (dados) => {
-          if (dados.erro) {
-            this.erroCep = 'CEP não encontrado.';
-            return;
-          }
-
-          this.cadastroForm.patchValue({
-            logradouro: dados.logradouro ?? '',
-            bairro: dados.bairro ?? '',
-            cidade: dados.localidade ?? '',
-            uf: dados.uf ?? ''
-          });
-        },
-        error: () => {
-          this.erroCep = 'Não foi possível consultar o CEP. Tente novamente.';
-        }
-      });
-  }
-
-  atualizarUf(valor: string): void {
-    const uf = valor
-      .replace(/[^a-zA-Z]/g, '')
-      .slice(0, 2)
-      .toUpperCase();
-
-    if (this.campos.uf.value !== uf) {
-      this.campos.uf.setValue(uf);
-    }
-  }
-
-  private gerarSenhaAleatoria(): string {
-    // Mantém o comportamento do protótipo atual.
-    return Math.floor(1000 + Math.random() * 9000).toString();
-  }
-
-  onSubmit(): void {
-    if (this.cadastroForm.invalid || this.enviando) {
-      this.cadastroForm.markAllAsTouched();
-      return;
-    }
-
-    const dados = this.cadastroForm.getRawValue();
-
-    const cliente: ClienteRegistro = {
-      ...dados,
-      nome: dados.nome.trim(),
-      email: dados.email.trim(),
-      cpf: dados.cpf.replace(/\D/g, ''),
-      telefone: dados.telefone.replace(/\D/g, ''),
-      cep: dados.cep.replace(/\D/g, ''),
-      logradouro: dados.logradouro.trim(),
-      numero: dados.numero.trim(),
-      complemento: dados.complemento.trim(),
-      bairro: dados.bairro.trim(),
-      cidade: dados.cidade.trim(),
-      uf: dados.uf.toUpperCase()
-    };
-
-    const payloadParaSalvar = {
-      ...cliente,
-      senha: this.gerarSenhaAleatoria()
-    };
-//PARTE PROVISÓRIA: 
-    // Ainda não há envio para o backend neste método.
-    console.log('Dados validados para cadastro:', payloadParaSalvar);
-
-    alert('Validação concluída! O cadastro ainda precisa ser integrado ao backend.');
-
-    // Removam este redirecionamento de teste quando implementar a API pfv
-    // this.router.navigate(['/painel-cliente']);
-  }
-}
+    bairro: this.fb.nonNullable.

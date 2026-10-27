@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EfetuarManutencaoComponent } from './efetuar-manutencao.component';
@@ -7,7 +8,7 @@ describe('EfetuarManutencaoComponent', () => {
   let fixture: ComponentFixture<EfetuarManutencaoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ providers: [provideHttpClient()],
       imports: [EfetuarManutencaoComponent],
     }).compileComponents();
 
