@@ -1,6 +1,5 @@
 package br.ufpr.backend.services;
 
-import java.sql.*;
 import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;

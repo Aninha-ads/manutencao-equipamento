@@ -1,4 +1,4 @@
-package app.dto;
+package br.ufpr.backend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ public class LoginDTO {
     @Email(message = "Formato de e-mail inválido.")
     private String email;
 
-    @NotBlank(message = "A password é obrigatória.")
+    @NotBlank(message = "A senha é obrigatória.")
     private String senha;
 
     public String getEmail() { return email; }

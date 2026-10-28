@@ -1,9 +1,10 @@
-package app.services;
+package br.ufpr.backend.services;
 
-import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class HashService {

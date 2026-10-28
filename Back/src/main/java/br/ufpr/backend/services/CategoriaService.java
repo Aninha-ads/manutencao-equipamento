@@ -1,10 +1,12 @@
 package br.ufpr.backend.services;
 
-import br.ufpr.backend.models.Categoria;
-import br.ufpr.backend.repositories.CategoriaRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import br.ufpr.backend.models.Categoria;
+import br.ufpr.backend.repositories.CategoriaRepository;
 
 @Service
 public class CategoriaService {
@@ -29,4 +31,15 @@ public class CategoriaService {
         categoria.setAtivo(false);
         repository.save(categoria);
     }
+
+     //não consigo abrir o doumento para revisar requisitos se devemos inativar ou excluir
+     //ufpr virtual fora do ar
+    public void excluir(Integer id) {
+    if (!repository.existsById(id)) {
+        throw new RuntimeException("CategoriaNaoEncontrada");
+    }
+
+    repository.deleteById(id);
+}
+
 }

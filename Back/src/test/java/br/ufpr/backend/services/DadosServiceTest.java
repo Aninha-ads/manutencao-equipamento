@@ -6,15 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = {
     "spring.datasource.url=jdbc:h2:mem:dados;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE",
-    "spring.datasource.username=sa", "spring.datasource.password=", "spring.jpa.hibernate.ddl-auto=none"
+    "spring.datasource.username=sa",
+    "spring.jpa.hibernate.ddl-auto=none"
 })
 @AutoConfigureMockMvc
 class DadosServiceTest {
@@ -59,6 +62,34 @@ class DadosServiceTest {
             .andExpect(jsonPath("$.solicitacoes[1].estado").value("ORCADA"))
             .andExpect(jsonPath("$.solicitacoes[0].historico[0].estado").value("ABERTA"));
         api.perform(get("/api/categorias")).andExpect(status().isOk());
+    }
+
+    @Test void autenticaFuncionarioCriadoPelaApiComCredenciaisPersistidas() throws Exception {
+        String cadastro = """
+            {"nome":"Funcionário de teste","email":"auth@exemplo.com",
+             "senha":"senha-segura-123","dataNascimento":"1990-01-02"}
+            """;
+
+        api.perform(post("/api/auth/cadastro")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(cadastro))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.email").value("auth@exemplo.com"))
+            .andExpect(jsonPath("$.perfil").value("FUNCIONARIO"));
+
+        String hash = jdbc.queryForObject(
+            "SELECT senha_hash FROM usuario WHERE email=?",
+            String.class, "auth@exemplo.com");
+        assertNotNull(hash);
+        assertNotEquals("senha-segura-123", hash);
+
+        api.perform(post("/api/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"email":"auth@exemplo.com","senha":"senha-segura-123"}
+                    """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.email").value("auth@exemplo.com"));
     }
 
     @Test void cadastroUsaAutoIncrementESalvaHistoricoNaMesmaTransacao() {

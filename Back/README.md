@@ -105,7 +105,13 @@ Os estados retornados são os códigos da tabela `estado_solicitacao`, sem rótu
 O login continua sendo uma etapa separada: a abertura exige selecionar explicitamente um cliente existente,
 e a interface de funcionário mantém o primeiro funcionário ativo como contexto de demonstração.
 Esses contextos devem ser substituídos pela identidade da sessão ao implementar autenticação.
-Os endpoints ainda não fazem autenticação ou autorização.
+O backend também expõe `POST /api/auth/cadastro` e `POST /api/auth/login` para funcionários.
+O cadastro recebe `nome`, `email`, `senha` e `dataNascimento`; a senha é armazenada como hash e salt,
+e o funcionário é criado nas tabelas `usuario` e `funcionario` dentro de uma transação. O login só aceita
+funcionários ativos com credenciais cadastradas. Os funcionários de demonstração do seed não têm senha
+cadastrada e, portanto, não podem iniciar sessão.
+
+A autenticação ainda não foi ligada às telas Angular nem usada para autorizar os demais endpoints.
 
 Para validar a integração sem depender de um MySQL local, execute `.\mvnw.cmd test`.
 `DadosServiceTest` executa o schema e o seed em H2 com adaptações de sintaxe, verifica a origem dos dados,
