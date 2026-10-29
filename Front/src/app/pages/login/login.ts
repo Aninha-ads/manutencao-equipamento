@@ -33,9 +33,6 @@ export class LoginComponent {
       return;
     }
 
-    console.log('E-mail:', this.form.value.email);
-    console.log('Senha:', this.form.value.senha);
-
     alert('Login realizado!');
       this.router.navigate(['/painel-cliente']);
   }
