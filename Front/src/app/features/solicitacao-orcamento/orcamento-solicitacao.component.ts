@@ -19,8 +19,10 @@ export class OrcamentoSolicitacaoComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
+  private readonly chaveClienteLogado = 'clienteLogadoId';
+
   clientes = this.dados.listarClientes();
-  clienteId: number | null = null;
+  clienteId: number | null = this.obterClienteLogado();
   categorias = this.dados.listarCategorias().map(c => c.nome);
 
   //adicionei o formgroup
@@ -29,6 +31,17 @@ export class OrcamentoSolicitacaoComponent {
     equipamento: ['', [Validators.required, Validators.maxLength(30)]],
     descricao: ['', Validators.required],
   });
+
+  private obterClienteLogado(): number | null {
+    const salvo = localStorage.getItem(this.chaveClienteLogado);
+    return salvo ? Number(salvo) : null;
+  }
+
+  // INT01: persiste a escolha do cliente, para o painel-cliente saber de quem filtrar
+  selecionarCliente(id: number): void {
+    this.clienteId = id;
+    localStorage.setItem(this.chaveClienteLogado, String(id));
+  }
   
  // private router = inject(Router);
 

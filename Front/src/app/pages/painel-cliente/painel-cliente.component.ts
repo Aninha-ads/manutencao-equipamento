@@ -11,6 +11,7 @@ interface Solicitacao {
   equipamento: string;
   descricao: string;
   estado: EstadoSolicitacao;
+  clienteId?: number;
 }
 
 @Component({
@@ -21,6 +22,8 @@ interface Solicitacao {
 })
 export class PainelClienteComponent implements OnInit{
   private dados = inject(DadosService);
+  private readonly chaveClienteLogado = 'clienteLogadoId';
+
   filtroEstado = 'TODOS';
   solicitacoes: Solicitacao[] = [];
 
@@ -30,12 +33,20 @@ export class PainelClienteComponent implements OnInit{
   }
 
   private carregarSolicitacoes(): void {
+    const clienteLogadoId = this.obterClienteLogado();
     //const lista = this.dados.listarSolicitacoes();
 
     //lista ordenada, data/hora
-    this.solicitacoes = this.dados.listarSolicitacoes().sort(
-      (a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
-    );
+    // INT01: só mostra as solicitações do cliente que está "logado" (seleção provisória,
+    // até o login de verdade existir), ordenadas por data/hora.
+    this.solicitacoes = this.dados.listarSolicitacoes()
+      .filter(s => clienteLogadoId === null || s.clienteId === clienteLogadoId)
+      .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
+  }
+
+  private obterClienteLogado(): number | null {
+    const salvo = localStorage.getItem(this.chaveClienteLogado);
+    return salvo ? Number(salvo) : null;
   }
 
   get estados(): string[] {
@@ -46,28 +57,27 @@ export class PainelClienteComponent implements OnInit{
     if (this.filtroEstado === 'TODOS') {
       return this.solicitacoes;
     }
-
     return this.solicitacoes.filter(
       solicitacao => solicitacao.estado === this.filtroEstado
     );
   }
 
-  equipamentoResumido(equipamento: string):string {
+  equipamentoResumido(equipamento: string): string {
     return equipamento.length > 30
-    ? equipamento.substring(0, 30) + '...' 
-    : equipamento;
+      ? equipamento.substring(0, 30) + '...'
+      : equipamento;
   }
 
-  acaoPara(estado: string): {label: string; rota: string} | null {
+  acaoPara(estado: string): { label: string; rota: string } | null {
     switch (estado) {
       case 'ORCADA':
         return { label: 'Aprovar/Rejeitar', rota: '/orcamentos/mostrar-orcamento' };
       case 'REJEITADA':
         return { label: 'Resgatar Serviço', rota: '/resgatar-servico' };
       case 'APROVADA':
-        return null; 
+        return null;
       default:
-        return null; 
+        return null;
     }
   }
 
