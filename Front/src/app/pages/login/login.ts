@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { AuthService } from '../../core/services/auth.service';
 /*pelo que eu pesquisei, aqui 'informa' meu angular de que essa aplicação é um componente*/
 @Component({
   selector: 'app-login',
@@ -13,30 +15,40 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.css'
 })
 
-/*pelo que vi, em typescript, uma classe assim faz o trabalho dum eventbutton,
-por enquanto, basicamente ele mostra uma mensagenzinha depois de um login com sucesso
-(que agora é todo login pq não tá pronto)
-e se não preencher os campos, ele manda preencher com outro alerta.
-*/
+// O backend identifica o perfil e a resposta determina o painel de destino.
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private auth = inject(AuthService);
+  erroLogin = signal('');
+  enviando = signal(false);
 
   form: FormGroup = this.fb.group({
     email: ['',[Validators.required, Validators.email]],
     senha: ['', Validators.required],
   });
 
-  fazerLogin(): void {
+  async fazerLogin(): Promise<void> {
+    if (this.enviando()) return;
+    this.erroLogin.set('');
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    console.log('E-mail:', this.form.value.email);
-    console.log('Senha:', this.form.value.senha);
-
-    alert('Login realizado!');
-      this.router.navigate(['/painel-cliente']);
+    this.enviando.set(true);
+    try {
+      const sessao = await firstValueFrom(this.auth.login(
+        this.form.controls['email'].value.trim(),
+        this.form.controls['senha'].value
+      ));
+      await this.router.navigate([
+        sessao.perfil === 'FUNCIONARIO' ? '/painel-funcionario' : '/painel-cliente'
+      ]);
+    } catch {
+      this.erroLogin.set('E-mail ou senha inválidos, ou serviço indisponível.');
+    } finally {
+      this.enviando.set(false);
+    }
   }
 }

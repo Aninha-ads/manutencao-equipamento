@@ -27,10 +27,11 @@ export class DadosService {
   buscarSolicitacao(valor: string | null) {
     return valor && /^\d+$/.test(valor) ? this.listarSolicitacoes().find(s => s.id === Number(valor)) : undefined;
   }
-  async salvarFuncionario(f: FuncionarioTela, novo = false) {
+  async salvarFuncionario(f: FuncionarioTela, novo = false, senha?: string) {
+    const dados = { ...f, senha: senha?.trim() || undefined };
     const salvo = await firstValueFrom(novo
-      ? this.http.post<FuncionarioTela>(`${this.api}/funcionarios`, f)
-      : this.http.put<FuncionarioTela>(`${this.api}/funcionarios/${f.id}`, f));
+      ? this.http.post<FuncionarioTela>(`${this.api}/funcionarios`, dados)
+      : this.http.put<FuncionarioTela>(`${this.api}/funcionarios/${f.id}`, dados));
     await this.carregar();
     return salvo;
   }
@@ -59,8 +60,18 @@ export class DadosService {
     await this.carregar();
     return salvo;
   }
-  async mudarEstado(id: number, estado: EstadoSolicitacao, autorId?: number) {
-    await firstValueFrom(this.http.patch(`${this.api}/solicitacoes/${id}/estado`, { estado, autorId }));
+  async mudarEstado(
+    id: number,
+    estado: EstadoSolicitacao,
+    detalhes: {
+      valorOrcamento?: number;
+      motivoRejeicao?: string;
+      descricaoManutencao?: string;
+      orientacoesCliente?: string;
+      funcionarioDestinoId?: number;
+    } = {}
+  ) {
+    await firstValueFrom(this.http.patch(`${this.api}/solicitacoes/${id}/estado`, { estado, ...detalhes }));
     await this.carregar();
   }
 }
