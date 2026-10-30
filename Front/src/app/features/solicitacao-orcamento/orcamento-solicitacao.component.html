@@ -5,7 +5,11 @@
 
   <div class="mb-3">
   <label for="cliente-solicitacao" class="form-label">Cliente</label>
-  <select id="cliente-solicitacao" class="form-select" (change)="clienteId = +$any($event.target).value">
+  <select 
+  id="cliente-solicitacao" 
+  class="form-select" 
+  [value]="clienteId ?? ''"
+  (change)="selecionarCliente(+$any($event.target).value)">
     <option value="">Selecione o cliente</option>
     @for (cliente of clientes; track cliente.id) {
       <option [value]="cliente.id">{{ cliente.nome }}</option>
