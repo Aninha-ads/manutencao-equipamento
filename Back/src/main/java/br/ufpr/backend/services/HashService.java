@@ -3,6 +3,7 @@ package br.ufpr.backend.services;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class HashService {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(Base64.getDecoder().decode(salt));
-            byte[] hash = md.digest(senha.getBytes("UTF-8"));
+            byte[] hash = md.digest(senha.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(hash);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao processar a encriptação", e);
@@ -29,6 +30,8 @@ public class HashService {
 
     public boolean validarSenha(String senhaFornecida, String saltArmazenado, String hashArmazenado) {
         String hashCalculado = gerarHash(senhaFornecida, saltArmazenado);
-        return hashCalculado.equals(hashArmazenado);
+        return MessageDigest.isEqual(
+                hashCalculado.getBytes(StandardCharsets.UTF_8),
+                hashArmazenado.getBytes(StandardCharsets.UTF_8));
     }
 }

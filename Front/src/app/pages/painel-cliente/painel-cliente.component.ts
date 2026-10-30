@@ -74,12 +74,19 @@ export class PainelClienteComponent implements OnInit{
         return { label: 'Aprovar/Rejeitar', rota: '/orcamentos/mostrar-orcamento' };
       case 'REJEITADA':
         return { label: 'Resgatar Serviço', rota: '/resgatar-servico' };
-      case 'ARRUMADA':
-        return { label: 'Pagar Serviço', rota: '/pagar-servico' };
       case 'APROVADA':
         return null;
       default:
         return null;
+    }
+  }
+
+  async pagarServico(id: number): Promise<void> {
+    try {
+      await this.dados.mudarEstado(id, 'PAGA');
+      this.carregarSolicitacoes();
+    } catch {
+      alert('Não foi possível registrar o pagamento. Verifique a solicitação e tente novamente.');
     }
   }
 }

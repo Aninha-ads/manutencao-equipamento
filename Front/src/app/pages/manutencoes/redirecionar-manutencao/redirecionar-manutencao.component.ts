@@ -1,5 +1,6 @@
 import { FuncionarioTela as Funcionario } from '../../../core/models/dados-tela.model';
 import { DadosService } from '../../../core/services/dados.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -7,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -20,6 +21,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class RedirecionarManutencaoComponent {
   private dados = inject(DadosService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(AuthService);
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
   registro = this.dados.buscarSolicitacao(this.route.snapshot.queryParamMap.get('id'));
@@ -35,7 +38,7 @@ export class RedirecionarManutencaoComponent {
   private fb = inject(FormBuilder);
   funcionarios = this.dados.listarFuncionarios();
 
-  funcionarioAtual: Funcionario | undefined = this.funcionarios[0];
+  funcionarioAtual: Funcionario | undefined = this.funcionarios.find(f => f.id === this.auth.id);
 
   funcionariosDisponiveis: Funcionario[] = this.funcionarios.filter(
     funcionario => funcionario.id !== this.funcionarioAtual?.id
@@ -55,7 +58,7 @@ export class RedirecionarManutencaoComponent {
     return this.redirecionamentoForm.controls.funcionarioDestinoId;
   }
 
-  private funcionarioDestinoValido(control: any) {
+  private funcionarioDestinoValido(control: import('@angular/forms').AbstractControl) {
 
     const id = control.value;
 
@@ -82,8 +85,12 @@ export class RedirecionarManutencaoComponent {
     return null;
   }
 
-  redirecionarManutencao(): void {
+  async redirecionarManutencao(): Promise<void> {
     if (!this.registro) return;
+    if (this.registro.estado !== 'APROVADA') {
+      alert('Somente solicitações aprovadas podem ser redirecionadas.');
+      return;
+    }
 
     if (this.redirecionamentoForm.invalid) {
       this.redirecionamentoForm.markAllAsTouched();
@@ -99,13 +106,14 @@ export class RedirecionarManutencaoComponent {
       return;
     }
 
-    console.log('Redirecionamento:', {
-      funcionarioAtual: this.funcionarioAtual,
-      funcionarioDestino: funcionarioDestino
-    });
-
-    alert(
-      `Manutenção redirecionada para ${funcionarioDestino.nome}.`
-    );
+    try {
+      await this.dados.mudarEstado(this.registro.id, 'REDIRECIONADA', {
+        funcionarioDestinoId: funcionarioDestino.id
+      });
+      alert(`Manutenção redirecionada para ${funcionarioDestino.nome}.`);
+      await this.router.navigate(['/visualizacao-solicitacoes']);
+    } catch {
+      alert('Não foi possível redirecionar a manutenção. Verifique o estado da solicitação e tente novamente.');
+    }
   }
 }

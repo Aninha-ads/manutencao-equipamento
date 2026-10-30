@@ -1,6 +1,9 @@
 package br.ufpr.backend.controllers;
 
 import br.ufpr.backend.services.DadosService;
+import br.ufpr.backend.security.ApiAuthenticationFilter;
+import br.ufpr.backend.security.AuthenticatedUser;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -15,19 +18,25 @@ public class SolicitacaoController {
     public SolicitacaoController(DadosService dados) { this.dados = dados; }
 
     @GetMapping
-    public List<DadosService.Solicitacao> listar() { return dados.solicitacoes(); }
+    public List<DadosService.Solicitacao> listar(
+            @RequestAttribute(ApiAuthenticationFilter.USER_ATTRIBUTE) AuthenticatedUser user) {
+        return dados.solicitacoes(user);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Integer> abrir(@RequestBody DadosService.Abertura abertura) {
-        return Map.of("id", dados.abrir(abertura));
+    public Map<String, Integer> abrir(
+            @Valid @RequestBody DadosService.Abertura abertura,
+            @RequestAttribute(ApiAuthenticationFilter.USER_ATTRIBUTE) AuthenticatedUser user) {
+        return Map.of("id", dados.abrir(abertura, user));
     }
-
-    public record Mudanca(String estado, Integer autorId) {}
 
     @PatchMapping("/{id}/estado")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void estado(@PathVariable int id, @RequestBody Mudanca mudanca) {
-        dados.mudarEstado(id, mudanca.estado(), mudanca.autorId());
+    public void estado(
+            @PathVariable int id,
+            @RequestBody DadosService.MudancaEstado mudanca,
+            @RequestAttribute(ApiAuthenticationFilter.USER_ATTRIBUTE) AuthenticatedUser user) {
+        dados.mudarEstado(id, mudanca, user);
     }
 }

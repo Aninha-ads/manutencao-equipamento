@@ -11,11 +11,11 @@ import { OrcamentoSolicitacaoComponent } from './features/solicitacao-orcamento/
 import { ManterFuncionariosComponent } from './features/manter-funcionarios/manter-funcionarios.component';
 import { CategoriaComponent } from './features/cadastro-categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
-import { LoginFuncionarioComponent } from './pages/login-funcionario/login-funcionario.component';
 import { HomeComponent } from './home/home.component';
 import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
 import { ResgatarServicoComponent } from './pages/resgatar-servico/resgatar-servico.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
+import { perfilGuard } from './core/guards/perfil.guard';
 
 export const routes: Routes = [
   {
@@ -29,8 +29,14 @@ export const routes: Routes = [
   },
    {
     path: 'login-funcionario',
-    component: LoginFuncionarioComponent
+    redirectTo: 'login',
+    pathMatch: 'full'
     },
+   {
+     path: 'cadastro-funcionario',
+     redirectTo: 'manter-funcionarios',
+     pathMatch: 'full'
+   },
 
     {
     path: 'home',
@@ -42,63 +48,77 @@ export const routes: Routes = [
   },
   {
     path: 'painel-cliente',
-    component: PainelClienteComponent
+      component: PainelClienteComponent,
+      canActivate: [perfilGuard('CLIENTE')]
+    },
+    {
+      path: 'painel-funcionario',
+      component: PainelFuncionarioComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
+    },
+    {
+      path: 'orcamentos/efetuar',
+      component: EfetuarOrcamentoComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
+  },
+    { path: 'orcamentos/mostrar-orcamento/:id',
+      component: MostrarOrcamentoComponent,
+      canActivate: [perfilGuard('CLIENTE')]
   },
   {
-    path: 'painel-funcionario',
-    component: PainelFuncionarioComponent
-  },
-  {
-    path: 'orcamentos/efetuar',
-    component: EfetuarOrcamentoComponent
-  },
-  { path: 'orcamentos/mostrar-orcamento/:id', 
-    component: MostrarOrcamentoComponent 
-  },
-  {
-    path: 'visualizacao-solicitacoes',
-    component: VisualizacaoSolicitacoesComponent
-  },
-  {
-    path: 'orcamento/novo',
-    component: OrcamentoSolicitacaoComponent
-  },
-  {
-    path: 'orcamentos/:id',
-    component: VisualizarServicoComponent
+      path: 'visualizacao-solicitacoes',
+      component: VisualizacaoSolicitacoesComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
+    },
+    {
+      path: 'orcamento/novo',
+      component: OrcamentoSolicitacaoComponent,
+      canActivate: [perfilGuard('CLIENTE')]
+    },
+    {
+      path: 'orcamentos/:id',
+      component: VisualizarServicoComponent,
+      canActivate: [perfilGuard('CLIENTE')]
+    },
+    {
+      path: 'visualizar-servico/:id',
+      component: VisualizarServicoComponent,
+      canActivate: [perfilGuard('CLIENTE')]
   },
     {
-    path: 'visualizar-servico/:id',
-    component: VisualizarServicoComponent
+      path: 'manutencoes/efetuar',
+      component: EfetuarManutencaoComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
   },
-  {
-    path: 'manutencoes/efetuar',
-    component: EfetuarManutencaoComponent
-  },
-  {
-      path: 'manutencoes/redirecionar',
-    component: RedirecionarManutencaoComponent
-  },
+    {
+        path: 'manutencoes/redirecionar',
+      component: RedirecionarManutencaoComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
+    },
 
-  {
-    path: 'manter-funcionarios',
-    component: ManterFuncionariosComponent
-  },
+    {
+      path: 'manter-funcionarios',
+      component: ManterFuncionariosComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
+    },
 
-  {
-    path: 'categoria',
-    component: CategoriaComponent
+    {
+      path: 'categoria',
+      component: CategoriaComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')]
     
   },
 
   {
     path: 'registrar-servico/:id',
-    component: ResgatarServicoComponent
+    component: ResgatarServicoComponent,
+    canActivate: [perfilGuard('CLIENTE')]
   },
 
   {
   path: 'relatorios',
-  component: RelatoriosComponent
+  component: RelatoriosComponent,
+  canActivate: [perfilGuard('FUNCIONARIO')]
   },
 
   {

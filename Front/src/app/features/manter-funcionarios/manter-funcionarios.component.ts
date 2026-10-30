@@ -1,4 +1,5 @@
 import { DadosService } from '../../core/services/dados.service';
+import { AuthService } from '../../core/services/auth.service';
 import { FuncionarioTela as Funcionario } from '../../core/models/dados-tela.model';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,10 +15,11 @@ import { DatePipe } from '@angular/common';
 //nn sei fazer todo esse semi-back direito
 export class ManterFuncionariosComponent {
   private dados = inject(DadosService);
+  private auth = inject(AuthService);
   private fb = inject(FormBuilder);
 
   // funcionário atualmente logado
-  funcionarioLogadoId = this.dados.listarFuncionarios()[0]?.id ?? 0;
+  funcionarioLogadoId = this.auth.id ?? 0;
   // controle do formulário
   modoEdicao = false;
   funcionarioEditandoId: number | null = null;
@@ -26,7 +28,7 @@ export class ManterFuncionariosComponent {
     email: ['', [Validators.required, Validators.email]],
     nome: ['', Validators.required],
     nascimento: ['', Validators.required],
-    senha: ['', Validators.required], // obrigatória só no cadastro; ajustada em alternarModoEdicao()
+    senha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
   });
 
   // Funcionários carregados das tabelas funcionario e usuario.
@@ -59,7 +61,9 @@ export class ManterFuncionariosComponent {
       nascimento: this.form.value.nascimento
     };
 
-    if (!await this.persistir(() => this.dados.salvarFuncionario(novoFuncionario, true))) return;
+    if (!await this.persistir(() => this.dados.salvarFuncionario(
+      novoFuncionario, true, this.form.controls['senha'].value
+    ))) return;
     alert('Funcionário cadastrado com sucesso!');
     this.limparFormulario();
   }
@@ -107,7 +111,11 @@ export class ManterFuncionariosComponent {
       return;
     }
 
-    if (!await this.persistir(() => this.dados.salvarFuncionario({ ...funcionario, email, nome, nascimento: this.form.value.nascimento }))) return;
+    if (!await this.persistir(() => this.dados.salvarFuncionario(
+      { ...funcionario, email, nome, nascimento: this.form.value.nascimento },
+      false,
+      this.form.controls['senha'].value
+    ))) return;
     alert('Funcionário atualizado com sucesso!');
     this.limparFormulario();
   }

@@ -120,15 +120,12 @@ export class EfetuarOrcamentoComponent {
     const valor = Number(texto);
   
     try {
-      await this.dados.mudarEstado(this.registro.id, 'ORCADA');
-      // PENDENTE: o valor do orçamento ainda não está sendo enviado ao back-end.
-      // mudarEstado(id, estado, autorId?) não aceita esse campo — confirmar com
-      // o DadosController.java se existe outro parâmetro/endpoint para isso.
+      await this.dados.mudarEstado(this.registro.id, 'ORCADA', { valorOrcamento: valor });
 
       alert(`Orçamento de R$ ${valor.toFixed(2).replace('.', ',')} registrado com sucesso!`);
       this.router.navigate(['/painel-funcionario']);
     } catch {
-      alert('Não foi possível registrar o orçamento agora. Essa funcionalidade ainda está sendo implementada no servidor.');
+      alert('Não foi possível registrar o orçamento. Verifique a solicitação e tente novamente.');
     }
     
   }

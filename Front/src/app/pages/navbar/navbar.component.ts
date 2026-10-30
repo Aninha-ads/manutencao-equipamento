@@ -11,5 +11,9 @@ import { RouterLink } from '@angular/router';
 export class NavbarComponent {
   private auth = inject(AuthService);
   menuAberto = false;
-  sair(): void { this.auth.logout(); }
+  sair(): void {
+    this.auth.logout().subscribe({
+      error: () => alert('A sessão foi encerrada neste navegador, mas o servidor não confirmou a revogação.')
+    });
+  }
 }

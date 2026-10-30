@@ -10,10 +10,13 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { NgxMaskDirective } from 'ngx-mask';
 import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 export interface ClienteRegistro {
   nome: string;
   email: string;
+  senha: string;
   cpf: string;
   telefone: string;
   cep: string;
@@ -35,6 +38,8 @@ export interface ClienteRegistro {
 export class CadastroClienteComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   enviando = false;
   erroCep = '';
@@ -125,6 +130,12 @@ export class CadastroClienteComponent {
       Validators.required,
       Validators.email,
       Validators.maxLength(254)
+    ]),
+
+    senha: this.fb.nonNullable.control('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(100)
     ]),
 
     cpf: this.fb.nonNullable.control('', [
@@ -266,16 +277,14 @@ export class CadastroClienteComponent {
     this.enviando = true;
 
     // Ajuste a URL e o formato do payload conforme o contrato da sua API.
-    this.http
-      .post('/api/clientes', dados)
+    this.auth
+      .registrarCliente(dados)
       .pipe(finalize(() => (this.enviando = false)))
       .subscribe({
         next: () => {
           this.sucessoCadastro = 'Cadastro realizado com sucesso!';
           this.formulario.reset();
-
-          // Se necessário, redirecione para a tela de login.
-          // this.router.navigate(['/login']);
+          void this.router.navigate(['/painel-cliente']);
         },
         error: (erro) => {
           if (erro.status === 0) {

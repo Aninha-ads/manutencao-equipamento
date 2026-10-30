@@ -1,0 +1,35 @@
+<main class="container py-5">
+  <div class="card mx-auto shadow" style="max-width: 34rem">
+    <div class="card-body">
+      <h1 class="h3 mb-4">Cadastro de funcionário</h1>
+      @if (erro) {
+        <div class="alert alert-danger" role="alert">{{ erro }}</div>
+      }
+      <form [formGroup]="form" (ngSubmit)="cadastrar()">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input id="nome" class="form-control" formControlName="nome" autocomplete="name">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input id="email" type="email" class="form-control" formControlName="email" autocomplete="email">
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input id="senha" type="password" class="form-control" formControlName="senha" autocomplete="new-password">
+          @if (form.controls.senha.touched && form.controls.senha.invalid) {
+            <div class="text-danger small">A senha deve ter pelo menos 6 caracteres.</div>
+          }
+        </div>
+        <div class="mb-3">
+          <label for="dataNascimento" class="form-label">Data de nascimento</label>
+          <input id="dataNascimento" type="date" class="form-control" formControlName="dataNascimento">
+        </div>
+        <button class="btn btn-primary w-100" type="submit" [disabled]="enviando">
+          {{ enviando ? 'Cadastrando…' : 'Cadastrar' }}
+        </button>
+      </form>
+      <a class="d-block text-center mt-3" routerLink="/login">Voltar ao login</a>
+    </div>
+  </div>
+</main>

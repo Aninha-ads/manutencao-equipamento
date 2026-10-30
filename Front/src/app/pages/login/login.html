@@ -14,6 +14,9 @@
       </p>
 
       <form [formGroup]="form" (ngSubmit)="fazerLogin()">
+        @if (erroLogin()) {
+          <div class="alert alert-danger" role="alert">{{ erroLogin() }}</div>
+        }
 
         <div class="mb-3">
           <label for="email" class="form-label">
@@ -52,11 +55,11 @@
         </div>
 
         <button
-          type="button"
+          type="submit"
           class="btn btn-primary w-100"
-          [disabled]="form.invalid"
+          [disabled]="form.invalid || enviando()"
         >
-          Entrar
+          {{ enviando() ? 'Entrando…' : 'Entrar' }}
         </button>
 
       </form>
@@ -73,6 +76,7 @@
         >
           Clique aqui e cadastre-se!
         </a>
+
 
       </div>
 

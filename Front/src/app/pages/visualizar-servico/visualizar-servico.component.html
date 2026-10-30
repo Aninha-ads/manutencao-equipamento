@@ -398,6 +398,7 @@
 
                 <!-- Funcionário -->
 
+                @if (passo.funcionario && ['ORCADA', 'REDIRECIONADA', 'ARRUMADA', 'FINALIZADA'].includes(passo.estado)) {
                 <div class="funcionario">
 
                   <span>
@@ -409,6 +410,13 @@
                   </strong>
 
                 </div>
+                }
+                @if (passo.estado === 'REDIRECIONADA' && (passo.funcionarioOrigem || passo.funcionarioDestino)) {
+                  <div class="text-muted small mt-1">
+                    Responsável: {{ passo.funcionarioOrigem ?? '—' }} →
+                    {{ passo.funcionarioDestino ?? '—' }}
+                  </div>
+                }
 
 
               </div>

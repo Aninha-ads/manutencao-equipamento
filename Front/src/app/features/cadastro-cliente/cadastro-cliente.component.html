@@ -6,6 +6,12 @@
       (ngSubmit)="onSubmit()"
       novalidate
     >
+      @if (erroCadastro) {
+        <div class="alert alert-danger" role="alert">{{ erroCadastro }}</div>
+      }
+      @if (sucessoCadastro) {
+        <div class="alert alert-success" role="status">{{ sucessoCadastro }}</div>
+      }
       <!-- nome -->
       <div class="row mb-3">
         <div class="col-md-12">
@@ -26,6 +32,24 @@
               } @else if (campos.nome.hasError('maxlength')) {
                 O nome deve ter no máximo 150 caracteres.
               }
+            </div>
+          }
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="senha" class="form-label">Senha</label>
+          <input
+            type="password"
+            id="senha"
+            class="form-control"
+            formControlName="senha"
+            autocomplete="new-password"
+            [class.is-invalid]="campos.senha.touched && campos.senha.invalid"
+          >
+          @if (campos.senha.touched && campos.senha.invalid) {
+            <div class="invalid-feedback">
+              A senha deve ter entre 6 e 100 caracteres.
             </div>
           }
         </div>
