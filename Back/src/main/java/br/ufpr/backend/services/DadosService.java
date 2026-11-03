@@ -241,6 +241,9 @@ public class DadosService {
             }
             case "FINALIZADA" -> {
                 exigirPerfil(autor, AuthenticatedUser.FUNCIONARIO);
+                if ("REJEITADA".equals(anterior)) {
+                    observacao = "Equipamento devolvido ao cliente sem manutenção. Solicitação rejeitada arquivada.";
+                }
                 jdbc.update("UPDATE solicitacao SET estado=?,data_hora_finalizacao=CURRENT_TIMESTAMP WHERE id=?",
                         estado, id);
             }
@@ -253,7 +256,7 @@ public class DadosService {
         return switch (anterior) {
             case "ABERTA" -> "ORCADA".equals(proximo);
             case "ORCADA" -> "APROVADA".equals(proximo) || "REJEITADA".equals(proximo);
-            case "REJEITADA" -> "APROVADA".equals(proximo);
+            case "REJEITADA" -> "APROVADA".equals(proximo) || "FINALIZADA".equals(proximo);
             case "APROVADA" -> "REDIRECIONADA".equals(proximo) || "ARRUMADA".equals(proximo);
             case "REDIRECIONADA" -> "ARRUMADA".equals(proximo);
             case "ARRUMADA" -> "PAGA".equals(proximo);

@@ -47,7 +47,7 @@
           </span>
 
           <h1 class="display-6 fw-bold mb-1">
-            Visualizar Serviço
+            {{ interfaceFuncionario ? (solicitacao.estado === 'ABERTA' ? 'Detalhes da solicitação aberta' : 'Detalhes da solicitação') : 'Visualizar Serviço' }}
           </h1>
 
           <p class="mb-0 text-light">
@@ -439,6 +439,11 @@
     <div
       class="d-flex justify-content-end gap-2 flex-wrap mb-4"
     >
+    @if (interfaceFuncionario && solicitacao.estado === 'ABERTA') {
+      <a routerLink="/orcamentos/efetuar" [queryParams]="{ id: solicitacao.id }" class="btn btn-primary">
+        Efetuar Orçamento
+      </a>
+    }
     @if (podeRejeitar) {
       <button
         type="button"
@@ -467,5 +472,5 @@
 
 </div>
 } @else {
-<div class="container py-4" role="alert">Solicitação não encontrada. <a routerLink="/painel-cliente">Voltar às solicitações</a></div>
+<div class="container py-4" role="alert">Solicitação não encontrada. <a [routerLink]="rotaVoltar">Voltar às solicitações</a></div>
 }

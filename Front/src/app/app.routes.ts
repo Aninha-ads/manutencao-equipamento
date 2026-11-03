@@ -57,6 +57,18 @@ export const routes: Routes = [
       canActivate: [perfilGuard('FUNCIONARIO')]
     },
     {
+      path: 'solicitacoes/abertas/:id',
+      component: VisualizarServicoComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')],
+      data: { interfaceFuncionario: true }
+    },
+    {
+      path: 'solicitacoes/detalhes/:id',
+      component: VisualizarServicoComponent,
+      canActivate: [perfilGuard('FUNCIONARIO')],
+      data: { interfaceFuncionario: true }
+    },
+    {
       path: 'orcamentos/efetuar',
       component: EfetuarOrcamentoComponent,
       canActivate: [perfilGuard('FUNCIONARIO')]

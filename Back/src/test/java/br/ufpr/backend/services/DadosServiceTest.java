@@ -215,6 +215,34 @@ class DadosServiceTest {
         assertThrows(ResponseStatusException.class, () -> dados.removerFuncionario(5));
     }
 
+    @Test void devolveEArquivaRejeitadaSemRegistrarManutencaoOuPagamento() throws Exception {
+        int antes = dados.historico(3).size();
+        api.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/solicitacoes/3/estado")
+                .header("Authorization", "Bearer " + tokens.issue(funcionario()).value())
+                .contentType(MediaType.APPLICATION_JSON).content("{\"estado\":\"FINALIZADA\"}"))
+            .andExpect(status().isNoContent());
+        var registro = jdbc.queryForMap("SELECT * FROM solicitacao WHERE id=3");
+        assertEquals("FINALIZADA", registro.get("estado"));
+        assertNotNull(registro.get("data_hora_finalizacao"));
+        assertNull(registro.get("data_hora_pagamento"));
+        assertNull(registro.get("descricao_manutencao"));
+        assertNotNull(registro.get("motivo_rejeicao"));
+        assertEquals(antes + 1, dados.historico(3).size());
+        assertTrue(dados.historico(3).get(antes).descricao().contains("sem manutenção"));
+        assertEquals(5, jdbc.queryForObject("SELECT autor_id FROM historico_solicitacao WHERE solicitacao_id=3 AND estado_novo='FINALIZADA'", Integer.class));
+    }
+
+    @Test void bloqueiaArquivamentoPorClienteEReparoDeRejeitada() {
+        var finalizacao = new DadosService.MudancaEstado("FINALIZADA", null, null, null, null, null);
+        var proibido = assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(3, finalizacao, cliente(3)));
+        assertEquals(403, proibido.getStatusCode().value());
+        var reparo = new DadosService.MudancaEstado("ARRUMADA", null, null, "Reparo", "Orientações", null);
+        var conflito = assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(3, reparo, funcionario()));
+        assertEquals(409, conflito.getStatusCode().value());
+        assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(2, finalizacao, funcionario()));
+        assertEquals("REJEITADA", jdbc.queryForObject("SELECT estado FROM solicitacao WHERE id=3", String.class));
+    }
+
     @Test void persisteFinalizacaoEHistoricoAtomicamente() {
         int antes = dados.historico(7).size();
         var finalizacao = new DadosService.MudancaEstado("FINALIZADA", null, null, null, null, null);

@@ -18,7 +18,11 @@ export class VisualizarServicoComponent {
   private readonly chaveClienteLogado = 'clienteLogadoId';
   solicitacao = this.carregar();
   historico = this.ordenar(this.solicitacao?.historico);
+  get interfaceFuncionario(): boolean {
+    return this.route.snapshot.data['interfaceFuncionario'] === true;
+  }
   get rotaVoltar(): string {
+    if (this.interfaceFuncionario) return '/painel-funcionario';
     const origem = this.route.snapshot.queryParamMap.get('origem');
     return origem === 'painel-funcionario' || origem === 'visualizacao-solicitacoes'
       ? '/' + origem : '/painel-cliente';
@@ -47,6 +51,8 @@ export class VisualizarServicoComponent {
   }
 
   private temAcesso(clienteId?: number): boolean {
+    // Esta interface só é alcançada pela rota protegida para funcionários.
+    if (this.interfaceFuncionario) return true;
     const origem = this.route.snapshot.queryParamMap.get('origim');
     if (origem === 'painel-funcionario' || origem == 'visualizacao-solicitacoes') return true;
     const logado = localStorage.getItem(this.chaveClienteLogado);
@@ -54,7 +60,7 @@ export class VisualizarServicoComponent {
   }
 
   get podeRejeitar(): boolean {
-    return this.solicitacao?.estado === 'ORCADA' && this.rotaVoltar === '/painel-cliente';
+    return !this.interfaceFuncionario && this.solicitacao?.estado === 'ORCADA' && this.rotaVoltar === '/painel-cliente';
   }
   abrirModalRejeitar() {
     const modalRef = this.modalService.open(ModalRejeitarServicoComponent);

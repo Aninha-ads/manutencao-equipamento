@@ -8,7 +8,7 @@
       <h1>Painel do Funcionário</h1>
 
       <p>
-        Solicitações aguardando orçamento
+        Solicitações aguardando orçamento, manutenção ou devolução
       </p>
     </div>
 
@@ -20,10 +20,10 @@
     <div class="section-title">
 
       <div>
-        <h2>Solicitações Abertas</h2>
+        <h2>Solicitações pendentes</h2>
 
         <p>
-          Solicitações que necessitam de atenção imediata.
+          Solicitações abertas, aprovadas e rejeitadas.
         </p>
       </div>
 
@@ -33,6 +33,10 @@
 
     </div>
 
+
+    @if (erro()) {
+      <div class="alert alert-danger" role="alert">{{ erro() }}</div>
+    }
 
     <div class="card tabela-card">
 
@@ -71,7 +75,8 @@
                 </td>
 
                 <td>
-                  <span class="status-aberta">
+                  <span class="status-aberta" [class.status-aprovada]="solicitacao.estado === 'APROVADA'"
+                    [class.status-rejeitada]="solicitacao.estado === 'REJEITADA'">
                     {{ solicitacao.estado }}
                   </span>
                 </td>
@@ -80,23 +85,36 @@
 
                   <a
                     class="btn btn-orcamento me-2"
-                    [routerLink]="['/visualizar-servico', solicitacao.id]"
-                    [queryParams]="{ origem: 'painel-funcionario' }"
+                    [routerLink]="[solicitacao.estado === 'ABERTA' ? '/solicitacoes/abertas' : '/solicitacoes/detalhes', solicitacao.id]"
                   >
                     Detalhes
                   </a>
 
+                  @if (solicitacao.estado === 'ABERTA') {
                   <a
                     class="btn btn-orcamento"
                     routerLink="/orcamentos/efetuar" [queryParams]="{ id: solicitacao.id }"
                   >
                     Efetuar Orçamento
                   </a>
+                  }
+                  @if (solicitacao.estado === 'APROVADA') {
+                    <a class="btn btn-orcamento" routerLink="/manutencoes/efetuar"
+                      [queryParams]="{ id: solicitacao.id }">Arrumar</a>
+                  }
+                  @if (solicitacao.estado === 'REJEITADA') {
+                    <button type="button" class="btn btn-orcamento"
+                      [disabled]="processando() !== null" (click)="devolver(solicitacao)">
+                      {{ processando() === solicitacao.id ? 'Arquivando…' : 'Devolver / arquivar' }}
+                    </button>
+                  }
 
                 </td>
 
               </tr>
 
+            } @empty {
+              <tr><td colspan="5" class="text-center py-4">Nenhuma solicitação pendente.</td></tr>
             }
 
           </tbody>

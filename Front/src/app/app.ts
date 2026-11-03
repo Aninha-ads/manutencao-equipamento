@@ -25,7 +25,7 @@ export class App {
   get menuFuncionario(): boolean {
     const origem = this.router.parseUrl(this.router.url).queryParams['origem'];
     return origem === 'painel-funcionario' || origem === 'visualizacao-solicitacoes'
-      || ['/painel-funcionario', '/visualizacao-solicitacoes', '/orcamentos/efetuar',
+      || ['/painel-funcionario', '/solicitacoes/abertas/', '/solicitacoes/detalhes/', '/visualizacao-solicitacoes', '/orcamentos/efetuar',
           '/manutencoes/', '/manter-funcionarios', '/categoria', '/relatorios']
           .some(rota => this.router.url.startsWith(rota));
   }
