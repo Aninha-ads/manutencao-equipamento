@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
   private auth = inject(AuthService);
+  readonly sessao = this.auth.sessao;
   menuAberto = false;
   sair(): void {
     this.auth.logout().subscribe({

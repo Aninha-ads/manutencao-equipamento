@@ -22,6 +22,10 @@
   padding: 20px 12px !important;
 }
 
+.navbar-text {
+  color: #ffffff !important;
+}
+
 .nav-link:hover {
   color: #e6d19d !important;
 }
