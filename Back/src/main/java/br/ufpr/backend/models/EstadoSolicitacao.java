@@ -8,17 +8,30 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "estado_solicitacao")
 public class EstadoSolicitacao {
+
     @Id
-    @Column(length = 20)
+    @Column(name = "codigo", nullable = false, length = 20)
     private String codigo;
 
-    @Column(nullable = false, length = 80)
+    @Column(name = "descricao", nullable = false, length = 80)
     private String descricao;
 
-    public EstadoSolicitacao() {}
+    public EstadoSolicitacao() {
+    }
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

@@ -55,8 +55,12 @@ export class EfetuarManutencaoComponent {
     return this.manutencaoForm.controls.orientacoesCliente;
   }
 
-  efetuarManutencao(): void {
+  async efetuarManutencao(): Promise<void> {
     if (!this.registro) return;
+    if (this.registro.estado !== 'APROVADA' && this.registro.estado !== 'REDIRECIONADA') {
+      alert('A solicitação precisa estar aprovada ou redirecionada para iniciar a manutenção.');
+      return;
+    }
 
     if (this.manutencaoForm.invalid) {
       this.manutencaoForm.markAllAsTouched();
@@ -68,8 +72,11 @@ export class EfetuarManutencaoComponent {
       orientacoesCliente: this.orientacoesCliente.value.trim()
     };
 
-    console.log('Dados da manutenção:', dados);
-
-    alert('Manutenção registrada com sucesso!');
+    try {
+      await this.dados.mudarEstado(this.registro.id, 'ARRUMADA', dados);
+      alert('Manutenção registrada com sucesso!');
+    } catch {
+      alert('Não foi possível registrar a manutenção. Verifique o estado da solicitação e tente novamente.');
+    }
   }
 }

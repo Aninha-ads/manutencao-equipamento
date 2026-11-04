@@ -130,7 +130,7 @@
               </span>
 
               <span class="info-value">
-                {{ solicitacao.dataHora }}
+                {{ solicitacao.dataHora | date:'dd/MM/yyyy HH:mm':'':'pt-BR' }}
               </span>
 
             </div>
@@ -343,10 +343,9 @@
           faz o Angular percorrer todos os passos do histórico.
                -->
 
-          @for (
-            passo of historico;
-            track passo.dataHora + passo.estado
-          ) {
+          @for ( passo of historico;
+          track $index)
+            {
 
             <div class="timeline-item">
 
@@ -380,7 +379,7 @@
 
                   <span class="data-historico">
 
-                    {{ passo.dataHora }}
+                    {{ passo.dataHora | date:'dd/MM/yyyy HH:mm':'':'pt-BR' }}
 
                   </span>
 
@@ -398,6 +397,7 @@
 
                 <!-- Funcionário -->
 
+                @if (passo.funcionario && ['ORCADA', 'REDIRECIONADA', 'ARRUMADA', 'FINALIZADA'].includes(passo.estado)) {
                 <div class="funcionario">
 
                   <span>
@@ -409,6 +409,13 @@
                   </strong>
 
                 </div>
+                }
+                @if (passo.estado === 'REDIRECIONADA' && (passo.funcionarioOrigem || passo.funcionarioDestino)) {
+                  <div class="text-muted small mt-1">
+                    Responsável: {{ passo.funcionarioOrigem ?? '—' }} →
+                    {{ passo.funcionarioDestino ?? '—' }}
+                  </div>
+                }
 
 
               </div>
@@ -432,6 +439,7 @@
     <div
       class="d-flex justify-content-end gap-2 flex-wrap mb-4"
     >
+    @if (podeRejeitar) {
       <button
         type="button"
         class="btn btn-danger"
@@ -439,6 +447,7 @@
       >
         Rejeitar serviço
       </button>
+    }
       <a
         [routerLink]="rotaVoltar"
         class="btn btn-dark btn-voltar"

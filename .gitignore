@@ -10,3 +10,7 @@
 # Maven build output
 /Back/target/
 /Back/.mvn/repository/
+
+# Local validation artifacts
+/Back/verificacao-compilacao.log
+/Front/.tsupgrader/

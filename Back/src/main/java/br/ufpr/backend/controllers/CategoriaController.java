@@ -32,7 +32,7 @@ public class CategoriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.inativar(id);
+        service.excluir(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,14 +1,26 @@
 import { Component, inject } from '@angular/core';
-import {AbstractControl, FormBuilder, ReactiveFormsModule,
- ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
+<<<<<<< HEAD
 
+=======
+import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
 
 export interface ClienteRegistro {
   nome: string;
   email: string;
+  senha: string;
   cpf: string;
   telefone: string;
   cep: string;
@@ -19,7 +31,7 @@ export interface ClienteRegistro {
   cidade: string;
   uf: string;
 }
-//vira ReactiveFromsModule
+
 @Component({
   selector: 'app-cadastro-cliente',
   standalone: true,
@@ -30,12 +42,14 @@ export interface ClienteRegistro {
 export class CadastroClienteComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
   enviando = false;
   erroCep = '';
+  erroCadastro = '';
+  sucessoCadastro = '';
 
-  // Rejeita campos vazios ou preenchidos apenas com espaços.
   private readonly textoObrigatorio: ValidatorFn = (
     control: AbstractControl
   ): ValidationErrors | null => {
@@ -43,23 +57,21 @@ export class CadastroClienteComponent {
       ? null
       : { apenasEspacos: true };
   };
- //Critérios para o CPF:
-  // Valida se o CPF possui 11 dígitos e dois dígitos verificadores corretos.
+
+  // Valida os 11 dígitos do CPF e seus dígitos verificadores.
   private readonly validarCpf: ValidatorFn = (
     control: AbstractControl
   ): ValidationErrors | null => {
     const cpf = String(control.value ?? '').replace(/\D/g, '');
 
     if (!cpf) {
-      return null; // O Validators.required verifica se está vazio.
+      return null;
     }
-    if (cpf.length !== 11) {
+
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
       return { cpfInvalido: true };
     }
-    // Bloqueia CPFs com todos os dígitos iguais.
-    if (/^(\d)\1{10}$/.test(cpf)) {
-      return { cpfInvalido: true };
-    }
+
     const calcularDigito = (
       numeros: string,
       pesoInicial: number
@@ -74,13 +86,12 @@ export class CadastroClienteComponent {
       return resto < 2 ? 0 : 11 - resto;
     };
 
-    // Primeiro dígito: pesos 10, 9, 8, ..., 2.
     const primeiroDigito = calcularDigito(cpf.substring(0, 9), 10);
+
     if (primeiroDigito !== Number(cpf[9])) {
       return { cpfInvalido: true };
     }
 
-    // Segundo dígito: pesos 11, 10, 9, ..., 2.
     const segundoDigito = calcularDigito(cpf.substring(0, 10), 11);
 
     if (segundoDigito !== Number(cpf[10])) {
@@ -90,10 +101,11 @@ export class CadastroClienteComponent {
     return null;
   };
 
-  // Exige uma quantidade exata de dígitos, ignorando a máscara.
+  // Valida a quantidade de dígitos, ignorando a máscara.
   private quantidadeDigitos(quantidade: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const valor = String(control.value ?? '');
+
       if (!valor) {
         return null;
       }
@@ -102,11 +114,24 @@ export class CadastroClienteComponent {
 
       return digitos.length === quantidade
         ? null
+<<<<<<< HEAD
         : { quantidadeDigitos: { esperada: quantidade } };
     };
   }
 
   cadastroForm = this.fb.group({
+=======
+        : {
+            quantidadeDigitos: {
+              exigido: quantidade,
+              atual: digitos.length
+            }
+          };
+    };
+  }
+
+  readonly formulario = this.fb.group({
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
     nome: this.fb.nonNullable.control('', [
       Validators.required,
       this.textoObrigatorio,
@@ -115,11 +140,23 @@ export class CadastroClienteComponent {
 
     email: this.fb.nonNullable.control('', [
       Validators.required,
+<<<<<<< HEAD
       this.textoObrigatorio,
+=======
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
       Validators.email,
       Validators.maxLength(254)
     ]),
 
+<<<<<<< HEAD
+=======
+    senha: this.fb.nonNullable.control('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(100)
+    ]),
+
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
     cpf: this.fb.nonNullable.control('', [
       Validators.required,
       this.validarCpf
@@ -165,6 +202,7 @@ export class CadastroClienteComponent {
 
     uf: this.fb.nonNullable.control('', [
       Validators.required,
+<<<<<<< HEAD
       Validators.pattern(/^[A-Za-z]{2}$/)
     ])
   });
@@ -182,11 +220,49 @@ export class CadastroClienteComponent {
     if (cepLimpo.length !== 8) {
       controleCep.markAsTouched();
       controleCep.updateValueAndValidity();
+=======
+      Validators.pattern(/^[a-zA-Z]{2}$/)
+    ])
+  });
+
+  get cadastroForm() {
+    return this.formulario;
+  }
+
+  get campos() {
+    return this.formulario.controls;
+  }
+
+  onSubmit(): void {
+    this.cadastrar();
+  }
+
+  buscarCep(): void {
+    this.consultarCep();
+  }
+
+  atualizarUf(uf: string): void {
+    const ufMaiuscula = uf.toUpperCase();
+
+    if (uf !== ufMaiuscula) {
+      this.formulario.controls.uf.setValue(ufMaiuscula);
+    }
+  }
+
+  consultarCep(): void {
+    const cep = this.formulario.controls.cep.value.replace(/\D/g, '');
+
+    this.erroCep = '';
+
+    if (cep.length !== 8) {
+      this.erroCep = 'Informe um CEP válido com 8 dígitos.';
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
       return;
     }
 
     this.http
       .get<{
+<<<<<<< HEAD
         erro?: boolean;
         logradouro?: string;
         bairro?: string;
@@ -196,15 +272,35 @@ export class CadastroClienteComponent {
       .subscribe({
         next: (dados) => {
           if (dados.erro) {
+=======
+        cep: string;
+        logradouro: string;
+        bairro: string;
+        localidade: string;
+        uf: string;
+        erro?: boolean;
+      }>(`https://viacep.com.br/ws/${cep}/json/`)
+      .subscribe({
+        next: (resposta) => {
+          if (resposta.erro) {
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
             this.erroCep = 'CEP não encontrado.';
             return;
           }
 
+<<<<<<< HEAD
           this.cadastroForm.patchValue({
             logradouro: dados.logradouro ?? '',
             bairro: dados.bairro ?? '',
             cidade: dados.localidade ?? '',
             uf: dados.uf ?? ''
+=======
+          this.formulario.patchValue({
+            logradouro: resposta.logradouro ?? '',
+            bairro: resposta.bairro ?? '',
+            cidade: resposta.localidade ?? '',
+            uf: resposta.uf ?? ''
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
           });
         },
         error: () => {
@@ -213,6 +309,7 @@ export class CadastroClienteComponent {
       });
   }
 
+<<<<<<< HEAD
   atualizarUf(valor: string): void {
     const uf = valor
       .replace(/[^a-zA-Z]/g, '')
@@ -266,4 +363,57 @@ export class CadastroClienteComponent {
     // this.router.navigate(['/painel-cliente']);
   }
   
+=======
+  cadastrar(): void {
+    this.erroCadastro = '';
+    this.sucessoCadastro = '';
+
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      return;
+    }
+
+    const dados: ClienteRegistro = {
+      ...this.formulario.getRawValue(),
+      nome: this.formulario.controls.nome.value.trim(),
+      email: this.formulario.controls.email.value.trim(),
+      cpf: this.formulario.controls.cpf.value.replace(/\D/g, ''),
+      telefone: this.formulario.controls.telefone.value.replace(/\D/g, ''),
+      cep: this.formulario.controls.cep.value.replace(/\D/g, ''),
+      logradouro: this.formulario.controls.logradouro.value.trim(),
+      numero: this.formulario.controls.numero.value.trim(),
+      complemento: this.formulario.controls.complemento.value.trim(),
+      bairro: this.formulario.controls.bairro.value.trim(),
+      cidade: this.formulario.controls.cidade.value.trim(),
+      uf: this.formulario.controls.uf.value.trim().toUpperCase()
+    };
+
+    this.enviando = true;
+
+    // Ajuste a URL e o formato do payload conforme o contrato da sua API.
+    this.auth
+      .registrarCliente(dados)
+      .pipe(finalize(() => (this.enviando = false)))
+      .subscribe({
+        next: () => {
+          this.sucessoCadastro = 'Cadastro realizado com sucesso!';
+          this.formulario.reset();
+          void this.router.navigate(['/painel-cliente']);
+        },
+        error: (erro) => {
+          if (erro.status === 0) {
+            this.erroCadastro =
+              'Não foi possível conectar ao servidor. Verifique se o backend está funcionando.';
+          } else if (erro.status === 409) {
+            this.erroCadastro =
+              'Já existe um cadastro com esses dados.';
+          } else {
+            this.erroCadastro =
+              erro.error?.message ??
+              'Não foi possível realizar o cadastro. Verifique os dados e tente novamente.';
+          }
+        }
+      });
+  }
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
 }

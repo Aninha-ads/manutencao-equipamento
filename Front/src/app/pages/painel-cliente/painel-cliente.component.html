@@ -67,6 +67,14 @@
                         {{ acao.label }}
                       </a>
                     }
+                    @if (solicitacao.estado === 'ARRUMADA') {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        (click)="pagarServico(solicitacao.id)">
+                        Confirmar pagamento
+                      </button>
+                    }
                   </td>
                 </tr>
               } @empty {

@@ -40,12 +40,16 @@ export class MostrarOrcamentoComponent implements OnInit {
       return;
     }
 
-    await this.dados.mudarEstado(this.solicitacao.id, 'APROVADA');
-
-    const valorFormatado = (this.solicitacao.valorOrcamento ?? 0).toFixed(2).replace('.', ',');
-    alert(`Serviço Aprovado no Valor R$ ${valorFormatado}`);
-    this.router.navigate(['/painel-cliente']);
+    try{
+      await this.dados.mudarEstado(this.solicitacao.id, 'APROVADA');
+      const valorFormatado = (this.solicitacao.valorOrcamento ?? 0).toFixed(2).replace('.', ',');
+      alert(`Serviço Aprovado no Valor R$ ${valorFormatado}`);
+      this.router.navigate(['/painel-cliente']);
+    } catch {
+      alert('Não foi possível aprovar o serviço. Verifique a solicitação e tente novamente.');
+    }
   }
+    
 
   abrirRejeicao(): void {
     this.mostrandoRejeicao = true;
@@ -67,13 +71,13 @@ export class MostrarOrcamentoComponent implements OnInit {
 
     const motivo = this.rejeicaoForm.value.motivo!.trim();
 
-    await this.dados.mudarEstado(this.solicitacao.id, 'REJEITADA');
-    // PENDENTE: o motivo da rejeição ainda não está sendo enviado ao back-end.
-    // mudarEstado(id, estado, autorId?) não aceita esse campo — confirmar com
-    // o DadosController.java se existe outro parâmetro/endpoint para isso.
-    console.log('Motivo informado (ainda não enviado ao back-end):', motivo);
-
-    alert('Serviço Rejeitado');
-    this.router.navigate(['/painel-cliente']);
+    try {
+      await this.dados.mudarEstado(this.solicitacao.id, 'REJEITADA', { motivoRejeicao: motivo });
+      alert('Serviço Rejeitado');
+      this.router.navigate(['/painel-cliente']);
+    } catch {
+      alert('Não foi possível rejeitar o serviço. Verifique a solicitação e tente novamente.');
+    }
+    
   }
 }

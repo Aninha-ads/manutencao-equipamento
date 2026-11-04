@@ -83,7 +83,7 @@ export class VisualizacaoSolicitacoesComponent {
   async finalizarSolicitacao(solicitacao: Solicitacao): Promise<void> {
     if (this.estadoAtual(solicitacao) !== 'PAGA' || !confirm('Finalizar esta solicitação?')) return;
     try {
-      await this.dados.mudarEstado(solicitacao.id, 'FINALIZADA', this.funcionarioLogadoId ?? undefined);
+      await this.dados.mudarEstado(solicitacao.id, 'FINALIZADA');
       this.solicitacoes = this.dados.listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? '' }));
     } catch {
       alert('Não foi possível finalizar a solicitação no banco. Tente novamente.');

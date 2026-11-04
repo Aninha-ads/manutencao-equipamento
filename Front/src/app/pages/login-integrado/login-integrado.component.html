@@ -1,0 +1,41 @@
+<div class="login-page d-flex justify-content-center align-items-center">
+  <div class="card login-card shadow">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Login</h2>
+      <p class="text-center text-muted mb-4">Entre com sua conta</p>
+
+      <form [formGroup]="form" (ngSubmit)="entrar()" novalidate>
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input id="email" type="email" class="form-control" formControlName="email"
+                 placeholder="Digite seu e-mail" autocomplete="username">
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <div class="text-danger small mt-1">Informe um e-mail válido!</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input id="senha" type="password" class="form-control" formControlName="senha"
+                 placeholder="Digite sua senha" autocomplete="current-password">
+          @if (form.controls.senha.touched && form.controls.senha.invalid) {
+            <div class="text-danger small mt-1">Informe a senha</div>
+          }
+        </div>
+
+        @if (erro) {
+          <div class="alert alert-danger py-2" role="alert">{{ erro }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary w-100" [disabled]="enviando">
+          {{ enviando ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </form>
+
+      <div class="text-center mt-4">
+        <span>Primeira vez aqui?</span>
+        <a routerLink="/cadastro" class="d-block mt-2">Clique aqui e cadastre-se!</a>
+      </div>
+    </div>
+  </div>
+</div>
