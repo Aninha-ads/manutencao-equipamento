@@ -1,6 +1,5 @@
 package app.services;
 
-<<<<<<< HEAD
 import app.models.Solicitacao;
 import app.repositories.SolicitacaoRepository;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,6 @@ public class SolicitacaoService {
         
         solicitacao.setStatus("FINALIZADA");
         return solicitacaoRepository.save(solicitacao);
-=======
 import org.springframework.stereotype.Service;
 
 import br.ufpr.backend.models.Solicitacao;
@@ -71,6 +69,5 @@ public class SolicitacaoService {
 
     public List<Solicitacao> buscarPorPeriodo(LocalDateTime dataInicio, LocalDateTime dataFim) {
         return backendService.buscarPorPeriodo(dataInicio, dataFim);
->>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
     }
 }

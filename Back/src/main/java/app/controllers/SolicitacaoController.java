@@ -1,11 +1,9 @@
 package app.controllers;
 
-<<<<<<< HEAD
 import app.services.SolicitacaoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-=======
 import br.ufpr.backend.models.Solicitacao;
 import app.services.SolicitacaoService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
->>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
 @RestController
 @RequestMapping("/api/solicitacoes")
 @CrossOrigin(origins = "*")
