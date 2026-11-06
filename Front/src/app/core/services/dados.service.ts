@@ -55,7 +55,7 @@ export class DadosService {
     await firstValueFrom(this.http.delete(`${this.api}/categorias/${id}`));
     await this.carregar();
   }
-  async criarSolicitacao(dados: { clienteId: number; categoriaId: number; equipamento: string; descricao: string }) {
+  async criarSolicitacao(dados: { categoriaId: number; equipamento: string; descricao: string }) {
     const salvo = await firstValueFrom(this.http.post<{ id: number }>(`${this.api}/solicitacoes`, dados));
     await this.carregar();
     return salvo;
@@ -70,8 +70,34 @@ export class DadosService {
       orientacoesCliente?: string;
       funcionarioDestinoId?: number;
     } = {}
-  ) {
+  )
+   {
     await firstValueFrom(this.http.patch(`${this.api}/solicitacoes/${id}/estado`, { estado, ...detalhes }));
     await this.carregar();
+  }
+  async gerarPdfCategorias(): Promise<Blob> {
+    return await firstValueFrom(
+     this.http.get(`${this.api}/relatorios/receitas/categorias/pdf`, {
+       responseType: 'blob'
+      })
+    );
+  }
+  async gerarPdfReceitas(inicio?: string, fim?: string): Promise<Blob> {
+    const params: any = {};
+
+    if (inicio) {
+     params.inicio = inicio;
+    }
+
+    if (fim) {
+     params.fim = fim;
+   }
+
+    return await firstValueFrom(
+     this.http.get(`${this.api}/relatorios/receitas/pdf`, {
+        params,
+        responseType: 'blob'
+     })
+    );
   }
 }

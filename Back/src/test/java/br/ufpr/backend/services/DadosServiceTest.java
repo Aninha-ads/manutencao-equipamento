@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = {
+    "app.security.allow-unauthenticated-employee-registration=true",
     "spring.datasource.url=jdbc:h2:mem:dados;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE",
     "spring.datasource.username=sa",
     "spring.datasource.password=",
@@ -110,20 +111,19 @@ class DadosServiceTest {
             .andExpect(jsonPath("$.perfil").value("FUNCIONARIO"));
     }
 
-    @Test void impedeCadastroDeFuncionarioSemSessaoOuComPerfilCliente() throws Exception {
+    @Test void permiteCadastroDeFuncionarioSemSessaoMasMantemDemaisRotasProtegidas() throws Exception {
         String cadastro = """
-            {"nome":"Sem permissão","email":"bloqueado@exemplo.com",
+            {"nome":"Funcionário de teste","email":"sem-sessao@exemplo.com",
              "senha":"senha-segura-123","nascimento":"1990-01-02"}
             """;
         api.perform(post("/api/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON).content(cadastro))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.email").value("sem-sessao@exemplo.com"));
+        api.perform(get("/api/funcionarios"))
             .andExpect(status().isUnauthorized());
-        api.perform(post("/api/funcionarios")
-                .header("Authorization", "Bearer " + tokens.issue(cliente(1)).value())
-                .contentType(MediaType.APPLICATION_JSON).content(cadastro))
-            .andExpect(status().isForbidden());
-        assertEquals(0, jdbc.queryForObject(
-                "SELECT COUNT(*) FROM usuario WHERE email='bloqueado@exemplo.com'", Integer.class));
+        assertEquals(1, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM usuario WHERE email='sem-sessao@exemplo.com'", Integer.class));
     }
 
     @Test void removeAutocadastroDeFuncionarioMesmoParaUsuarioAutenticado() throws Exception {

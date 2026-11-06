@@ -1,4 +1,5 @@
 import { DadosService } from '../../core/services/dados.service';
+import { AuthService } from '../../core/services/auth.service';
 //Aninha - gente, eu troquei o FormsModule por ReactiveForms, era uma exigência da Semana 7. 
 //Também troquei o estado inicial de 'Pendente' para 'ABERTA' - é o que o RF004 pede
 
@@ -16,13 +17,10 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class OrcamentoSolicitacaoComponent {
   private dados = inject(DadosService);
+  private auth = inject(AuthService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  private readonly chaveClienteLogado = 'clienteLogadoId';
-
-  clientes = this.dados.listarClientes();
-  clienteId: number | null = this.obterClienteLogado();
   categorias = this.dados.listarCategorias().map(c => c.nome);
 
   //adicionei o formgroup
@@ -32,33 +30,21 @@ export class OrcamentoSolicitacaoComponent {
     descricao: ['', Validators.required],
   });
 
-  private obterClienteLogado(): number | null {
-    const salvo = localStorage.getItem(this.chaveClienteLogado);
-    return salvo ? Number(salvo) : null;
-  }
-
-  // INT01: persiste a escolha do cliente, para o painel-cliente saber de quem filtrar
-  selecionarCliente(id: number): void {
-    this.clienteId = id;
-    localStorage.setItem(this.chaveClienteLogado, String(id));
-  }
-  
- // private router = inject(Router);
-
-
   async salvarSolicitacao(): Promise<void> {
     if(this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    
+    if (this.auth.perfil !== 'CLIENTE') {
+      alert('Entre como cliente para registrar uma solicitação.');
+      return;
+    }
 
-    // A identificação autenticada substituirá esta seleção explícita quando o login estiver integrado.
     const categoria = this.dados.listarCategorias().find(c => c.nome === this.form.value.categoria);
-    if (!categoria || !this.clienteId) { alert('Selecione cliente e categoria válidos.'); return; }
+    if (!categoria) { alert('Selecione uma categoria válida.'); return; }
     try {
       await this.dados.criarSolicitacao({
-        clienteId: Number(this.clienteId), categoriaId: categoria.id,
+        categoriaId: categoria.id,
         equipamento: this.form.value.equipamento.trim(), descricao: this.form.value.descricao.trim()
       });
     } catch {

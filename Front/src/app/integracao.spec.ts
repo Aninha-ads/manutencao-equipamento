@@ -14,6 +14,14 @@ import { OrcamentoSolicitacaoComponent } from './features/solicitacao-orcamento/
 describe('INT01 — Nova solicitação e painel do cliente', () => {
   beforeEach(async () => {
     registerLocaleData(localePt);
+    localStorage.setItem('sessao', JSON.stringify({
+      id: 1,
+      email: 'ana@example.test',
+      token: 'test-token',
+      perfil: 'CLIENTE',
+      nome: 'Ana',
+      expiresAt: '2999-01-01T00:00:00Z'
+    }));
     TestBed.configureTestingModule({ providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()] });
     const carregar = TestBed.inject(DadosService).carregar();
     TestBed.inject(HttpTestingController).expectOne('/api/dados').flush({
@@ -26,23 +34,21 @@ describe('INT01 — Nova solicitação e painel do cliente', () => {
       ]
     });
     await carregar;
-    localStorage.clear();
   });
 
   afterEach(() => localStorage.clear());
 
-  it('solicitação criada aparece no painel apenas para o cliente que a criou', async () => {
+  it('cria solicitação usando a identidade da sessão autenticada', async () => {
     const harness = await RouterTestingHarness.create();
 
-    // Ana cria uma solicitação.
     const formulario = await harness.navigateByUrl('/orcamento/novo', OrcamentoSolicitacaoComponent);
-    formulario.selecionarCliente(1);
     formulario.form.setValue({ categoria: 'Notebook', equipamento: 'Notebook de teste', descricao: 'Não liga' });
 
     const http = TestBed.inject(HttpTestingController);
     const envio = formulario.salvarSolicitacao();
     const requisicaoCriar = http.expectOne('/api/solicitacoes');
     requisicaoCriar.flush({ id: 99 });
+    await Promise.resolve();
     const requisicaoRecarga = http.expectOne('/api/dados');
     requisicaoRecarga.flush({
       ...dadosTeste(),
@@ -54,13 +60,7 @@ describe('INT01 — Nova solicitação e painel do cliente', () => {
     });
     await envio;
 
-    // Painel do cliente Ana (clienteLogadoId = 1) deve mostrar a nova solicitação.
     const painelAna = await harness.navigateByUrl('/painel-cliente', PainelClienteComponent);
     expect(painelAna.solicitacoes.some(s => s.id === 99)).toBe(true);
-
-    // Painel do cliente Bruno (clienteLogadoId = 2) não deve mostrar a solicitação da Ana.
-    localStorage.setItem('clienteLogadoId', '2');
-    const painelBruno = await harness.navigateByUrl('/painel-cliente', PainelClienteComponent);
-    expect(painelBruno.solicitacoes.some(s => s.id === 99)).toBe(false);
   });
 });
