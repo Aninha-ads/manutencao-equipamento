@@ -60,7 +60,7 @@ describe('DadosService — fonte SQL via API', () => {
   }
 
   it('deixa o banco gerar o ID e recarrega os dados após cadastrar', async () => {
-    const abertura = { clienteId: 1, categoriaId: 9, equipamento: 'Monitor', descricao: 'Não liga' };
+    const abertura = { categoriaId: 9, equipamento: 'Monitor', descricao: 'Não liga' };
     const salvar = service.criarSolicitacao(abertura);
     const pedido = http.expectOne('/api/solicitacoes');
     expect(pedido.request.method).toBe('POST');

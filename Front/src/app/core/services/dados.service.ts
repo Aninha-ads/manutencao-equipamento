@@ -55,7 +55,7 @@ export class DadosService {
     await firstValueFrom(this.http.delete(`${this.api}/categorias/${id}`));
     await this.carregar();
   }
-  async criarSolicitacao(dados: { clienteId: number; categoriaId: number; equipamento: string; descricao: string }) {
+  async criarSolicitacao(dados: { categoriaId: number; equipamento: string; descricao: string }) {
     const salvo = await firstValueFrom(this.http.post<{ id: number }>(`${this.api}/solicitacoes`, dados));
     await this.carregar();
     return salvo;

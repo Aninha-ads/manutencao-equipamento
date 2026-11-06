@@ -80,6 +80,11 @@ export class AuthService {
     localStorage.removeItem('sessao');
   }
 
+  expirarSessao(): void {
+    this.limparSessao();
+    void this.router.navigate(['/login']);
+  }
+
   private carregarSessaoSalva(): Sessao | null {
     const salva = localStorage.getItem('sessao');
     if (!salva) {
