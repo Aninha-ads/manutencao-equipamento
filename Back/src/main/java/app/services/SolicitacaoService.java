@@ -28,5 +28,5 @@ public class SolicitacaoService {
 
     public List<Solicitacao> buscarPorPeriodo(LocalDateTime dataInicio, LocalDateTime dataFim) {
         return backendService.buscarPorPeriodo(dataInicio, dataFim);
-    }
+}
 }

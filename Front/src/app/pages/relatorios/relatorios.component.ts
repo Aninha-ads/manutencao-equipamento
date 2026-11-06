@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DadosService } from '../../core/services/dados.service';
+
 
 @Component({
   selector: 'app-relatorios',
@@ -10,27 +12,52 @@ import { FormsModule } from '@angular/forms';
 })
 export class RelatoriosComponent {
 
+  constructor(private dadosService: DadosService) {}
+
   dataInicial: string = '';
   dataFinal: string = '';
 
-  gerarRelatorioReceitas(): void {
-    console.log('Relatório de Receitas');
-    console.log('Data inicial:', this.dataInicial);
-    console.log('Data final:', this.dataFinal);
+  // Faz o download do PDF
+  baixarPdf(pdf: Blob, nomeArquivo: string): void {
+    const url = window.URL.createObjectURL(pdf);
 
-    // Futuramente:
-    // chamar o endpoint do Spring Boot para gerar o PDF
-    // por enquanto tem apenas o aviso mesmo, não teve muito
-    // tempo essa semana
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nomeArquivo;
 
-    alert('Relatório de Receitas por data solicitado!');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url);
   }
 
-  gerarRelatorioCategorias(): void {
-    console.log('Relatório de Receitas por Categoria');
+  // Relatório de receitas
+  async gerarRelatorioReceitas(): Promise<void> {
+    try {
+      const pdf = await this.dadosService.gerarPdfReceitas(
+        this.dataInicial || undefined,
+        this.dataFinal || undefined
+      );
 
-      // chamar o endpoint do Spring Boot para gerar o PDF também
+      this.baixarPdf(pdf, 'relatorio-receitas.pdf');
 
-    alert('Relatório de Receitas por Categoria solicitado!');
+    } catch (erro) {
+      console.error('Erro ao gerar relatório de receitas:', erro);
+      alert('Não foi possível gerar o relatório de receitas.');
+    }
+  }
+
+  // Relatório por categoria
+  async gerarRelatorioCategorias(): Promise<void> {
+    try {
+      const pdf = await this.dadosService.gerarPdfCategorias();
+
+      this.baixarPdf(pdf, 'relatorio-categorias.pdf');
+
+    } catch (erro) {
+      console.error('Erro ao gerar relatório por categoria:', erro);
+      alert('Não foi possível gerar o relatório por categoria.');
+    }
   }
 }

@@ -1,15 +1,17 @@
 package br.ufpr.backend.security;
 
+import java.io.IOException;
+
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import br.ufpr.backend.models.Usuario;
 import br.ufpr.backend.repositories.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class ApiAuthenticationFilter extends OncePerRequestFilter {
@@ -67,6 +69,7 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
         return (HttpMethod.POST.matches(method)
                     && (path.endsWith("/api/auth/login")
                         || path.endsWith("/api/clientes")))
+                    
                 || (HttpMethod.GET.matches(method)
                     && (path.endsWith("/api/categorias")
                         || path.matches(".*/api/categorias/\\d+")));
