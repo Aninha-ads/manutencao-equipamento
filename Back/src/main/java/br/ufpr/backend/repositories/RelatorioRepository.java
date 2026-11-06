@@ -1,4 +1,4 @@
-package app.repositories;
+package br.ufpr.backend.repositories;
 
 import java.time.LocalDate;
 import java.util.List;

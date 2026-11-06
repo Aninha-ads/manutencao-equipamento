@@ -1,6 +1,6 @@
-package app.controllers;
+package br.ufpr.backend.controllers;
 
-import app.services.RelatorioService;
+import br.ufpr.backend.services.RelatorioService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

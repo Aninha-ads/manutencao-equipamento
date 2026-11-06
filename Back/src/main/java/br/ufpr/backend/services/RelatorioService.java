@@ -1,4 +1,4 @@
-package app.services;
+package br.ufpr.backend.services;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.stereotype.Service;
 
-import app.repositories.RelatorioRepository;
+import br.ufpr.backend.repositories.RelatorioRepository;
 
 @Service
 public class RelatorioService {

@@ -29,7 +29,7 @@ export class RelatoriosComponent {
     link.click();
     document.body.removeChild(link);
 
-    window.URL.revokeObjectURL(url);
+    window.setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   }
 
   // Relatório de receitas

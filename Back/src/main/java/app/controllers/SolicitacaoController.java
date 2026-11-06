@@ -1,18 +1,13 @@
 package app.controllers;
 
+import app.models.Solicitacao;
 import app.services.SolicitacaoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import br.ufpr.backend.models.Solicitacao;
-import app.services.SolicitacaoService;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/solicitacoes")
@@ -25,52 +20,13 @@ public class SolicitacaoController {
         this.solicitacaoService = solicitacaoService;
     }
 
-<<<<<<< HEAD
     @PatchMapping("/{id}/pagar")
-    public ResponseEntity<Object> registrarPagamento(@PathVariable Long id) {
+    public ResponseEntity<Solicitacao> registrarPagamento(@PathVariable Long id) {
         return ResponseEntity.ok(solicitacaoService.registrarPagamento(id));
     }
 
     @PatchMapping("/{id}/finalizar")
-    public ResponseEntity<Object> finalizarSolicitacao(@PathVariable Long id) {
+    public ResponseEntity<Solicitacao> finalizarSolicitacao(@PathVariable Long id) {
         return ResponseEntity.ok(solicitacaoService.finalizarSolicitacao(id));
-=======
-    @PostMapping
-    public ResponseEntity<Object> criarEndpointAbertura(@RequestBody Solicitacao solicitacao) {
-        try {
-         
-            Solicitacao solicitacaoCriada = solicitacaoService.abrirSolicitacao(solicitacao);
-            
-            
-            return ResponseEntity.status(HttpStatus.CREATED).body(solicitacaoCriada);
-            
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-            
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Erro interno ao tentar abrir a solicitação de manutenção.");
-        }
-    }
-    @GetMapping
-    public ResponseEntity<List<Solicitacao>> listarSolicitacoes(@RequestParam(required = false) Long clienteId) {
-        List<Solicitacao> lista = solicitacaoService.listarSolicitacoes(clienteId);
-        return ResponseEntity.ok(lista);
-    }
-
-    @GetMapping("/periodo")
-    public ResponseEntity<Object> buscarPorPeriodo(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
-        try {
-            List<Solicitacao> lista = solicitacaoService.buscarPorPeriodo(inicio, fim);
-            return ResponseEntity.ok(lista);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Erro ao processar a busca por período.");
-        }
->>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
     }
 }
