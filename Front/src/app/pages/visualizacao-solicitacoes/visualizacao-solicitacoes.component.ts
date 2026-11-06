@@ -3,6 +3,8 @@ import { DadosService } from '../../core/services/dados.service';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+
 
 export interface Solicitacao {
   id: number;
@@ -22,6 +24,7 @@ export interface Solicitacao {
 })
 export class VisualizacaoSolicitacoesComponent {
   private dados = inject(DadosService);
+  private auth = inject(AuthService);
   filtroAtual: string = 'TODAS';
   filtroEstado: EstadoSolicitacao | 'TODOS' = 'TODOS';
   readonly estados: EstadoSolicitacao[] = [
@@ -38,8 +41,8 @@ export class VisualizacaoSolicitacoesComponent {
   private estadoAplicado: EstadoSolicitacao | 'TODOS' = 'TODOS';
   private inicioAplicado = '';
   private fimAplicado = '';
-  // Funcionário simulado para demonstrar a regra de redirecionamento do RF013.
-  funcionarioLogadoId: number | null = this.dados.listarFuncionarios()[0]?.id ?? null;
+  // Funcionário logado
+  funcionarioLogadoId: number | null = this.auth.id;
 
   dataAbertura(valor: string): Date {
     const p = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec(valor);

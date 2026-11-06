@@ -2,6 +2,9 @@ import { EstadoSolicitacao } from '../../models/solicitacao.model';
 import { DadosService } from '../../core/services/dados.service';
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+//importações para arrumar formatação da data e hora, pipe
 interface Solicitacao {
   id: number;
   dataHora: string;
@@ -14,7 +17,10 @@ interface Solicitacao {
   selector: 'app-painel-funcionario',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    FormsModule, 
+    RouterLink, 
+    DatePipe
   ],
   templateUrl: './painel-funcionario.component.html',
   styleUrl: './painel-funcionario.component.css'
