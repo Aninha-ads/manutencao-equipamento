@@ -9,7 +9,7 @@ public record ClienteCadastroDTO(
         @NotBlank @Email @Size(max = 254) String email,
         @NotBlank @Size(min = 6, max = 100) String senha,
         @NotBlank @Size(min = 11, max = 11) String cpf,
-        @NotBlank @Size(min = 11, max = 11) String telefone,
+        @NotBlank @Size(min = 10, max = 11) String telefone,
         @NotBlank @Size(min = 8, max = 8) String cep,
         @NotBlank @Size(max = 200) String logradouro,
         @NotBlank @Size(max = 20) String numero,
