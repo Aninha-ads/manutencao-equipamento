@@ -23,6 +23,11 @@ export interface Solicitacao {
 export class VisualizacaoSolicitacoesComponent {
   private dados = inject(DadosService);
   filtroAtual: string = 'TODAS';
+  filtroEstado: EstadoSolicitacao | 'TODOS' = 'TODOS';
+  readonly estados: EstadoSolicitacao[] = [
+    'ABERTA', 'ORCADA', 'REJEITADA', 'APROVADA',
+    'REDIRECIONADA', 'ARRUMADA', 'PAGA', 'FINALIZADA'
+  ];
   dataInicio: string = '';
   dataFim: string = '';
 
@@ -30,6 +35,7 @@ export class VisualizacaoSolicitacoesComponent {
 
   erroFiltro = '';
   private filtroAplicado = 'TODAS';
+  private estadoAplicado: EstadoSolicitacao | 'TODOS' = 'TODOS';
   private inicioAplicado = '';
   private fimAplicado = '';
   // Funcionário simulado para demonstrar a regra de redirecionamento do RF013.
@@ -57,6 +63,7 @@ export class VisualizacaoSolicitacoesComponent {
       return;
     }
     this.filtroAplicado = this.filtroAtual;
+    this.estadoAplicado = this.filtroEstado;
     this.inicioAplicado = this.dataInicio;
     this.fimAplicado = this.dataFim;
   }
@@ -66,6 +73,7 @@ export class VisualizacaoSolicitacoesComponent {
     const inicioHoje = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
     const amanha = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() + 1);
     return this.solicitacoes.filter(s => {
+      if (this.estadoAplicado !== 'TODOS' && s.estado !== this.estadoAplicado) return false;
       if (this.estadoAtual(s) === 'REDIRECIONADA' &&
           (this.funcionarioLogadoId === null || s.funcionarioDestinoId !== this.funcionarioLogadoId)) return false;
       const data = this.dataAbertura(s.dataHora);

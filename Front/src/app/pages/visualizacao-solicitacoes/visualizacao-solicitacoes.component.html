@@ -4,8 +4,8 @@
 
     <div class="card shadow-sm mb-4">
       <div class="card-body d-flex flex-wrap align-items-center gap-3">
-        <label class="fw-bold mb-0">Filtrar por:</label>
-        <select class="form-select w-auto" [(ngModel)]="filtroAtual">
+        <label for="filtroData" class="fw-bold mb-0">Filtrar por:</label>
+        <select id="filtroData" class="form-select w-auto" [(ngModel)]="filtroAtual">
           <option value="HOJE">Hoje</option>
           <option value="PERIODO">Período de Datas</option>
           <option value="TODAS">Todas</option>
@@ -16,6 +16,15 @@
           <span>até</span>
           <input type="date" class="form-control w-auto" [(ngModel)]="dataFim">
         }
+        <div class="d-flex align-items-center gap-3 flex-nowrap">
+          <label for="filtroEstado" class="fw-bold mb-0 flex-shrink-0">Estado:</label>
+          <select id="filtroEstado" class="form-select w-auto" [(ngModel)]="filtroEstado">
+            <option value="TODOS">Todos</option>
+            @for (estado of estados; track estado) {
+              <option [value]="estado">{{ estado }}</option>
+            }
+          </select>
+        </div>
         <button class="btn btn-primary ms-auto" (click)="aplicarFiltro()">Filtrar</button>
       </div>
     </div>
@@ -43,7 +52,7 @@
               </span>
             </td>
             <td class="text-center">
-              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/visualizar-servico', solicitacao.id]" [queryParams]="{ origem: 'visualizacao-solicitacoes' }">Detalhes</a>
+              <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/solicitacoes/detalhes', solicitacao.id]" [queryParams]="{ origem: 'visualizacao-solicitacoes' }">Detalhes</a>
               @switch (estadoAtual(solicitacao)) {
                 @case ('ABERTA') {
                   <button class="btn btn-sm btn-outline-primary" routerLink="/orcamentos/efetuar" [queryParams]="{ id: solicitacao.id }">Efetuar Orçamento</button>

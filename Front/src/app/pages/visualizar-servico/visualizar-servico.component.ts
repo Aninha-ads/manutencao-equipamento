@@ -17,6 +17,7 @@ export class VisualizarServicoComponent {
   private modalService = inject(NgbModal);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  erro = '';
   
   solicitacao = this.carregar();
   historico = this.ordenar(this.solicitacao?.historico);
@@ -24,18 +25,29 @@ export class VisualizarServicoComponent {
     return this.route.snapshot.data['interfaceFuncionario'] === true;
   }
   get rotaVoltar(): string {
-    if (this.interfaceFuncionario) return '/painel-funcionario';
     const origem = this.route.snapshot.queryParamMap.get('origem');
+    if (this.interfaceFuncionario) {
+      return origem === 'visualizacao-solicitacoes' ? '/visualizacao-solicitacoes' : '/painel-funcionario';
+    }
     return origem === 'painel-funcionario' || origem === 'visualizacao-solicitacoes'
       ? '/' + origem : '/painel-cliente';
   }
   constructor() {
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(() => {
-      this.solicitacao = this.carregar();
-      //this.historico = this.solicitacao?.historico ?? [];
-      this.historico = this.ordenar(this.solicitacao?.historico);
-      this.cdr.markForCheck();
+      void this.atualizarRegistro();
     });
+  }
+
+  private async atualizarRegistro(): Promise<void> {
+    this.erro = '';
+    try {
+      await this.dados.carregar();
+      this.solicitacao = this.carregar();
+      this.historico = this.ordenar(this.solicitacao?.historico);
+    } catch {
+      this.erro = 'Não foi possível atualizar os dados e as datas do histórico. Tente abrir o pedido novamente.';
+    }
+    this.cdr.markForCheck();
   }
 
   private carregar() {
@@ -65,8 +77,24 @@ export class VisualizarServicoComponent {
     return !this.interfaceFuncionario && this.solicitacao?.estado === 'ORCADA' && this.auth.perfil === 'CLIENTE';
   }
   
-  abrirModalRejeitar() {
+  async abrirModalRejeitar(): Promise<void> {
+    if (!this.podeRejeitar || !this.solicitacao) return;
+    const id = this.solicitacao.id;
     const modalRef = this.modalService.open(ModalRejeitarServicoComponent);
-    modalRef.result.then((motivo: string) => console.log('Motivo da rejeição:', motivo), () => {});
+    let motivo: string;
+    try {
+      motivo = await modalRef.result;
+    } catch {
+      return;
+    }
+    this.erro = '';
+    try {
+      await this.dados.mudarEstado(id, 'REJEITADA', { motivoRejeicao: motivo });
+      this.solicitacao = this.carregar();
+      this.historico = this.ordenar(this.solicitacao?.historico);
+    } catch {
+      this.erro = 'Não foi possível registrar a rejeição. Confira o estado atual do pedido e tente novamente.';
+    }
+    this.cdr.markForCheck();
   }
 }
