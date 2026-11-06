@@ -1,5 +1,9 @@
 package app.controllers;
 
+import app.services.SolicitacaoService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import br.ufpr.backend.models.Solicitacao;
 import app.services.SolicitacaoService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +25,16 @@ public class SolicitacaoController {
         this.solicitacaoService = solicitacaoService;
     }
 
+<<<<<<< HEAD
+    @PatchMapping("/{id}/pagar")
+    public ResponseEntity<Object> registrarPagamento(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitacaoService.registrarPagamento(id));
+    }
+
+    @PatchMapping("/{id}/finalizar")
+    public ResponseEntity<Object> finalizarSolicitacao(@PathVariable Long id) {
+        return ResponseEntity.ok(solicitacaoService.finalizarSolicitacao(id));
+=======
     @PostMapping
     public ResponseEntity<Object> criarEndpointAbertura(@RequestBody Solicitacao solicitacao) {
         try {
@@ -57,5 +71,6 @@ public class SolicitacaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body("Erro ao processar a busca por período.");
         }
+>>>>>>> 0fc6f8fc37280887f7b33b43003e5a848c58e6b0
     }
 }
