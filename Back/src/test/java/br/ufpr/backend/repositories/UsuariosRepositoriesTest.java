@@ -1,6 +1,7 @@
 package br.ufpr.backend.repositories;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.lang.NonNull;
 
 import br.ufpr.backend.models.Cliente;
 import br.ufpr.backend.models.Endereco;
@@ -56,7 +58,8 @@ class UsuariosRepositoriesTest {
         Funcionario encontrado = funcionarios.findByUsuarioEmail("ativo@exemplo.com").orElseThrow();
         assertThat(encontrado.getId()).isEqualTo(ativo.getId());
         assertThat(encontrado.getDataNascimento()).isEqualTo(LocalDate.of(1995, 3, 12));
-        assertThat(funcionarios.findByUsuarioAtivoTrue()).extracting(Funcionario::getId)
+        assertThat(funcionarios.findByUsuarioAtivoTrue())
+            .extracting(funcionario -> Objects.requireNonNull(funcionario).getId())
             .containsExactly(ativo.getId());
         assertThat(funcionarios.findByUsuarioEmail("ausente@exemplo.com")).isEmpty();
     }
@@ -64,9 +67,9 @@ class UsuariosRepositoriesTest {
     @Test
     void atualizaEConsultaDadosPersistidos() {
         Cliente cliente = clientes.saveAndFlush(cliente(usuario("editar@exemplo.com"), endereco(), "11144477735"));
-        Integer id = cliente.getId();
+        Integer id = Objects.requireNonNull(cliente.getId());
         entityManager.clear();
-        Cliente encontrado = clientes.findById(id).orElseThrow();
+        Cliente encontrado = Objects.requireNonNull(clientes.findById(id).orElseThrow());
         encontrado.setTelefone("41999990002");
         clientes.saveAndFlush(encontrado);
         entityManager.clear();
@@ -98,13 +101,15 @@ class UsuariosRepositoriesTest {
             .isInstanceOf(DataIntegrityViolationException.class);
     }
 
+    @NonNull
     private Usuario usuario(String email) {
         Usuario usuario = new Usuario();
         usuario.setNome("Pessoa de teste");
         usuario.setEmail(email);
-        return usuarios.saveAndFlush(usuario);
+        return Objects.requireNonNull(usuarios.saveAndFlush(usuario));
     }
 
+    @NonNull
     private Endereco endereco() {
         Endereco endereco = new Endereco();
         endereco.setCep("01234567");
@@ -113,9 +118,10 @@ class UsuariosRepositoriesTest {
         endereco.setBairro("Centro");
         endereco.setCidade("Curitiba");
         endereco.setUf("PR");
-        return enderecos.saveAndFlush(endereco);
+        return Objects.requireNonNull(enderecos.saveAndFlush(endereco));
     }
 
+    @NonNull
     private Cliente cliente(Usuario usuario, Endereco endereco, String cpf) {
         Cliente cliente = new Cliente();
         cliente.setUsuario(usuario);
@@ -125,6 +131,7 @@ class UsuariosRepositoriesTest {
         return cliente;
     }
 
+    @NonNull
     private Funcionario funcionario(Usuario usuario) {
         Funcionario funcionario = new Funcionario();
         funcionario.setUsuario(usuario);

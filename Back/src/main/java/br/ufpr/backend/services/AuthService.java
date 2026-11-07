@@ -14,6 +14,7 @@ import br.ufpr.backend.security.AuthenticatedUser;
 import br.ufpr.backend.security.SessionTokenService;
 import java.util.Locale;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -91,6 +92,7 @@ public class AuthService {
         tokens.revoke(token);
     }
 
+    @NonNull
     private Usuario novoUsuario(String nome, String email, String senha) {
         String salt = hashService.gerarSalt();
         Usuario usuario = new Usuario();
@@ -112,8 +114,12 @@ public class AuthService {
     }
 
     private String identificarPerfil(Usuario usuario, String solicitado) {
-        boolean cliente = clienteRepository.findById(usuario.getId()).isPresent();
-        boolean funcionario = funcionarioRepository.findById(usuario.getId()).isPresent();
+        Integer usuarioId = usuario.getId();
+        if (usuarioId == null) {
+            throw credenciaisInvalidas();
+        }
+        boolean cliente = clienteRepository.findById(usuarioId).isPresent();
+        boolean funcionario = funcionarioRepository.findById(usuarioId).isPresent();
         if (solicitado == null) {
             if (cliente == funcionario) {
                 throw credenciaisInvalidas();

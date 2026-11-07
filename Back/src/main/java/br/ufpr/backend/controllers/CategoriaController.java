@@ -4,6 +4,7 @@ import br.ufpr.backend.models.Categoria;
 import br.ufpr.backend.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,17 +22,17 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> buscar(@PathVariable Integer id) {
+    public ResponseEntity<Categoria> buscar(@PathVariable @NonNull Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> criar(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> criar(@RequestBody @NonNull Categoria categoria) {
         return ResponseEntity.ok(service.salvar(categoria));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletar(@PathVariable @NonNull Integer id) {
         service.excluir(id);
         return ResponseEntity.noContent().build();
     }

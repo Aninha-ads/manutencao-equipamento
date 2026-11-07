@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import br.ufpr.backend.security.AuthenticatedUser;
-import br.ufpr.backend.services.HashService;
 import static org.springframework.http.HttpStatus.*;
 
 /** Dados das telas obtidos exclusivamente das tabelas SQL. */
@@ -77,9 +76,12 @@ public class DadosService {
         return solicitacoes(null);
     }
     public List<Solicitacao> solicitacoes(AuthenticatedUser user) {
-        String filtroCliente = user != null && AuthenticatedUser.CLIENTE.equals(user.perfil())
-                ? " WHERE s.cliente_id=?" : "";
-        Object[] args = filtroCliente.isEmpty() ? new Object[0] : new Object[]{user.id()};
+        String filtroCliente = "";
+        Object[] args = new Object[0];
+        if (user != null && AuthenticatedUser.CLIENTE.equals(user.perfil())) {
+            filtroCliente = " WHERE s.cliente_id=?";
+            args = new Object[]{user.id()};
+        }
         return jdbc.query("""
             SELECT s.*, c.cpf, c.telefone, u.nome AS cliente, u.email, cat.nome AS categoria,
                    e.logradouro, e.numero, e.cidade
@@ -96,7 +98,7 @@ public class DadosService {
     private int inserir(String sql, Object... args) {
         var key = new GeneratedKeyHolder();
         jdbc.update(connection -> {
-            var statement = connection.prepareStatement(sql, new String[]{"id"});
+            var statement = Objects.requireNonNull(connection.prepareStatement(sql, new String[]{"id"}));
             for (int i=0; i<args.length; i++) statement.setObject(i+1, args[i]);
             return statement;
         }, key);

@@ -9,7 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.http.MediaType;
+import java.util.Objects;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,6 +33,9 @@ class DadosServiceTest {
     @Autowired MockMvc api;
     @Autowired SessionTokenService tokens;
 
+    private ResultActions executar(RequestBuilder requisicao) throws Exception {
+        return api.perform(Objects.requireNonNull(requisicao));
+    }
     private AuthenticatedUser cliente(int id) {
         return new AuthenticatedUser(id, "Cliente de teste", "cliente@exemplo.com", AuthenticatedUser.CLIENTE);
     }
@@ -67,7 +73,7 @@ class DadosServiceTest {
     }
 
     @Test void apiRetornaContratoDasTelasComCodigosDeEstadoDoSql() throws Exception {
-        api.perform(get("/api/dados")
+        executar(get("/api/dados")
                 .header("Authorization", "Bearer " + tokens.issue(funcionario()).value()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.clientes.length()").value(4))
@@ -77,7 +83,7 @@ class DadosServiceTest {
             .andExpect(jsonPath("$.funcionarios[0].id").value(5))
             .andExpect(jsonPath("$.solicitacoes[1].estado").value("ORCADA"))
             .andExpect(jsonPath("$.solicitacoes[0].historico[0].estado").value("ABERTA"));
-        api.perform(get("/api/categorias")).andExpect(status().isOk());
+        executar(get("/api/categorias")).andExpect(status().isOk());
     }
 
     @Test void autenticaFuncionarioCriadoPelaApiComCredenciaisPersistidas() throws Exception {
@@ -87,9 +93,9 @@ class DadosServiceTest {
             """;
 
         String tokenAutor = tokens.issue(funcionario()).value();
-        api.perform(post("/api/funcionarios")
+        executar(post("/api/funcionarios")
                 .header("Authorization", "Bearer " + tokenAutor)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
                 .content(cadastro))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.email").value("auth@exemplo.com"))
@@ -102,8 +108,8 @@ class DadosServiceTest {
         assertNotNull(hash);
         assertNotEquals("senha-segura-123", hash);
 
-        api.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
+        executar(post("/api/auth/login")
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
                 .content("""
                     {"email":"auth@exemplo.com","senha":"senha-segura-123"}
                     """))
@@ -117,10 +123,10 @@ class DadosServiceTest {
             {"nome":"Funcionário de teste","email":"sem-sessao@exemplo.com",
              "senha":"senha-segura-123","nascimento":"1990-01-02"}
             """;
-        api.perform(post("/api/funcionarios")
-                .contentType(MediaType.APPLICATION_JSON).content(cadastro))
+        executar(post("/api/funcionarios")
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)).content(cadastro))
             .andExpect(status().isUnauthorized());
-        api.perform(get("/api/funcionarios"))
+        executar(get("/api/funcionarios"))
             .andExpect(status().isUnauthorized());
         assertEquals(0, jdbc.queryForObject(
                 "SELECT COUNT(*) FROM usuario WHERE email='sem-sessao@exemplo.com'", Integer.class));
@@ -131,13 +137,13 @@ class DadosServiceTest {
             {"nome":"Sem permissão","email":"antigo@exemplo.com",
              "senha":"senha-segura-123","dataNascimento":"1990-01-02"}
             """;
-        api.perform(post("/api/auth/cadastro")
-                .contentType(MediaType.APPLICATION_JSON).content(cadastro))
+        executar(post("/api/auth/cadastro")
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)).content(cadastro))
             .andExpect(status().isUnauthorized());
         for (var user : new AuthenticatedUser[]{cliente(1), funcionario()}) {
-            api.perform(post("/api/auth/cadastro")
+            executar(post("/api/auth/cadastro")
                     .header("Authorization", "Bearer " + tokens.issue(user).value())
-                    .contentType(MediaType.APPLICATION_JSON).content(cadastro))
+                    .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)).content(cadastro))
                 .andExpect(status().isNotFound());
         }
         assertEquals(0, jdbc.queryForObject(
@@ -147,9 +153,9 @@ class DadosServiceTest {
     @Test void impedeFuncionarioInativoDeCadastrarOutraConta() throws Exception {
         String token = tokens.issue(funcionario()).value();
         jdbc.update("UPDATE usuario SET ativo=false WHERE id=5");
-        api.perform(post("/api/funcionarios")
+        executar(post("/api/funcionarios")
                 .header("Authorization", "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
                 .content("""
                     {"nome":"Bloqueado","email":"inativo@exemplo.com",
                      "senha":"senha-segura-123","nascimento":"1990-01-02"}
@@ -201,7 +207,7 @@ class DadosServiceTest {
                 "SELECT autor_id FROM historico_solicitacao WHERE solicitacao_id=? AND estado_novo='ABERTA'",
                 Integer.class, id));
 
-        api.perform(get("/api/solicitacoes")
+        executar(get("/api/solicitacoes")
                 .header("Authorization", "Bearer " + tokens.issue(cliente(1)).value()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[?(@.id == " + id + ")].historico[0].funcionario").value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())))
@@ -217,9 +223,9 @@ class DadosServiceTest {
 
     @Test void devolveEArquivaRejeitadaSemRegistrarManutencaoOuPagamento() throws Exception {
         int antes = dados.historico(3).size();
-        api.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/solicitacoes/3/estado")
+        executar(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/solicitacoes/3/estado")
                 .header("Authorization", "Bearer " + tokens.issue(funcionario()).value())
-                .contentType(MediaType.APPLICATION_JSON).content("{\"estado\":\"FINALIZADA\"}"))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)).content("{\"estado\":\"FINALIZADA\"}"))
             .andExpect(status().isNoContent());
         var registro = jdbc.queryForMap("SELECT * FROM solicitacao WHERE id=3");
         assertEquals("FINALIZADA", registro.get("estado"));
@@ -260,7 +266,7 @@ class DadosServiceTest {
         dados.mudarEstado(3, new DadosService.MudancaEstado("FINALIZADA", null, null, null, null, null), funcionario());
         assertEquals(409, assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(3,
             new DadosService.MudancaEstado("APROVADA", null, null, null, null, null), cliente(3))).getStatusCode().value());
-        api.perform(get("/api/relatorios/receitas/pdf")
+        executar(get("/api/relatorios/receitas/pdf")
             .header("Authorization", "Bearer " + tokens.issue(cliente(3)).value()))
             .andExpect(status().isForbidden());
     }

@@ -6,7 +6,9 @@ import br.ufpr.backend.repositories.FuncionarioRepository;
 import br.ufpr.backend.repositories.UsuarioRepository;
 import br.ufpr.backend.services.HashService;
 import java.util.Locale;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,7 +53,7 @@ public class LoginService {
         }
 
         return new SessaoResponse(usuario.getId(), usuario.getNome(), usuario.getEmail(),
-                descobrirPerfil(usuario.getId()));
+                descobrirPerfil(Objects.requireNonNull(usuario.getId())));
     }
 
     private boolean senhaConfere(Usuario usuario, String senha) {
@@ -60,7 +62,7 @@ public class LoginService {
                 && hashService.validarSenha(senha, usuario.getSenhaSalt(), usuario.getSenhaHash());
     }
 
-    private PerfilUsuario descobrirPerfil(Integer usuarioId) {
+    private PerfilUsuario descobrirPerfil(@NonNull Integer usuarioId) {
         if (funcionarios.existsById(usuarioId)) {
             return PerfilUsuario.FUNCIONARIO;
         }

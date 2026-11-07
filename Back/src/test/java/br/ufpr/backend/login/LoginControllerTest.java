@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import java.util.Objects;
+import org.springframework.lang.NonNull;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,8 +29,10 @@ class LoginControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(new LoginController(service)).build();
     }
 
-    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder login(String json) {
-        return post("/api/sessao/login").contentType(MediaType.APPLICATION_JSON).content(json);
+    @NonNull
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder login(@NonNull String json) {
+        return Objects.requireNonNull(post("/api/sessao/login")
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)).content(json));
     }
 
     @Test

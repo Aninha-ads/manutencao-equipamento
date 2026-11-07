@@ -1,8 +1,10 @@
 package br.ufpr.backend.security;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,11 +29,11 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
+        String path = Objects.requireNonNull(request.getRequestURI());
+        String method = Objects.requireNonNull(request.getMethod());
 
         if (!path.startsWith(request.getContextPath() + "/api")
                 || HttpMethod.OPTIONS.matches(method)
@@ -41,16 +43,19 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String authorization = request.getHeader("Authorization");
-        AuthenticatedUser user = authorization != null && authorization.startsWith("Bearer ")
-                ? tokens.resolve(authorization.substring(7).trim())
-                : null;
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            respond(response, HttpServletResponse.SC_UNAUTHORIZED, "Autenticação necessária.");
+            return;
+        }
+        String token = authorization.substring(7).trim();
+        AuthenticatedUser user = tokens.resolve(token);
         if (user == null) {
             respond(response, HttpServletResponse.SC_UNAUTHORIZED, "Autenticação necessária.");
             return;
         }
-        Usuario usuario = usuarios.findById(user.id()).orElse(null);
+        Usuario usuario = usuarios.findById(Objects.requireNonNull(user.id())).orElse(null);
         if (usuario == null || !Boolean.TRUE.equals(usuario.getAtivo())) {
-            tokens.revoke(authorization.substring(7).trim());
+            tokens.revoke(token);
             respond(response, HttpServletResponse.SC_UNAUTHORIZED, "Sessão inválida ou conta desativada.");
             return;
         }
@@ -65,7 +70,7 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean isPublic(String method, String path) {
+    private boolean isPublic(@NonNull String method, @NonNull String path) {
         return (HttpMethod.POST.matches(method)
                     && (path.endsWith("/api/auth/login")
                         || path.endsWith("/api/clientes")))
@@ -75,7 +80,7 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
                         || path.matches(".*/api/categorias/\\d+")));
     }
 
-    private boolean requiresEmployee(String method, String path) {
+    private boolean requiresEmployee(@NonNull String method, @NonNull String path) {
         return path.contains("/api/funcionarios")
                 || path.contains("/api/relatorios")
                 || (path.contains("/api/categorias") && !HttpMethod.GET.matches(method))
