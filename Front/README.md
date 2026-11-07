@@ -1,5 +1,8 @@
 # ManutencaoEquipamento
 
+Para configurar MySQL, backend e frontend em conjunto, consulte o
+[README principal](../README.md). Execute os comandos npm nesta pasta `Front`.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.21.
 
 ## Development server

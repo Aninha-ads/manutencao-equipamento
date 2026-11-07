@@ -77,6 +77,7 @@ public class ApiAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean requiresEmployee(String method, String path) {
         return path.contains("/api/funcionarios")
+                || path.contains("/api/relatorios")
                 || (path.contains("/api/categorias") && !HttpMethod.GET.matches(method))
                 || (path.contains("/api/clientes") && !HttpMethod.POST.matches(method));
     }

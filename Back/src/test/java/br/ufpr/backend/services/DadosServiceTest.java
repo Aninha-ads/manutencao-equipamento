@@ -17,7 +17,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = {
-    "app.security.allow-unauthenticated-employee-registration=true",
     "spring.datasource.url=jdbc:h2:mem:dados;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE",
     "spring.datasource.username=sa",
     "spring.datasource.password=",
@@ -41,9 +40,11 @@ class DadosServiceTest {
 
     @BeforeEach void preparar() throws Exception {
         jdbc.execute("DROP ALL OBJECTS");
-        // Usa os próprios scripts SQL de produção, retirando apenas opções exclusivas do MySQL.
-        for (String arquivo : new String[]{"schema.sql", "seed.sql"}) {
-            String sql = Files.readString(Path.of("database", arquivo))
+        // O schema acompanha a aplicação; os cenários usam uma massa fixa,
+        // independente das edições feitas no banco local de demonstração.
+        for (Path arquivo : new Path[]{Path.of("database", "schema.sql"),
+                Path.of("src", "test", "resources", "dados-seed.sql")}) {
+            String sql = Files.readString(arquivo)
                 .replaceAll("(?m)^--.*$", "")
                 .replaceAll("ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_as_cs", "")
                 .replace("SET time_zone = '+00:00';", "")
@@ -111,18 +112,17 @@ class DadosServiceTest {
             .andExpect(jsonPath("$.perfil").value("FUNCIONARIO"));
     }
 
-    @Test void permiteCadastroDeFuncionarioSemSessaoMasMantemDemaisRotasProtegidas() throws Exception {
+    @Test void bloqueiaCadastroDeFuncionarioSemSessao() throws Exception {
         String cadastro = """
             {"nome":"Funcionário de teste","email":"sem-sessao@exemplo.com",
              "senha":"senha-segura-123","nascimento":"1990-01-02"}
             """;
         api.perform(post("/api/funcionarios")
                 .contentType(MediaType.APPLICATION_JSON).content(cadastro))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.email").value("sem-sessao@exemplo.com"));
+            .andExpect(status().isUnauthorized());
         api.perform(get("/api/funcionarios"))
             .andExpect(status().isUnauthorized());
-        assertEquals(1, jdbc.queryForObject(
+        assertEquals(0, jdbc.queryForObject(
                 "SELECT COUNT(*) FROM usuario WHERE email='sem-sessao@exemplo.com'", Integer.class));
     }
 
@@ -241,6 +241,28 @@ class DadosServiceTest {
         assertEquals(409, conflito.getStatusCode().value());
         assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(2, finalizacao, funcionario()));
         assertEquals("REJEITADA", jdbc.queryForObject("SELECT estado FROM solicitacao WHERE id=3", String.class));
+    }
+
+    @Test void resgataRejeitadaSomentePeloClienteDonoEPreservaOrcamento() {
+        var aprovar = new DadosService.MudancaEstado("APROVADA", null, null, null, null, null);
+        assertEquals(403, assertThrows(ResponseStatusException.class,
+            () -> dados.mudarEstado(3, aprovar, cliente(1))).getStatusCode().value());
+        var valor = jdbc.queryForObject("SELECT valor_orcado FROM solicitacao WHERE id=3", java.math.BigDecimal.class);
+        int antes = dados.historico(3).size();
+        dados.mudarEstado(3, aprovar, cliente(3));
+        assertEquals("APROVADA", jdbc.queryForObject("SELECT estado FROM solicitacao WHERE id=3", String.class));
+        assertEquals(valor, jdbc.queryForObject("SELECT valor_orcado FROM solicitacao WHERE id=3", java.math.BigDecimal.class));
+        assertTrue(dados.historico(3).get(antes).descricao().contains("resgatada"));
+        assertEquals(antes + 1, dados.historico(3).size());
+    }
+
+    @Test void naoResgataDepoisDaDevolucaoEProtegeRelatoriosDeClientes() throws Exception {
+        dados.mudarEstado(3, new DadosService.MudancaEstado("FINALIZADA", null, null, null, null, null), funcionario());
+        assertEquals(409, assertThrows(ResponseStatusException.class, () -> dados.mudarEstado(3,
+            new DadosService.MudancaEstado("APROVADA", null, null, null, null, null), cliente(3))).getStatusCode().value());
+        api.perform(get("/api/relatorios/receitas/pdf")
+            .header("Authorization", "Bearer " + tokens.issue(cliente(3)).value()))
+            .andExpect(status().isForbidden());
     }
 
     @Test void persisteFinalizacaoEHistoricoAtomicamente() {

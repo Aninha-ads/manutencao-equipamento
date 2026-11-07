@@ -201,6 +201,9 @@ public class DadosService {
             case "APROVADA" -> {
                 exigirClienteDaSolicitacao(autor, clienteId);
                 jdbc.update("UPDATE solicitacao SET estado=? WHERE id=?", estado, id);
+                observacao = "REJEITADA".equals(anterior)
+                        ? "Solicitação resgatada pelo cliente. Orçamento aprovado para manutenção."
+                        : "Orçamento aprovado pelo cliente.";
             }
             case "REJEITADA" -> {
                 exigirClienteDaSolicitacao(autor, clienteId);

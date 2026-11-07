@@ -1,11 +1,17 @@
-<p>resgatar-servico works!</p>
 <!--Aninha: Essa tela 'resgatar-servico' serve para o cliente ver os dados da solicitacao rejeitada(incluindo o motivo da rejeição, que provavelmente está em algum lugar do histórico) e confirma o resgate-->
 
 <div class="resgatar-servico-page">
     <div class="container mt-5 mb-5">
-        @if (solicitacao) {
+        @if (erro) {
+            <div class="alert alert-danger" role="alert">{{ erro }}
+                <button type="button" class="btn btn-outline-dark ms-2" (click)="carregar()" [disabled]="carregando || salvando">Recarregar dados</button>
+            </div>
+        }
+        @if (carregando) {
+            <p role="status">Carregando solicitação...</p>
+        } @else if (solicitacao) {
             <h3>Resgatar Solicitação</h3>
-            <p class="text-muted">Confirme para reenviar esta solicitação ao fluxo de aprovação.</p>
+            <p class="text-muted">Ao confirmar, você aprova o orçamento e autoriza a manutenção da solicitação rejeitada.</p>
             <div class="card shadow-sm mt-4">
                 <div class="card-header">
                     <strong>Solicitação #{{ solicitacao.id }}</strong>
@@ -24,6 +30,8 @@
 
                         <dt class="col-sm-3">Motivo da rejeição</dt>
                         <dd class="col-sm-9">{{ motivoRejeicao }}</dd>
+                        <dt class="col-sm-3">Valor do orçamento</dt>
+                        <dd class="col-sm-9">{{ solicitacao.valorOrcamento | currency:'BRL' }}</dd>
                     </dl>
                 </div>
 
@@ -32,11 +40,15 @@
                     <button 
                         type="button"
                         class="btn btn-primary"
-                        [disabled]="solicitacao.estado !== 'REJEITADA'"
+                        [disabled]="salvando || solicitacao.estado !== 'REJEITADA'"
                         (click)="resgatarServico()">
+                        {{ salvando ? 'Resgatando...' : 'Confirmar resgate e aprovar orçamento' }}
                     </button>
                 </div>
             </div>
+            @if (solicitacao.estado !== 'REJEITADA') {
+                <p class="alert alert-info mt-3">Somente solicitações rejeitadas podem ser resgatadas.</p>
+            }
         } @else {
             <p class="text-danger">Solicitação não encontrada.</p>
         }

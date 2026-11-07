@@ -102,20 +102,22 @@
         <div class="col-md-3">
           <label for="telefone" class="form-label">Telefone</label>
           <input
-            type="text"
+            type="tel"
             id="telefone"
             class="form-control"
             formControlName="telefone"
-            mask="(00) 00000-0000"
-            placeholder="(00) 00000-0000"
+            mask="(00) 0000-0000||(00) 00000-0000"
+            placeholder="DDD + telefone"
+            autocomplete="tel-national"
+            inputmode="tel"
             [class.is-invalid]="campos.telefone.touched && campos.telefone.invalid"
           >
           @if (campos.telefone.touched && campos.telefone.invalid) {
             <div class="invalid-feedback">
               @if (campos.telefone.hasError('required')) {
                 Informe o telefone.
-              } @else if (campos.telefone.hasError('quantidadeDigitos')) {
-                Informe um telefone com 11 dígitos, incluindo o DDD.
+              } @else if (campos.telefone.hasError('quantidadeDigitos') || campos.telefone.hasError('mask')) {
+                Informe um telefone com 10 ou 11 dígitos, incluindo o DDD.
               }
             </div>
           }

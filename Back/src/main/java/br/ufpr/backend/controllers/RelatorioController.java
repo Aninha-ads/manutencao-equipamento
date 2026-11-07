@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/relatorios")
@@ -39,7 +40,7 @@ public class RelatorioController {
         byte[] pdf = service.gerarRelatorioReceitas(inicio, fim);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_PDF))
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=relatorio-receitas.pdf"
@@ -54,7 +55,7 @@ public class RelatorioController {
         byte[] pdf = service.gerarRelatorioCategorias();
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_PDF))
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=relatorio-categorias.pdf"

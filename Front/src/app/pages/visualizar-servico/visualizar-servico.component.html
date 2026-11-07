@@ -456,6 +456,9 @@
         Rejeitar serviço
       </button>
     }
+    @if (interfaceFuncionario && solicitacao.estado === 'REJEITADA') {
+      <button type="button" class="btn btn-dark" (click)="devolverArquivar()">Devolver e arquivar</button>
+    }
       <a
         [routerLink]="rotaVoltar"
         class="btn btn-dark btn-voltar"

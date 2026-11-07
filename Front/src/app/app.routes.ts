@@ -16,7 +16,6 @@ import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
 import { ResgatarServicoComponent } from './pages/resgatar-servico/resgatar-servico.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
 import { perfilGuard } from './core/guards/perfil.guard';
-import { CadastroFuncionarioComponent } from './pages/cadastro-funcionario/cadastro-funcionario.component';
 
 export const routes: Routes = [
   {
@@ -123,9 +122,14 @@ export const routes: Routes = [
   },
 
   {
-    path: 'registrar-servico/:id',
+    path: 'resgatar-servico/:id',
     component: ResgatarServicoComponent,
     canActivate: [perfilGuard('CLIENTE')]
+  },
+  {
+    path: 'registrar-servico/:id',
+    redirectTo: 'resgatar-servico/:id',
+    pathMatch: 'full'
   },
 
   {

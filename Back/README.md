@@ -15,9 +15,9 @@ Na pasta `Back`, compile e gere o JAR no PowerShell:
 Para iniciar, prepare o banco conforme as instruções abaixo e configure as credenciais:
 
 ```powershell
-$env:DB_USERNAME = 'root'
-$env:DB_PASSWORD = 'sua-senha-local'
-$env:DB_URL = 'jdbc:mysql://localhost:3306/manutencao_equipamento'
+$env:SPRING_DATASOURCE_USERNAME = 'root'
+$env:SPRING_DATASOURCE_PASSWORD = 'sua-senha-local'
+$env:SPRING_DATASOURCE_URL = 'jdbc:mysql://localhost:3306/manutencao_equipamento'
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -25,14 +25,15 @@ No Linux/macOS, use `sh ./mvnw clean verify` e `sh ./mvnw spring-boot:run`, com 
 
 O build não depende de um MySQL em execução. Para iniciar a aplicação, é necessário acesso ao banco. A aplicação não cria nem altera tabelas automaticamente e não executa os scripts SQL; eles continuam sendo executados manualmente.
 
-## Banco de dados — versão inicial
+## Banco de dados local
 
-Esta pasta contém a parte do banco da Semana 6. Foi usado MySQL 8.0.16 ou superior, para que as restrições CHECK sejam aplicadas.
+Os scripts usam MySQL 8.0.16 ou superior, para que as restrições CHECK sejam aplicadas.
 
 ## Arquivos
 
 - `database/schema.sql`: cria as tabelas e os estados das solicitações.
-- `database/seed.sql`: insere dados fictícios com comandos INSERT.
+- `database/seed.sql`: reproduz o retrato atualizado do banco local com INSERTs e IDs explícitos.
+- `database/migrations/002_senhas_iniciais.sql`: opcional; define credenciais de teste para usuários sem senha.
 - `database/verify.sql`: consultas simples para conferir o resultado.
 
 ## Como executar
@@ -43,7 +44,9 @@ Crie um banco vazio chamado `manutencao_equipamento` no MySQL. No MySQL Workbenc
 2. `seed.sql`
 3. `verify.sql`
 
-Execute os dois primeiros apenas uma vez. O seed depende dos IDs gerados em um banco novo, na ordem dos cadastros. Para testar novamente, use outro banco vazio. Estes arquivos não atualizam um banco criado com a versão anterior.
+Execute os dois primeiros apenas uma vez. O seed preserva os IDs do banco de
+origem e insere os registros na ordem das chaves estrangeiras. Para testar
+novamente, use outro banco vazio. Estes arquivos não atualizam bancos existentes.
 
 O schema usa InnoDB para aplicar as chaves estrangeiras e utf8mb4_0900_as_cs para diferenciar maiúsculas, minúsculas e acentos. A criação das tabelas faz commits implícitos no MySQL; o schema inteiro não pode ser desfeito com ROLLBACK. O seed usa uma transação para inserir os dados.
 
@@ -53,7 +56,7 @@ Os campos de data e hora usam TIMESTAMP(6). O seed configura a sessão em UTC pa
 
 | Tabela | O que guarda |
 | --- | --- |
-| usuario | Nome, e-mail e campos para as futuras credenciais |
+| usuario | Nome, e-mail, hash e salt das credenciais |
 | endereco | Endereço do cliente |
 | cliente | CPF, telefone e ligação com usuário e endereço |
 | funcionario | Data de nascimento e ligação com usuário |
@@ -68,14 +71,20 @@ As chaves estrangeiras impedem referências a registros inexistentes e a exclus�
 
 ## Dados de teste
 
-São 4 clientes, 2 funcionários, 5 categorias e 20 solicitações nos oito estados. Também há 65 registros de histórico para acompanhar o caminho das solicitações. Os e-mails usam `example.test` e os dados são fictícios.
+O retrato de 06/11/2026 contém 9 usuários, 6 clientes, 3 funcionários, 6 endereços,
+5 categorias, 24 solicitações e 72 eventos de histórico. Inclui os cadastros e
+as alterações feitos no banco local depois da massa inicial.
 
-Os campos de hash e salt ficam vazios por enquanto. Esses usuários ainda não servem para login. A geração e a validação das credenciais serão feitas na Semana 8, sem guardar senhas em texto puro.
+O seed preserva hash e salt dos usuários que já possuem credenciais. As mesmas
+senhas do banco de origem continuam válidas. Os quatro clientes antigos ainda
+estão sem senha, conforme o retrato. Execute a migração `002` apenas se desejar
+definir a senha fictícia `1234` para os usuários sem hash; isso é opcional e
+modifica essa condição dos dados copiados. Credenciais existentes são preservadas.
+Consulte o roteiro completo no [README principal](../README.md).
 
 ## Próximas melhorias
 
 - Validar CPF, telefone, CEP, e-mail e campos vazios.
-- Implementar o login e preencher hash e salt.
 - Validar as mudanças de estado, os responsáveis e as datas do atendimento.
 - Atualizar a solicitação e inserir seu histórico na mesma transação.
 - Usar o campo ativo para desativar contas e categorias, com as regras de exclusão do sistema.
@@ -102,17 +111,14 @@ IDs novos são gerados pelo banco. Funcionários removidos são inativados, pres
 A abertura, o resgate e a finalização de solicitações gravam o histórico na mesma transação.
 Os estados retornados são os códigos da tabela `estado_solicitacao`, sem rótulos acentuados no código.
 
-O login continua sendo uma etapa separada: a abertura exige selecionar explicitamente um cliente existente,
-e a interface de funcionário mantém o primeiro funcionário ativo como contexto de demonstração.
-Esses contextos devem ser substituídos pela identidade da sessão ao implementar autenticação.
-O backend também expõe `POST /api/auth/cadastro` e `POST /api/auth/login` para funcionários.
-O cadastro recebe `nome`, `email`, `senha` e `dataNascimento`; a senha é armazenada como hash e salt,
-e o funcionário é criado nas tabelas `usuario` e `funcionario` dentro de uma transação. O login só aceita
-funcionários ativos com credenciais cadastradas. Os funcionários de demonstração do seed não têm senha
-cadastrada e, portanto, não podem iniciar sessão.
-
-A autenticação ainda não foi ligada às telas Angular nem usada para autorizar os demais endpoints.
+O login integrado usa `POST /api/auth/login` e emite uma sessão com token.
+As telas e a API verificam o perfil; o cliente só pode alterar seus próprios pedidos.
+Funcionários são cadastrados pela gestão de funcionários (`POST /api/funcionarios`)
+com autenticação de funcionário. O antigo autocadastro em `/api/auth/cadastro`
+não está disponível. Clientes se cadastram em `POST /api/clientes`.
+A abertura usa o cliente autenticado e as ações gravam o autor no histórico.
 
 Para validar a integração sem depender de um MySQL local, execute `.\mvnw.cmd test`.
-`DadosServiceTest` executa o schema e o seed em H2 com adaptações de sintaxe, verifica a origem dos dados,
+`DadosServiceTest` executa o schema e a massa fixa `src/test/resources/dados-seed.sql`
+em H2 com adaptações de sintaxe, verifica a origem dos dados,
 os relacionamentos, as gravações e o histórico. Isso não substitui um teste final com o MySQL configurado.

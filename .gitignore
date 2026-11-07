@@ -14,3 +14,11 @@
 # Local validation artifacts
 /Back/verificacao-compilacao.log
 /Front/.tsupgrader/
+/Front/verificacao-testes.log
+
+# Pacotes de entrega gerados localmente
+/entrega/
+
+# Diagnósticos locais da JVM
+/hs_err_pid*.log
+/replay_pid*.log

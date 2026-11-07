@@ -1,134 +1,150 @@
--- Dados ficticios para testar o banco. Executar uma vez, em banco vazio, depois de schema.sql.
--- Os IDs usados abaixo seguem a ordem dos cadastros.
--- Os horários abaixo estão em UTC; a sessão usa esse fuso ao inserir TIMESTAMP.
+-- Retrato do banco local manutencao_equipamento atualizado em 06/11/2026.
+-- Executar uma unica vez em banco vazio, depois de schema.sql. Nao atualiza bancos existentes.
+-- Preserva IDs, datas, estados, observacoes e credenciais (hash e salt) do banco de origem.
+-- Usuarios sem senha no banco de origem continuam sem senha; a migracao 002 e opcional.
+-- Datas TIMESTAMP exportadas em UTC. estado_solicitacao ja e preenchida por schema.sql.
+-- Totais: 9 usuarios, 6 enderecos, 6 clientes, 3 funcionarios, 5 categorias, 24 solicitacoes e 72 eventos.
+SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 START TRANSACTION;
 
 -- usuario
-INSERT INTO usuario (nome, email, ativo) VALUES
-    ('Ana Silva', 'ana@example.test', true),
-    ('João Souza', 'joao@example.test', true),
-    ('Carla Lima', 'carla@example.test', true),
-    ('Pedro Santos', 'pedro@example.test', true),
-    ('Maria Técnica', 'maria@example.test', true),
-    ('Mário Técnico', 'mario@example.test', true);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (1,'Ana Silva','ana@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (2,'João Souza','joao@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (3,'Carla Lima','carla@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (4,'Pedro Santos','pedro@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (5,'Maria Técnica','maria@example.test','6yjqNcgsWhGTeFaeDBlxy0M5CkY0zfolZ+pvQpy5AEQ=','h63ZQP4V2KtuOZqcSJS96A==',1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (6,'Mário Técnico','mario@example.test','hcJQ2MXMLljWaPm4JEMJltq/nELHB6EVzck50BIz0U4=','0rILPAE2UF/skz2egIoUCg==',1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (7,'Zoe Reis','zoe@ufpr.br','A6CFQUcR5THnWNAJNnQ2a13F7cDMG4pr/YlGi6JjXIQ=','8Fnm8IJdBwddUN75aqDyJQ==',1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (8,'Leo Pie','leo@ufpr.br','v551nx0kljtucFIizmjsMyEVOeSMV4KI5IkIGF6QLuk=','vMoTzg5s3CUbaZuuX7b39g==',1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (9,'Ari Vaz','ari@ufpr.br','jDwxqxz1c4+W4tYMHBr8OdVmVGOr7n/V8NDn2aeTFxE=','UQmwxurt7Qp4cjzuFvYKlg==',1);
 
 -- endereco
-INSERT INTO endereco (cep, logradouro, numero, complemento, bairro, cidade, uf) VALUES
-    ('80010000', 'Rua de Teste A', '10', NULL, 'Centro', 'Curitiba', 'PR'),
-    ('80020000', 'Rua de Teste B', '20', NULL, 'Centro', 'Curitiba', 'PR'),
-    ('80030000', 'Rua de Teste C', '30', NULL, 'Centro', 'Curitiba', 'PR'),
-    ('80040000', 'Rua de Teste D', '40', NULL, 'Centro', 'Curitiba', 'PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (1,'80010000','Rua de Teste A','10',NULL,'Centro','Curitiba','PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (2,'80020000','Rua de Teste B','20',NULL,'Centro','Curitiba','PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (3,'80030000','Rua de Teste C','30',NULL,'Centro','Curitiba','PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (4,'80040000','Rua de Teste D','40',NULL,'Centro','Curitiba','PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (5,'81531980','Avenida Coronel Francisco Heráclito dos Santos','100',NULL,'Jardim das Américas','Curitiba','PR');
+INSERT INTO `endereco` (`id`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`) VALUES (6,'80045270','Rua XV de Novembro','2408',NULL,'Alto da Rua XV','Curitiba','PR');
 
 -- cliente
-INSERT INTO cliente (usuario_id, cpf, telefone, endereco_id) VALUES
-    (1, '52998224725', '41990000001', 1),
-    (2, '11144477735', '41990000002', 2),
-    (3, '12345678909', '41990000003', 3),
-    (4, '98765432100', '41990000004', 4);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (1,'52998224725','41990000001',1);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (2,'11144477735','41990000002',2);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (3,'12345678909','41990000003',3);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (4,'98765432100','41990000004',4);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (7,'23470948909','41999999999',5);
+INSERT INTO `cliente` (`usuario_id`, `cpf`, `telefone`, `endereco_id`) VALUES (9,'67609401056','41996989585',6);
 
 -- funcionario
-INSERT INTO funcionario (usuario_id, data_nascimento) VALUES
-    (5, '1990-05-15'),
-    (6, '1988-10-20');
+INSERT INTO `funcionario` (`usuario_id`, `data_nascimento`) VALUES (5,'1990-05-15');
+INSERT INTO `funcionario` (`usuario_id`, `data_nascimento`) VALUES (6,'1988-10-20');
+INSERT INTO `funcionario` (`usuario_id`, `data_nascimento`) VALUES (8,'2000-02-13');
 
 -- categoria
-INSERT INTO categoria (nome, ativo) VALUES
-    ('Notebook', true),
-    ('Impressora', true),
-    ('Desktop', true),
-    ('Monitor', true),
-    ('Outro', true);
+INSERT INTO `categoria` (`id`, `nome`, `ativo`) VALUES (1,'Notebook',1);
+INSERT INTO `categoria` (`id`, `nome`, `ativo`) VALUES (2,'Impressora',1);
+INSERT INTO `categoria` (`id`, `nome`, `ativo`) VALUES (3,'Desktop',1);
+INSERT INTO `categoria` (`id`, `nome`, `ativo`) VALUES (4,'Monitor',1);
+INSERT INTO `categoria` (`id`, `nome`, `ativo`) VALUES (5,'Outro',1);
 
 -- solicitacao
-INSERT INTO solicitacao (cliente_id, categoria_id, funcionario_responsavel_id, descricao_equipamento, descricao_defeito, data_hora_abertura, estado, valor_orcado, motivo_rejeicao, descricao_manutencao, orientacoes_cliente, data_hora_pagamento, data_hora_finalizacao) VALUES
-    (1, 1, NULL, 'Notebook de teste 1', 'Não liga', '2026-09-01 12:00:00.000', 'ABERTA', NULL, NULL, NULL, NULL, NULL, NULL),
-    (2, 2, 5, 'Impressora de teste 2', 'Falha intermitente', '2026-09-01 13:00:00.000', 'ORCADA', '131.00', NULL, NULL, NULL, NULL, NULL),
-    (3, 3, 5, 'Desktop de teste 3', 'Ruído excessivo', '2026-09-02 12:00:00.000', 'REJEITADA', '146.50', 'Valor acima do orçamento disponível.', NULL, NULL, NULL, NULL),
-    (4, 4, 5, 'Monitor de teste 4', 'Superaquecimento', '2026-09-02 13:00:00.000', 'APROVADA', '162.00', NULL, NULL, NULL, NULL, NULL),
-    (1, 5, 6, 'Outro de teste 5', 'Conector danificado', '2026-09-03 12:00:00.000', 'REDIRECIONADA', '177.50', NULL, NULL, NULL, NULL, NULL),
-    (2, 1, 5, 'Notebook de teste 6', 'Não liga', '2026-09-03 13:00:00.000', 'ARRUMADA', '193.00', NULL, 'Reparo e testes funcionais do equipamento 6', 'Manter o equipamento limpo e em local ventilado.', NULL, NULL),
-    (3, 2, 5, 'Impressora de teste 7', 'Falha intermitente', '2026-09-04 12:00:00.000', 'PAGA', '208.50', NULL, 'Reparo e testes funcionais do equipamento 7', 'Manter o equipamento limpo e em local ventilado.', '2026-09-04 16:00:00.000', NULL),
-    (4, 3, 5, 'Desktop de teste 8', 'Ruído excessivo', '2026-09-04 13:00:00.000', 'FINALIZADA', '224.00', NULL, 'Reparo e testes funcionais do equipamento 8', 'Manter o equipamento limpo e em local ventilado.', '2026-09-04 17:00:00.000', '2026-09-04 18:00:00.000'),
-    (1, 4, NULL, 'Monitor de teste 9', 'Superaquecimento', '2026-09-05 12:00:00.000', 'ABERTA', NULL, NULL, NULL, NULL, NULL, NULL),
-    (2, 5, 5, 'Outro de teste 10', 'Conector danificado', '2026-09-05 13:00:00.000', 'ORCADA', '255.00', NULL, NULL, NULL, NULL, NULL),
-    (3, 1, 5, 'Notebook de teste 11', 'Não liga', '2026-09-06 12:00:00.000', 'REJEITADA', '270.50', 'Valor acima do orçamento disponível.', NULL, NULL, NULL, NULL),
-    (4, 2, 5, 'Impressora de teste 12', 'Falha intermitente', '2026-09-06 13:00:00.000', 'APROVADA', '286.00', NULL, NULL, NULL, NULL, NULL),
-    (1, 3, 6, 'Desktop de teste 13', 'Ruído excessivo', '2026-09-07 12:00:00.000', 'REDIRECIONADA', '301.50', NULL, NULL, NULL, NULL, NULL),
-    (2, 4, 5, 'Monitor de teste 14', 'Superaquecimento', '2026-09-07 13:00:00.000', 'ARRUMADA', '317.00', NULL, 'Reparo e testes funcionais do equipamento 14', 'Manter o equipamento limpo e em local ventilado.', NULL, NULL),
-    (3, 5, 5, 'Outro de teste 15', 'Conector danificado', '2026-09-08 12:00:00.000', 'PAGA', '332.50', NULL, 'Reparo e testes funcionais do equipamento 15', 'Manter o equipamento limpo e em local ventilado.', '2026-09-08 16:00:00.000', NULL),
-    (4, 1, 5, 'Notebook de teste 16', 'Não liga', '2026-09-08 13:00:00.000', 'FINALIZADA', '348.00', NULL, 'Reparo e testes funcionais do equipamento 16', 'Manter o equipamento limpo e em local ventilado.', '2026-09-08 17:00:00.000', '2026-09-08 18:00:00.000'),
-    (1, 2, NULL, 'Impressora de teste 17', 'Falha intermitente', '2026-09-09 12:00:00.000', 'ABERTA', NULL, NULL, NULL, NULL, NULL, NULL),
-    (2, 3, 5, 'Desktop de teste 18', 'Ruído excessivo', '2026-09-09 13:00:00.000', 'ORCADA', '379.00', NULL, NULL, NULL, NULL, NULL),
-    (3, 4, 5, 'Monitor de teste 19', 'Superaquecimento', '2026-09-10 12:00:00.000', 'REJEITADA', '394.50', 'Valor acima do orçamento disponível.', NULL, NULL, NULL, NULL),
-    (4, 5, 5, 'Outro de teste 20', 'Conector danificado', '2026-09-10 13:00:00.000', 'APROVADA', '410.00', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (1,1,1,NULL,'Notebook de teste 1','Não liga','2026-09-01 12:00:00.000000','ABERTA',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (2,2,2,5,'Impressora de teste 2','Falha intermitente','2026-09-01 13:00:00.000000','ORCADA',131.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (3,3,3,5,'Desktop de teste 3','Ruído excessivo','2026-09-02 12:00:00.000000','REJEITADA',146.50,'Valor acima do orçamento disponível.',NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (4,4,4,5,'Monitor de teste 4','Superaquecimento','2026-09-02 13:00:00.000000','REDIRECIONADA',162.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (5,1,5,6,'Outro de teste 5','Conector danificado','2026-09-03 12:00:00.000000','REDIRECIONADA',177.50,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (6,2,1,5,'Notebook de teste 6','Não liga','2026-09-03 13:00:00.000000','APROVADA',193.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (7,3,2,5,'Impressora de teste 7','Falha intermitente','2026-09-04 12:00:00.000000','PAGA',208.50,NULL,'Reparo e testes funcionais do equipamento 7','Manter o equipamento limpo e em local ventilado.','2026-09-04 16:00:00.000000',NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (8,4,3,5,'Desktop de teste 8','Ruído excessivo','2026-09-04 13:00:00.000000','PAGA',224.00,NULL,'Reparo e testes funcionais do equipamento 8','Manter o equipamento limpo e em local ventilado.','2026-10-06 18:20:00.000000',NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (9,1,4,NULL,'Monitor de teste 9','Superaquecimento','2026-09-05 12:00:00.000000','ABERTA',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (10,2,5,5,'Outro de teste 10','Conector danificado','2026-09-05 13:00:00.000000','ORCADA',255.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (11,3,1,5,'Notebook de teste 11','Não liga','2026-09-06 12:00:00.000000','REJEITADA',270.50,'Valor acima do orçamento disponível.',NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (12,4,2,5,'Impressora de teste 12','Falha intermitente','2026-09-06 13:00:00.000000','APROVADA',286.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (13,1,3,6,'Desktop de teste 13','Ruído excessivo','2026-09-07 12:00:00.000000','REDIRECIONADA',301.50,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (14,2,4,5,'Monitor de teste 14','Superaquecimento','2026-09-07 13:00:00.000000','APROVADA',317.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (15,3,5,5,'Outro de teste 15','Conector danificado','2026-09-08 12:00:00.000000','FINALIZADA',332.50,NULL,'Reparo e testes funcionais do equipamento 15','Manter o equipamento limpo e em local ventilado.','2026-10-10 14:25:00.000000','2026-11-06 23:34:40.000000');
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (16,4,1,5,'Notebook de teste 16','Não liga','2026-09-08 13:00:00.000000','PAGA',348.00,NULL,'Reparo e testes funcionais do equipamento 16','Manter o equipamento limpo e em local ventilado.','2026-11-05 11:20:00.000000',NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (17,1,2,8,'Impressora de teste 17','Falha intermitente','2026-09-09 12:00:00.000000','ORCADA',180.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (18,2,3,5,'Desktop de teste 18','Ruído excessivo','2026-09-09 13:00:00.000000','ORCADA',379.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (19,3,4,5,'Monitor de teste 19','Superaquecimento','2026-09-10 12:00:00.000000','REJEITADA',394.50,'Valor acima do orçamento disponível.',NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (20,4,5,5,'Outro de teste 20','Conector danificado','2026-09-10 13:00:00.000000','REDIRECIONADA',410.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (21,7,2,8,'HP','Não liga','2026-10-30 00:04:11.323746','APROVADA',200.00,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (22,7,1,NULL,'Dell Inspiron','Tela quebrada','2026-10-30 00:34:15.036819','ABERTA',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (23,7,4,NULL,'Monitor BenQ 32\" MA320U','Defeito na entrada USB','2026-11-06 23:50:45.728855','ABERTA',NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `solicitacao` (`id`, `cliente_id`, `categoria_id`, `funcionario_responsavel_id`, `descricao_equipamento`, `descricao_defeito`, `data_hora_abertura`, `estado`, `valor_orcado`, `motivo_rejeicao`, `descricao_manutencao`, `orientacoes_cliente`, `data_hora_pagamento`, `data_hora_finalizacao`) VALUES (24,9,1,8,'MacBook Pro 16\" Apple M5 Max','Esquentando muito','2026-11-07 00:14:07.526673','ORCADA',800.00,NULL,NULL,NULL,NULL,NULL);
 
 -- historico_solicitacao
-INSERT INTO historico_solicitacao (solicitacao_id, data_hora, estado_anterior, estado_novo, autor_id, funcionario_origem_id, funcionario_destino_id, observacao) VALUES
-    (1, '2026-09-01 12:00:00.000', NULL, 'ABERTA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (2, '2026-09-01 13:00:00.000', NULL, 'ABERTA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (2, '2026-09-01 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (3, '2026-09-02 12:00:00.000', NULL, 'ABERTA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (3, '2026-09-02 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (3, '2026-09-02 14:00:00.000', 'ORCADA', 'REJEITADA', 3, NULL, NULL, 'Valor acima do orçamento disponível.'),
-    (4, '2026-09-02 13:00:00.000', NULL, 'ABERTA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (4, '2026-09-02 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (4, '2026-09-02 15:00:00.000', 'ORCADA', 'APROVADA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (5, '2026-09-03 12:00:00.000', NULL, 'ABERTA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (5, '2026-09-03 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (5, '2026-09-03 14:00:00.000', 'ORCADA', 'APROVADA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (5, '2026-09-03 15:00:00.000', 'APROVADA', 'REDIRECIONADA', 5, 5, 6, 'Encaminhada ao técnico especialista.'),
-    (6, '2026-09-03 13:00:00.000', NULL, 'ABERTA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (6, '2026-09-03 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (6, '2026-09-03 15:00:00.000', 'ORCADA', 'APROVADA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (6, '2026-09-03 16:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (7, '2026-09-04 12:00:00.000', NULL, 'ABERTA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (7, '2026-09-04 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (7, '2026-09-04 14:00:00.000', 'ORCADA', 'APROVADA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (7, '2026-09-04 15:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (7, '2026-09-04 16:00:00.000', 'ARRUMADA', 'PAGA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 13:00:00.000', NULL, 'ABERTA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 15:00:00.000', 'ORCADA', 'APROVADA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 16:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 17:00:00.000', 'ARRUMADA', 'PAGA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (8, '2026-09-04 18:00:00.000', 'PAGA', 'FINALIZADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (9, '2026-09-05 12:00:00.000', NULL, 'ABERTA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (10, '2026-09-05 13:00:00.000', NULL, 'ABERTA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (10, '2026-09-05 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (11, '2026-09-06 12:00:00.000', NULL, 'ABERTA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (11, '2026-09-06 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (11, '2026-09-06 14:00:00.000', 'ORCADA', 'REJEITADA', 3, NULL, NULL, 'Valor acima do orçamento disponível.'),
-    (12, '2026-09-06 13:00:00.000', NULL, 'ABERTA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (12, '2026-09-06 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (12, '2026-09-06 15:00:00.000', 'ORCADA', 'APROVADA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (13, '2026-09-07 12:00:00.000', NULL, 'ABERTA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (13, '2026-09-07 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (13, '2026-09-07 14:00:00.000', 'ORCADA', 'APROVADA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (13, '2026-09-07 15:00:00.000', 'APROVADA', 'REDIRECIONADA', 5, 5, 6, 'Encaminhada ao técnico especialista.'),
-    (14, '2026-09-07 13:00:00.000', NULL, 'ABERTA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (14, '2026-09-07 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (14, '2026-09-07 15:00:00.000', 'ORCADA', 'APROVADA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (14, '2026-09-07 16:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (15, '2026-09-08 12:00:00.000', NULL, 'ABERTA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (15, '2026-09-08 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (15, '2026-09-08 14:00:00.000', 'ORCADA', 'APROVADA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (15, '2026-09-08 15:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (15, '2026-09-08 16:00:00.000', 'ARRUMADA', 'PAGA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 13:00:00.000', NULL, 'ABERTA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 15:00:00.000', 'ORCADA', 'APROVADA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 16:00:00.000', 'APROVADA', 'ARRUMADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 17:00:00.000', 'ARRUMADA', 'PAGA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (16, '2026-09-08 18:00:00.000', 'PAGA', 'FINALIZADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (17, '2026-09-09 12:00:00.000', NULL, 'ABERTA', 1, NULL, NULL, 'Evento da massa de testes.'),
-    (18, '2026-09-09 13:00:00.000', NULL, 'ABERTA', 2, NULL, NULL, 'Evento da massa de testes.'),
-    (18, '2026-09-09 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (19, '2026-09-10 12:00:00.000', NULL, 'ABERTA', 3, NULL, NULL, 'Evento da massa de testes.'),
-    (19, '2026-09-10 13:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (19, '2026-09-10 14:00:00.000', 'ORCADA', 'REJEITADA', 3, NULL, NULL, 'Valor acima do orçamento disponível.'),
-    (20, '2026-09-10 13:00:00.000', NULL, 'ABERTA', 4, NULL, NULL, 'Evento da massa de testes.'),
-    (20, '2026-09-10 14:00:00.000', 'ABERTA', 'ORCADA', 5, NULL, NULL, 'Evento da massa de testes.'),
-    (20, '2026-09-10 15:00:00.000', 'ORCADA', 'APROVADA', 4, NULL, NULL, 'Evento da massa de testes.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (1,1,'2026-09-01 12:00:00.000000',NULL,'ABERTA',1,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (2,2,'2026-09-01 13:00:00.000000',NULL,'ABERTA',2,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (3,2,'2026-09-01 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (4,3,'2026-09-02 12:00:00.000000',NULL,'ABERTA',3,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (5,3,'2026-09-02 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (6,3,'2026-09-02 14:00:00.000000','ORCADA','REJEITADA',3,NULL,NULL,'Valor acima do orçamento disponível.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (7,4,'2026-09-02 13:00:00.000000',NULL,'ABERTA',4,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (8,4,'2026-09-02 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (9,4,'2026-09-02 15:00:00.000000','ORCADA','APROVADA',4,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (10,5,'2026-09-03 12:00:00.000000',NULL,'ABERTA',1,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (11,5,'2026-09-03 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (12,5,'2026-09-03 14:00:00.000000','ORCADA','APROVADA',1,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (13,5,'2026-09-03 15:00:00.000000','APROVADA','REDIRECIONADA',5,5,6,'Encaminhada ao técnico especialista.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (14,6,'2026-09-03 13:00:00.000000',NULL,'ABERTA',2,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (15,6,'2026-09-03 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (16,6,'2026-09-03 15:00:00.000000','ORCADA','APROVADA',2,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (18,7,'2026-09-04 12:00:00.000000',NULL,'ABERTA',3,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (19,7,'2026-09-04 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (20,7,'2026-09-04 14:00:00.000000','ORCADA','APROVADA',3,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (21,7,'2026-09-04 15:00:00.000000','APROVADA','ARRUMADA',5,NULL,NULL,'Manutenção concluída pelo funcionário responsável.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (22,7,'2026-09-04 16:00:00.000000','ARRUMADA','PAGA',3,NULL,NULL,'Pagamento confirmado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (23,8,'2026-09-04 13:00:00.000000',NULL,'ABERTA',4,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (24,8,'2026-09-04 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (25,8,'2026-09-04 15:00:00.000000','ORCADA','APROVADA',4,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (26,8,'2026-09-04 16:00:00.000000','APROVADA','ARRUMADA',5,NULL,NULL,'Manutenção concluída pelo funcionário responsável.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (27,8,'2026-10-06 18:20:00.000000','ARRUMADA','PAGA',4,NULL,NULL,'Pagamento confirmado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (29,9,'2026-09-05 12:00:00.000000',NULL,'ABERTA',1,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (30,10,'2026-09-05 13:00:00.000000',NULL,'ABERTA',2,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (31,10,'2026-09-05 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (32,11,'2026-09-06 12:00:00.000000',NULL,'ABERTA',3,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (33,11,'2026-09-06 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (34,11,'2026-09-06 14:00:00.000000','ORCADA','REJEITADA',3,NULL,NULL,'Valor acima do orçamento disponível.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (35,12,'2026-09-06 13:00:00.000000',NULL,'ABERTA',4,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (36,12,'2026-09-06 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (37,12,'2026-09-06 15:00:00.000000','ORCADA','APROVADA',4,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (38,13,'2026-09-07 12:00:00.000000',NULL,'ABERTA',1,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (39,13,'2026-09-07 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (40,13,'2026-09-07 14:00:00.000000','ORCADA','APROVADA',1,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (41,13,'2026-09-07 15:00:00.000000','APROVADA','REDIRECIONADA',5,5,6,'Encaminhada ao técnico especialista.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (42,14,'2026-09-07 13:00:00.000000',NULL,'ABERTA',2,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (43,14,'2026-09-07 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (44,14,'2026-09-07 15:00:00.000000','ORCADA','APROVADA',2,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (46,15,'2026-09-08 12:00:00.000000',NULL,'ABERTA',3,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (47,15,'2026-09-08 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (48,15,'2026-09-08 14:00:00.000000','ORCADA','APROVADA',3,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (49,15,'2026-09-08 15:00:00.000000','APROVADA','ARRUMADA',5,NULL,NULL,'Manutenção concluída pelo funcionário responsável.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (50,15,'2026-10-10 14:25:00.000000','ARRUMADA','PAGA',3,NULL,NULL,'Pagamento confirmado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (51,16,'2026-09-08 13:00:00.000000',NULL,'ABERTA',4,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (52,16,'2026-09-08 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (53,16,'2026-09-08 15:00:00.000000','ORCADA','APROVADA',4,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (54,16,'2026-09-08 16:00:00.000000','APROVADA','ARRUMADA',5,NULL,NULL,'Manutenção concluída pelo funcionário responsável.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (55,16,'2026-11-05 11:20:00.000000','ARRUMADA','PAGA',4,NULL,NULL,'Pagamento confirmado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (57,17,'2026-09-09 12:00:00.000000',NULL,'ABERTA',1,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (58,18,'2026-09-09 13:00:00.000000',NULL,'ABERTA',2,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (59,18,'2026-09-09 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (60,19,'2026-09-10 12:00:00.000000',NULL,'ABERTA',3,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (61,19,'2026-09-10 13:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (62,19,'2026-09-10 14:00:00.000000','ORCADA','REJEITADA',3,NULL,NULL,'Valor acima do orçamento disponível.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (63,20,'2026-09-10 13:00:00.000000',NULL,'ABERTA',4,NULL,NULL,'Solicitação de manutenção registrada pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (64,20,'2026-09-10 14:00:00.000000','ABERTA','ORCADA',5,NULL,NULL,'Orçamento enviado para aprovação do cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (65,20,'2026-09-10 15:00:00.000000','ORCADA','APROVADA',4,NULL,NULL,'Orçamento aprovado pelo cliente.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (66,21,'2026-10-30 00:04:11.343296',NULL,'ABERTA',7,NULL,NULL,'Solicitação aberta');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (67,22,'2026-10-30 00:34:15.039196',NULL,'ABERTA',7,NULL,NULL,'Solicitação aberta');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (68,21,'2026-11-03 15:51:46.691172','ABERTA','ORCADA',8,NULL,NULL,'Alteração de ABERTA para ORCADA');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (69,17,'2026-11-03 15:52:16.854193','ABERTA','ORCADA',8,NULL,NULL,'Alteração de ABERTA para ORCADA');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (70,21,'2026-11-03 15:56:22.647110','ORCADA','APROVADA',7,NULL,NULL,'Alteração de ORCADA para APROVADA');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (72,20,'2026-11-06 19:40:47.930463','APROVADA','REDIRECIONADA',8,5,5,'Solicitação redirecionada.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (76,4,'2026-11-06 22:38:05.656339','APROVADA','REDIRECIONADA',8,5,5,'Solicitação redirecionada.');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (77,15,'2026-11-06 23:34:40.296516','PAGA','FINALIZADA',8,NULL,NULL,'Alteração de PAGA para FINALIZADA');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (78,23,'2026-11-06 23:50:45.732366',NULL,'ABERTA',7,NULL,NULL,'Solicitação aberta');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (79,24,'2026-11-07 00:14:07.527972',NULL,'ABERTA',9,NULL,NULL,'Solicitação aberta');
+INSERT INTO `historico_solicitacao` (`id`, `solicitacao_id`, `data_hora`, `estado_anterior`, `estado_novo`, `autor_id`, `funcionario_origem_id`, `funcionario_destino_id`, `observacao`) VALUES (80,24,'2026-11-07 00:18:02.852546','ABERTA','ORCADA',8,NULL,NULL,'Alteração de ABERTA para ORCADA');
 
 COMMIT;

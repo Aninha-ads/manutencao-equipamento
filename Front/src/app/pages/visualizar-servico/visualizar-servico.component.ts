@@ -76,6 +76,19 @@ export class VisualizarServicoComponent {
   get podeRejeitar(): boolean {
     return !this.interfaceFuncionario && this.solicitacao?.estado === 'ORCADA' && this.auth.perfil === 'CLIENTE';
   }
+
+  async devolverArquivar(): Promise<void> {
+    if (!this.interfaceFuncionario || this.auth.perfil !== 'FUNCIONARIO' || this.solicitacao?.estado !== 'REJEITADA') return;
+    if (!confirm('Confirmar a devolução do equipamento e arquivar o pedido sem manutenção ou pagamento? O cliente não poderá mais resgatá-lo.')) return;
+    try {
+      await this.dados.mudarEstado(this.solicitacao.id, 'FINALIZADA');
+      this.solicitacao = this.carregar();
+      this.historico = this.ordenar(this.solicitacao?.historico);
+    } catch {
+      this.erro = 'Não foi possível arquivar o pedido. Reabra os detalhes para conferir o estado atual.';
+    }
+    this.cdr.markForCheck();
+  }
   
   async abrirModalRejeitar(): Promise<void> {
     if (!this.podeRejeitar || !this.solicitacao) return;

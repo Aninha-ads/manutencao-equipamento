@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
@@ -17,7 +18,7 @@ describe('Solicitações após atualizar o navegador', () => {
     http = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => http.verify());
+  afterEach(() => { http.verify(); vi.restoreAllMocks(); });
 
   it('busca as solicitações mesmo quando a memória começa vazia', async () => {
     const fixture = TestBed.createComponent(VisualizacaoSolicitacoesComponent);
@@ -31,6 +32,28 @@ describe('Solicitações após atualizar o navegador', () => {
     expect(fixture.componentInstance.solicitacoes.length).toBe(resposta.solicitacoes.length);
     expect(fixture.componentInstance.solicitacoesFiltradas.length).toBeGreaterThan(0);
     expect(fixture.nativeElement.textContent).not.toContain('Nenhuma solicitação encontrada');
+  });
+
+  it('devolve e arquiva rejeitada após confirmar a operação', async () => {
+    const fixture = TestBed.createComponent(VisualizacaoSolicitacoesComponent);
+    fixture.detectChanges();
+    const dados = dadosTeste();
+    dados.solicitacoes[0].estado = 'REJEITADA';
+    http.expectOne('/api/dados').flush(dados);
+    await expect.poll(() => fixture.componentInstance.carregando).toBe(false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Devolver e arquivar');
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const finalizar = fixture.componentInstance.finalizarSolicitacao(fixture.componentInstance.solicitacoes[0]);
+    const patch = http.expectOne('/api/solicitacoes/7/estado');
+    expect(patch.request.body).toEqual({ estado: 'FINALIZADA' });
+    patch.flush(null);
+    await Promise.resolve();
+    await Promise.resolve();
+    dados.solicitacoes[0].estado = 'FINALIZADA';
+    http.expectOne('/api/dados').flush(dados);
+    await finalizar;
+    expect(fixture.componentInstance.solicitacoes[0].estado).toBe('FINALIZADA');
   });
 
   it('distingue falha da API de lista vazia e permite tentar novamente', async () => {

@@ -72,6 +72,9 @@
                 @case ('PAGA') {
                   <button class="btn btn-sm btn-outline-dark" (click)="finalizarSolicitacao(solicitacao)">Finalizar Solicitação</button>
                 }
+                @case ('REJEITADA') {
+                  <button class="btn btn-sm btn-outline-dark" (click)="finalizarSolicitacao(solicitacao)">Devolver e arquivar</button>
+                }
               }
             </td>
           </tr>

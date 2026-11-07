@@ -98,7 +98,7 @@ export class CadastroClienteComponent {
   };
 
   // Valida a quantidade de dígitos, ignorando a máscara.
-  private quantidadeDigitos(quantidade: number): ValidatorFn {
+  private quantidadeDigitos(minimo: number, maximo = minimo): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const valor = String(control.value ?? '');
 
@@ -108,11 +108,12 @@ export class CadastroClienteComponent {
 
       const digitos = valor.replace(/\D/g, '');
 
-      return digitos.length === quantidade
+      return digitos.length >= minimo && digitos.length <= maximo
         ? null
         : {
             quantidadeDigitos: {
-              exigido: quantidade,
+              minimo,
+              maximo,
               atual: digitos.length
             }
           };
@@ -145,7 +146,7 @@ export class CadastroClienteComponent {
 
     telefone: this.fb.nonNullable.control('', [
       Validators.required,
-      this.quantidadeDigitos(11)
+      this.quantidadeDigitos(10, 11)
     ]),
 
     cep: this.fb.nonNullable.control('', [

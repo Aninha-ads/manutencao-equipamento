@@ -113,7 +113,10 @@ export class VisualizacaoSolicitacoesComponent implements OnInit {
   }
 
   async finalizarSolicitacao(solicitacao: Solicitacao): Promise<void> {
-    if (this.estadoAtual(solicitacao) !== 'PAGA' || !confirm('Finalizar esta solicitação?')) return;
+    const rejeitada = solicitacao.estado === 'REJEITADA';
+    if ((!rejeitada && solicitacao.estado !== 'PAGA') || !confirm(rejeitada
+      ? 'Confirmar a devolução do equipamento e arquivar a solicitação rejeitada? Ela será finalizada sem manutenção ou pagamento e não poderá mais ser resgatada.'
+      : 'Finalizar esta solicitação?')) return;
     try {
       await this.dados.mudarEstado(solicitacao.id, 'FINALIZADA');
       this.solicitacoes = this.dados.listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? '' }));

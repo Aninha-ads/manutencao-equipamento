@@ -24,9 +24,6 @@ public class RelatorioService {
 
     private final RelatorioRepository repository;
 
-    private final NumberFormat formatoMoeda =
-            NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-
     private final DateTimeFormatter formatoData =
             DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -37,15 +34,18 @@ public class RelatorioService {
     public byte[] gerarRelatorioReceitas(LocalDate inicio, LocalDate fim)
             throws IOException {
 
+        NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"));
+
         List<Object[]> resultados =
                 repository.buscarReceitasPorPeriodo(inicio, fim);
 
         List<String> linhas = new ArrayList<>();
 
-        linhas.add("Periodo: "
-                + (inicio == null ? "Inicio nao informado" : inicio.format(formatoData))
-                + " ate "
-                + (fim == null ? "Fim nao informado" : fim.format(formatoData)));
+        linhas.add("Período: "
+                + (inicio == null ? "Início não informado" : inicio.format(formatoData))
+                + " até "
+                + (fim == null ? "Fim não informado" : fim.format(formatoData)));
+        linhas.add("Inclui pedidos pagos e finalizados com pagamento registrado.");
 
         linhas.add("");
         linhas.add("DATA DO PAGAMENTO                 VALOR RECEBIDO");
@@ -73,13 +73,15 @@ public class RelatorioService {
         linhas.add("TOTAL RECEBIDO: " + formatoMoeda.format(totalGeral));
 
         if (resultados.isEmpty()) {
-            linhas.add("Nenhum pagamento encontrado no periodo.");
+            linhas.add("Nenhum pagamento encontrado no período.");
         }
 
-        return criarPdf("RELATORIO DE RECEITAS", linhas);
+        return criarPdf("RELATÓRIO DE RECEITAS", linhas);
     }
 
     public byte[] gerarRelatorioCategorias() throws IOException {
+
+        NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR"));
 
         List<Object[]> resultados =
                 repository.buscarReceitasPorCategoria();
@@ -87,6 +89,7 @@ public class RelatorioService {
         List<String> linhas = new ArrayList<>();
 
         linhas.add("RECEITAS AGRUPADAS POR CATEGORIA");
+        linhas.add("Inclui pedidos pagos e finalizados com pagamento registrado.");
         linhas.add("");
         linhas.add("CATEGORIA                         VALOR RECEBIDO");
         linhas.add("--------------------------------------------------");
@@ -111,7 +114,7 @@ public class RelatorioService {
             linhas.add("Nenhuma receita encontrada.");
         }
 
-        return criarPdf("RELATORIO DE RECEITAS POR CATEGORIA", linhas);
+        return criarPdf("RELATÓRIO DE RECEITAS POR CATEGORIA", linhas);
     }
 
     private BigDecimal converterValor(Object valor) {
@@ -147,14 +150,18 @@ public class RelatorioService {
             float y = 750;
 
             conteudo.beginText();
-            conteudo.setFont(fonteTitulo, 16);
+            conteudo.setFont(fonteTitulo, 13);
             conteudo.newLineAtOffset(50, y);
             conteudo.showText(titulo);
             conteudo.endText();
 
             y -= 40;
 
+            List<String> linhasAjustadas = new ArrayList<>();
             for (String linha : linhas) {
+                linhasAjustadas.addAll(quebrarLinha(linha, fonteTexto, 11, pagina.getMediaBox().getWidth() - 100));
+            }
+            for (String linha : linhasAjustadas) {
                 if (y < 60) {
                     conteudo.close();
 
@@ -163,6 +170,12 @@ public class RelatorioService {
 
                     conteudo = new PDPageContentStream(documento, pagina);
                     y = 750;
+                    conteudo.beginText();
+                    conteudo.setFont(fonteTitulo, 13);
+                    conteudo.newLineAtOffset(50, y);
+                    conteudo.showText(titulo + " (continuação)");
+                    conteudo.endText();
+                    y -= 40;
                 }
 
                 conteudo.beginText();
@@ -180,5 +193,33 @@ public class RelatorioService {
 
             return saida.toByteArray();
         }
+    }
+
+    private List<String> quebrarLinha(String texto, PDType1Font fonte, float tamanho, float largura) throws IOException {
+        List<String> linhas = new ArrayList<>();
+        // Os dados podem conter quebras de linha; cada trecho precisa caber nas margens.
+        for (String trecho : texto.replace('\t', ' ').split("\\R", -1)) {
+            if (trecho.isEmpty()) {
+                linhas.add("");
+                continue;
+            }
+            StringBuilder linha = new StringBuilder();
+            for (int ponto : trecho.codePoints().toArray()) {
+                String caractere = new String(Character.toChars(ponto));
+                try {
+                    fonte.encode(caractere);
+                } catch (IllegalArgumentException e) {
+                    caractere = "?";
+                }
+                String candidata = linha.toString() + caractere;
+                if (fonte.getStringWidth(candidata) / 1000 * tamanho > largura && !linha.isEmpty()) {
+                    linhas.add(linha.toString());
+                    linha.setLength(0);
+                }
+                linha.append(caractere);
+            }
+            if (!linha.isEmpty()) linhas.add(linha.toString());
+        }
+        return linhas;
     }
 }

@@ -1,6 +1,6 @@
 -- Define a senha de teste "1234" para os usuários do seed que ainda não têm senha.
 -- Usa o MESMO algoritmo do HashService: hash = Base64( SHA-256( salt_bytes + senha ) ).
--- Executar depois de schema.sql e seed.sql (MySQL 8). Pode rodar de novo sem efeito colateral.
+-- Opcional, depois de schema.sql e seed.sql (MySQL 8). Nao e necessario para copiar as senhas existentes.
 -- Apenas para dados fictícios de teste.
 
 -- 1) um salt aleatório (16 bytes em Base64) para cada usuário sem senha
@@ -14,7 +14,7 @@ UPDATE usuario
  WHERE senha_hash IS NULL
    AND senha_salt IS NOT NULL;
 
--- Conferência: deve listar 6 usuários, todos com salt (24 caracteres) e hash (44 caracteres)
+-- Conferência: lista os usuários atuais, com salt (24 caracteres) e hash (44 caracteres).
 SELECT u.email,
        CASE WHEN f.usuario_id IS NOT NULL THEN 'FUNCIONARIO' ELSE 'CLIENTE' END AS perfil,
        CHAR_LENGTH(u.senha_salt) AS tam_salt,
