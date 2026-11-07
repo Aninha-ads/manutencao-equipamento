@@ -19,7 +19,10 @@ public interface RelatorioRepository extends JpaRepository<Solicitacao, Integer>
             DATE(s.data_hora_pagamento) AS data_pagamento,
             SUM(s.valor_orcado) AS total
         FROM solicitacao s
-        WHERE s.estado = 'PAGA'
+        WHERE (s.estado = 'PAGA' OR (s.estado = 'FINALIZADA' AND EXISTS (
+            SELECT 1 FROM historico_solicitacao h
+            WHERE h.solicitacao_id = s.id AND h.estado_novo = 'PAGA'
+        )))
           AND s.data_hora_pagamento IS NOT NULL
           AND (:inicio IS NULL OR DATE(s.data_hora_pagamento) >= :inicio)
           AND (:fim IS NULL OR DATE(s.data_hora_pagamento) <= :fim)
@@ -38,7 +41,11 @@ public interface RelatorioRepository extends JpaRepository<Solicitacao, Integer>
             SUM(s.valor_orcado) AS total
         FROM solicitacao s
         INNER JOIN categoria c ON c.id = s.categoria_id
-        WHERE s.estado = 'PAGA'
+        WHERE (s.estado = 'PAGA' OR (s.estado = 'FINALIZADA' AND EXISTS (
+            SELECT 1 FROM historico_solicitacao h
+            WHERE h.solicitacao_id = s.id AND h.estado_novo = 'PAGA'
+        )))
+          AND s.data_hora_pagamento IS NOT NULL
         GROUP BY c.id, c.nome
         ORDER BY c.nome
         """, nativeQuery = true)

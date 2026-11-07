@@ -1,6 +1,6 @@
 import { EstadoSolicitacao } from '../../models/solicitacao.model';
 import { DadosService } from '../../core/services/dados.service';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -22,9 +22,12 @@ export interface Solicitacao {
   templateUrl: './visualizacao-solicitacoes.component.html',
   styleUrl: './visualizacao-solicitacoes.component.css'
 })
-export class VisualizacaoSolicitacoesComponent {
+export class VisualizacaoSolicitacoesComponent implements OnInit {
   private dados = inject(DadosService);
   private auth = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
+  carregando = true;
+  erroCarregamento = '';
   filtroAtual: string = 'TODAS';
   filtroEstado: EstadoSolicitacao | 'TODOS' = 'TODOS';
   readonly estados: EstadoSolicitacao[] = [
@@ -43,6 +46,24 @@ export class VisualizacaoSolicitacoesComponent {
   private fimAplicado = '';
   // Funcionário logado
   funcionarioLogadoId: number | null = this.auth.id;
+
+  ngOnInit(): void {
+    void this.carregarSolicitacoes();
+  }
+
+  async carregarSolicitacoes(): Promise<void> {
+    this.carregando = true;
+    this.erroCarregamento = '';
+    try {
+      await this.dados.carregar();
+      this.solicitacoes = this.dados.listarSolicitacoes().map(s => ({ ...s, cliente: s.cliente ?? 'Não informado' }));
+    } catch {
+      this.erroCarregamento = 'Não foi possível carregar as solicitações. Verifique a conexão com o servidor.';
+    } finally {
+      this.carregando = false;
+      this.cdr.markForCheck();
+    }
+  }
 
   dataAbertura(valor: string): Date {
     const p = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/.exec(valor);
