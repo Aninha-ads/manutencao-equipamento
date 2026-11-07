@@ -210,8 +210,10 @@ class DadosServiceTest {
         executar(get("/api/solicitacoes")
                 .header("Authorization", "Bearer " + tokens.issue(cliente(1)).value()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[?(@.id == " + id + ")].historico[0].funcionario").value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())))
-            .andExpect(jsonPath("$[?(@.id == " + id + ")].historico[4].funcionario").value(org.hamcrest.Matchers.contains("Mário Técnico")));
+            .andExpect(jsonPath("$[?(@.id == " + id + ")].historico[0].funcionario")
+                .value(Objects.requireNonNull(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue()))))
+            .andExpect(jsonPath("$[?(@.id == " + id + ")].historico[4].funcionario")
+                .value(Objects.requireNonNull(org.hamcrest.Matchers.contains("Mário Técnico"))));
     }
 
     @Test void inativaFuncionarioSemQuebrarReferenciasEImpedeRemoverUltimo() {
