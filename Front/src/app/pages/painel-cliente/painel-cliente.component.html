@@ -67,6 +67,15 @@
                         {{ acao.label }}
                       </a>
                     }
+                    @if (solicitacao.estado === 'REJEITADA') {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-warning"
+                        (click)="resgatarServico(solicitacao.id)">
+                            Resgatar Serviço
+                       </button>
+                    }
+
                     @if (solicitacao.estado === 'ARRUMADA') {
                       <button
                         type="button"

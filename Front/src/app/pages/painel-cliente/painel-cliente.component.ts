@@ -82,12 +82,38 @@ export class PainelClienteComponent implements OnInit{
     switch (estado) {
       case 'ORCADA':
         return { label: 'Aprovar/Rejeitar', rota: '/orcamentos/mostrar-orcamento' };
-      case 'REJEITADA':
-        return { label: 'Resgatar Serviço', rota: '/resgatar-servico' };
+      //removi rejeitada pois não precisava de uma rota, ela muda o estado da solicitação
+      //vou adicionar método abaijo para resgatar a rejeitada
       //case 'APROVADA':
       //return null;
       default:
         return null;
+    }
+  }
+
+    async resgatarServico(id: number): Promise<void> {
+      const solicitacao = this.solicitacoes.find(s => s.id === id);
+        //o botão só aparece se ela já estiver rejeitada, mas por segurança é bom
+        //colocar essa condição, vai que buga
+    if (!solicitacao || solicitacao.estado !== 'REJEITADA') {
+      alert('Esta solicitação não pode ser resgatada.');
+      return;
+    }
+
+    if (!confirm('Deseja resgatar esta solicitação? Ela mudará para o estado APROVADA.')) {
+      return;
+    }
+
+    try {
+      await this.dados.mudarEstado(id, 'APROVADA');
+
+      this.carregarSolicitacoes();
+
+      alert('Serviço resgatado com sucesso! A solicitação mudou para APROVADA e foi enviada para nossos técnicos!');
+
+    } catch (erro) {
+      console.error('Erro ao resgatar serviço:', erro);
+      alert('Não foi possível resgatar o serviço. Tente novamente.');
     }
   }
 
