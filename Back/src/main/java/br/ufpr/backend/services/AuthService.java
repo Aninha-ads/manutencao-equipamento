@@ -12,6 +12,7 @@ import br.ufpr.backend.repositories.FuncionarioRepository;
 import br.ufpr.backend.repositories.UsuarioRepository;
 import br.ufpr.backend.security.AuthenticatedUser;
 import br.ufpr.backend.security.SessionTokenService;
+import java.security.SecureRandom;
 import java.util.Locale;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -21,12 +22,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
+    private static final SecureRandom RANDOM = new SecureRandom();
+
     private final ClienteRepository clienteRepository;
     private final EnderecoRepository enderecoRepository;
     private final FuncionarioRepository funcionarioRepository;
     private final UsuarioRepository usuarioRepository;
     private final HashService hashService;
     private final SessionTokenService tokens;
+    private final EmailService emailService;
 
     public AuthService(
             ClienteRepository clienteRepository,
@@ -34,13 +38,15 @@ public class AuthService {
             FuncionarioRepository funcionarioRepository,
             UsuarioRepository usuarioRepository,
             HashService hashService,
-            SessionTokenService tokens) {
+            SessionTokenService tokens,
+            EmailService emailService) {
         this.clienteRepository = clienteRepository;
         this.enderecoRepository = enderecoRepository;
         this.funcionarioRepository = funcionarioRepository;
         this.usuarioRepository = usuarioRepository;
         this.hashService = hashService;
         this.tokens = tokens;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -51,7 +57,11 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Este CPF já está cadastrado.");
         }
 
-        Usuario usuario = usuarioRepository.save(novoUsuario(dto.nome(), email, dto.senha()));
+        String senhaFinal = (dto.senha() == null || dto.senha().isBlank())
+                ? String.format("%04d", RANDOM.nextInt(10000))
+                : dto.senha();
+
+        Usuario usuario = usuarioRepository.save(novoUsuario(dto.nome(), email, senhaFinal));
         Endereco endereco = new Endereco();
         endereco.setCep(dto.cep());
         endereco.setLogradouro(dto.logradouro().trim());
@@ -69,6 +79,9 @@ public class AuthService {
         cliente.setTelefone(dto.telefone());
         cliente.setEndereco(endereco);
         clienteRepository.save(cliente);
+
+        emailService.enviarSenhaAutocadastro(usuario.getNome(), email, senhaFinal);
+
         return autenticar(usuario, AuthenticatedUser.CLIENTE);
     }
 

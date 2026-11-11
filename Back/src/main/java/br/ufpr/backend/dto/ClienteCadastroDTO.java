@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record ClienteCadastroDTO(
         @NotBlank @Size(max = 150) String nome,
         @NotBlank @Email @Size(max = 254) String email,
-        @NotBlank @Size(min = 6, max = 100) String senha,
+        @Size(max = 100) String senha,
         @NotBlank @Size(min = 11, max = 11) String cpf,
         @NotBlank @Size(min = 10, max = 11) String telefone,
         @NotBlank @Size(min = 8, max = 8) String cep,

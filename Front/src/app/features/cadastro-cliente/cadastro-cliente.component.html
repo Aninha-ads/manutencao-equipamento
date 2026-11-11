@@ -23,8 +23,6 @@
             formControlName="nome"
             [class.is-invalid]="campos.nome.touched && campos.nome.invalid"
           >
-          <!-- Verifica se o cmpo foi preenchido e lança aviso de erro caso não 
-           seja preenchido ou passe o limite de caracteres -->
           @if (campos.nome.touched && campos.nome.invalid) {
             <div class="invalid-feedback">
               @if (campos.nome.hasError('required') || campos.nome.hasError('apenasEspacos')) {
@@ -36,26 +34,7 @@
           }
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="senha" class="form-label">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            class="form-control"
-            formControlName="senha"
-            autocomplete="new-password"
-            [class.is-invalid]="campos.senha.touched && campos.senha.invalid"
-          >
-          @if (campos.senha.touched && campos.senha.invalid) {
-            <div class="invalid-feedback">
-              A senha deve ter entre 6 e 100 caracteres.
-            </div>
-          }
-        </div>
-      </div>
-      <!--email,cpf e telefone no mesmo esquema do nome
-      ifs, erros e avisos tals, só que cpf e telefone com dígitos -->
+      <!-- email, cpf e telefone -->
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="email" class="form-label">E-mail</label>
@@ -66,6 +45,7 @@
             formControlName="email"
             [class.is-invalid]="campos.email.touched && campos.email.invalid"
           >
+          <small class="text-muted">Sua senha de acesso (4 dígitos) será enviada para este e-mail.</small>
           @if (campos.email.touched && campos.email.invalid) {
             <div class="invalid-feedback">
               @if (campos.email.hasError('required') || campos.email.hasError('apenasEspacos')) {
@@ -185,7 +165,7 @@
           }
         </div>
       </div>
-      <!-- complemento, bairro cidade e Estado (UF) -->
+      <!-- complemento, bairro, cidade e Estado (UF) -->
       <div class="row mb-3">
         <div class="col-md-4">
           <label for="complemento" class="form-label">Complemento</label>
