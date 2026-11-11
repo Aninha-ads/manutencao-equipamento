@@ -16,7 +16,7 @@ import { AuthService } from '../../core/services/auth.service';
 export interface ClienteRegistro {
   nome: string;
   email: string;
-  senha: string;
+  senha?: string;
   cpf: string;
   telefone: string;
   cep: string;
@@ -133,11 +133,7 @@ export class CadastroClienteComponent {
       Validators.maxLength(254)
     ]),
 
-    senha: this.fb.nonNullable.control('', [
-      Validators.required,
-      Validators.minLength(6),
-      Validators.maxLength(100)
-    ]),
+    senha: this.fb.nonNullable.control(''),
 
     cpf: this.fb.nonNullable.control('', [
       Validators.required,
@@ -277,15 +273,14 @@ export class CadastroClienteComponent {
 
     this.enviando = true;
 
-    // Ajuste a URL e o formato do payload conforme o contrato da sua API.
     this.auth
       .registrarCliente(dados)
       .pipe(finalize(() => (this.enviando = false)))
       .subscribe({
         next: () => {
-          this.sucessoCadastro = 'Cadastro realizado com sucesso!';
+          this.sucessoCadastro = 'Cadastro realizado! Sua senha de 4 dígitos foi enviada para o seu e-mail.';
           this.formulario.reset();
-          void this.router.navigate(['/painel-cliente']);
+          setTimeout(() => void this.router.navigate(['/login']), 2000);
         },
         error: (erro) => {
           if (erro.status === 0) {

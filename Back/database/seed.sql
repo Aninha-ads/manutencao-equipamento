@@ -9,10 +9,10 @@ SET time_zone = '+00:00';
 START TRANSACTION;
 
 -- usuario
-INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (1,'Ana Silva','ana@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (1,'Joana Silva','ana@example.test',NULL,NULL,1);
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (2,'João Souza','joao@example.test',NULL,NULL,1);
-INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (3,'Carla Lima','carla@example.test',NULL,NULL,1);
-INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (4,'Pedro Santos','pedro@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (3,'Joaquina Lima','carla@example.test',NULL,NULL,1);
+INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (4,'José Santos','pedro@example.test',NULL,NULL,1);
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (5,'Maria Técnica','maria@example.test','6yjqNcgsWhGTeFaeDBlxy0M5CkY0zfolZ+pvQpy5AEQ=','h63ZQP4V2KtuOZqcSJS96A==',1);
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (6,'Mário Técnico','mario@example.test','hcJQ2MXMLljWaPm4JEMJltq/nELHB6EVzck50BIz0U4=','0rILPAE2UF/skz2egIoUCg==',1);
 INSERT INTO `usuario` (`id`, `nome`, `email`, `senha_hash`, `senha_salt`, `ativo`) VALUES (7,'Zoe Reis','zoe@ufpr.br','A6CFQUcR5THnWNAJNnQ2a13F7cDMG4pr/YlGi6JjXIQ=','8Fnm8IJdBwddUN75aqDyJQ==',1);
