@@ -263,7 +263,7 @@ public class DadosService {
             case "ORCADA" -> "APROVADA".equals(proximo) || "REJEITADA".equals(proximo);
             case "REJEITADA" -> "APROVADA".equals(proximo) || "FINALIZADA".equals(proximo);
             case "APROVADA" -> "REDIRECIONADA".equals(proximo) || "ARRUMADA".equals(proximo);
-            case "REDIRECIONADA" -> "ARRUMADA".equals(proximo);
+            case "REDIRECIONADA" -> "REDIRECIONADA".equals(proximo) || "ARRUMADA".equals(proximo);
             case "ARRUMADA" -> "PAGA".equals(proximo);
             case "PAGA" -> "FINALIZADA".equals(proximo);
             default -> false;

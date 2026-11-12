@@ -216,6 +216,31 @@ class DadosServiceTest {
                 .value(Objects.requireNonNull(org.hamcrest.Matchers.contains("Mário Técnico"))));
     }
 
+    @Test void permiteRedirecionarNovamentePreservandoResponsavelEHistorico() {
+        int id = dados.abrir(new DadosService.Abertura(1, 1, "Notebook", "Falha"), cliente(1));
+        dados.mudarEstado(id, new DadosService.MudancaEstado(
+                "ORCADA", new java.math.BigDecimal("250.00"), null, null, null, null), funcionario());
+        dados.mudarEstado(id, new DadosService.MudancaEstado(
+                "APROVADA", null, null, null, null, null), cliente(1));
+        dados.mudarEstado(id, new DadosService.MudancaEstado(
+                "REDIRECIONADA", null, null, null, null, 6), funcionario());
+        var destino = new AuthenticatedUser(6, "Tecnico", "mario@example.test", AuthenticatedUser.FUNCIONARIO);
+        dados.mudarEstado(id, new DadosService.MudancaEstado(
+                "REDIRECIONADA", null, null, null, null, 5), destino);
+
+        var registro = jdbc.queryForMap("SELECT estado, funcionario_responsavel_id FROM solicitacao WHERE id=?", id);
+        assertEquals("REDIRECIONADA", registro.get("estado"));
+        assertEquals(5, ((Number) registro.get("funcionario_responsavel_id")).intValue());
+        assertEquals(5, dados.historico(id).size());
+        var transferencia = jdbc.queryForMap("""
+                SELECT estado_anterior, funcionario_origem_id, funcionario_destino_id
+                FROM historico_solicitacao WHERE solicitacao_id=? AND funcionario_destino_id=5
+                """, id);
+        assertEquals("REDIRECIONADA", transferencia.get("estado_anterior"));
+        assertEquals(6, ((Number) transferencia.get("funcionario_origem_id")).intValue());
+        assertEquals(5, ((Number) transferencia.get("funcionario_destino_id")).intValue());
+    }
+
     @Test void inativaFuncionarioSemQuebrarReferenciasEImpedeRemoverUltimo() {
         dados.removerFuncionario(6);
         assertEquals(1, dados.funcionarios().size());

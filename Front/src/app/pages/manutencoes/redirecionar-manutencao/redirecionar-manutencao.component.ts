@@ -87,8 +87,8 @@ export class RedirecionarManutencaoComponent {
 
   async redirecionarManutencao(): Promise<void> {
     if (!this.registro) return;
-    if (this.registro.estado !== 'APROVADA') {
-      alert('Somente solicitações aprovadas podem ser redirecionadas.');
+    if (this.registro.estado !== 'APROVADA' && this.registro.estado !== 'REDIRECIONADA') {
+      alert('Somente solicitações aprovadas ou redirecionadas podem ser redirecionadas.');
       return;
     }
 
