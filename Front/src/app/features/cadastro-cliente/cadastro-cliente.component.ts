@@ -289,6 +289,9 @@ export class CadastroClienteComponent {
           } else if (erro.status === 409) {
             this.erroCadastro =
               'Já existe um cadastro com esses dados.';
+          } else if (erro.status === 503) {
+            this.erroCadastro =
+              'Não foi possível enviar sua senha por e-mail. Tente novamente mais tarde.';
           } else {
             this.erroCadastro =
               erro.error?.message ??

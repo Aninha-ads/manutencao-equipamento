@@ -78,7 +78,7 @@ public class AuthService {
         cliente.setCpf(dto.cpf());
         cliente.setTelefone(dto.telefone());
         cliente.setEndereco(endereco);
-        clienteRepository.save(cliente);
+        clienteRepository.saveAndFlush(cliente);
 
         emailService.enviarSenhaAutocadastro(usuario.getNome(), email, senhaFinal);
 

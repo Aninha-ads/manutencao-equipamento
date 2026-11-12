@@ -4,9 +4,12 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class EmailService {
@@ -22,14 +25,10 @@ public class EmailService {
     }
 
     public void enviarSenhaAutocadastro(String nome, String emailDestino, String senhaQuatroDigitos) {
-       
-        
-        log.info("[AUTOCADASTRO] E-mail para: {} | Senha gerada (4 digitos): {}", emailDestino, senhaQuatroDigitos);
-        
-
         if (mailSender.isEmpty()) {
-            log.warn("JavaMailSender nao configurado. E-mail simulado apenas no log.");
-            return;
+            log.error("JavaMailSender não configurado para o autocadastro.");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "O envio da senha por e-mail está indisponível.");
         }
 
         try {
@@ -47,9 +46,10 @@ public class EmailService {
 
             mailSender.get().send(mensagem);
             log.info("E-mail enviado via SMTP com sucesso para {}", emailDestino);
-        } catch (Exception e) {
-            log.warn("Nao foi possivel enviar o e-mail via SMTP ({}). Use a senha exibida no console acima: {}",
-                    e.getMessage(), senhaQuatroDigitos);
+        } catch (MailException e) {
+            log.error("Falha no envio da senha de autocadastro via SMTP.", e);
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+                    "Não foi possível enviar a senha por e-mail.", e);
         }
     }
 }
