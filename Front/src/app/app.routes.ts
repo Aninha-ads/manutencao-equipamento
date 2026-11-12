@@ -11,7 +11,6 @@ import { OrcamentoSolicitacaoComponent } from './features/solicitacao-orcamento/
 import { ManterFuncionariosComponent } from './features/manter-funcionarios/manter-funcionarios.component';
 import { CategoriaComponent } from './features/cadastro-categoria/categoria.component';
 import { VisualizacaoSolicitacoesComponent } from './pages/visualizacao-solicitacoes/visualizacao-solicitacoes.component';
-import { HomeComponent } from './home/home.component';
 import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
 import { ResgatarServicoComponent } from './pages/resgatar-servico/resgatar-servico.component';
 import { MostrarOrcamentoComponent } from './pages/orcamentos/mostrar-orcamento/mostrar-orcamento.component';
@@ -37,10 +36,6 @@ export const routes: Routes = [
      redirectTo: 'manter-funcionarios',
      pathMatch: 'full'
    },
-
-       {
-    path: 'home',
-    component: HomeComponent  },
 
   {
     path: 'cadastro',

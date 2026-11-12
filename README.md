@@ -104,13 +104,13 @@ npm run build
 
 Os testes Java usam H2 e não alteram o banco MySQL local. Para testar o fluxo
 completo, faça login, abra um pedido, gere orçamento, aprove ou rejeite e confira
-os estados e o histórico. As instruções de resgate, arquivamento e relatórios
-estão em `docs/Entrega.md`.
+os estados e o histórico. Confira também o resgate de solicitações rejeitadas,
+o arquivamento e os relatórios de receitas.
 
 ## Entrega e arquivos gerados
 
-Consulte `docs/Entrega.md` e `scripts/gerar-entrega.ps1` para montar
-`Integrantes.txt`, `Fontes` e, se solicitada, `Documentacao`.
+Prepare o pacote de entrega manualmente, conforme as regras fornecidas pelo
+professor.
 
 `Front/node_modules`, `Front/.angular`, `Front/dist` e `Back/target` são gerados
 por instalação, build ou testes; não devem ser enviados como fontes. Mantenha

@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 /*pelo que eu pesquisei, aqui 'informa' meu angular de que essa aplicação é um componente*/
 @Component({
@@ -45,8 +46,14 @@ export class LoginComponent {
       await this.router.navigate([
         sessao.perfil === 'FUNCIONARIO' ? '/painel-funcionario' : '/painel-cliente'
       ]);
-    } catch {
-      this.erroLogin.set('E-mail ou senha inválidos, ou serviço indisponível.');
+    } catch (erro) {
+      if (erro instanceof HttpErrorResponse && (erro.status === 0 || erro.status >= 500)) {
+        this.erroLogin.set('Serviço de autenticação indisponível. Verifique se o backend está em execução e tente novamente.');
+      } else if (erro instanceof HttpErrorResponse && erro.status === 401) {
+        this.erroLogin.set('E-mail ou senha inválidos.');
+      } else {
+        this.erroLogin.set('Não foi possível concluir o login. Tente novamente.');
+      }
     } finally {
       this.enviando.set(false);
     }

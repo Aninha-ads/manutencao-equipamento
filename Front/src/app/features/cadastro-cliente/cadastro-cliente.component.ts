@@ -10,7 +10,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { NgxMaskDirective } from 'ngx-mask';
 import { finalize } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 export interface ClienteRegistro {
@@ -31,7 +31,7 @@ export interface ClienteRegistro {
 @Component({
   selector: 'app-cadastro-cliente',
   standalone: true,
-  imports: [ReactiveFormsModule, NgxMaskDirective],
+  imports: [ReactiveFormsModule, NgxMaskDirective, RouterLink],
   templateUrl: './cadastro-cliente.component.html',
   styleUrl: './cadastro-cliente.component.css',
 })

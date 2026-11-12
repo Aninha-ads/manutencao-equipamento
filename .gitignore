@@ -16,6 +16,12 @@
 /Front/.tsupgrader/
 /Front/verificacao-testes.log
 
+# Materiais locais de estudo e apresentação
+/Mapa_Arquivos_Front_Back.xlsx
+/Back/ARVORE_COMPLETA_BACK.txt
+/Back/GUIA_ESTUDO_BACKEND.md
+/Back/GUIA_ESTUDO_BACKEND.pdf
+
 # Pacotes de entrega gerados localmente
 /entrega/
 

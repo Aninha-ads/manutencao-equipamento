@@ -105,6 +105,23 @@
 
 /*botão*/
 
+.acoes-cadastro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.container .acoes-cadastro .btn {
+  width: 220px;
+  margin: 0;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .container .btn-primary {
   display: block;
 

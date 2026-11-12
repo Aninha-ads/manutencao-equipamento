@@ -19,7 +19,7 @@ export class App {
   constructor(public router: Router) {}
 
   get mostrarMenu(): boolean {
-    return !['/', '/login', '/login-funcionario', '/home', '/cadastro'].includes(this.router.url.split('?')[0]);
+    return !['/', '/login', '/login-funcionario', '/cadastro'].includes(this.router.url.split('?')[0]);
   }
 
   get menuFuncionario(): boolean {

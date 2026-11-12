@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -53,7 +54,7 @@ describe('LoginComponent', () => {
   }
 
   it('mostra erro sem navegar quando a autenticação falha', async () => {
-    auth.login.mockReturnValue(throwError(() => new Error('Falha de autenticação')));
+    auth.login.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
     const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     component.form.setValue({ email: 'pessoa@exemplo.com', senha: 'incorreta' });
 
@@ -65,4 +66,20 @@ describe('LoginComponent', () => {
       .toContain('E-mail ou senha inválidos');
     expect(component.enviando()).toBe(false);
   });
+
+  for (const status of [0, 500]) {
+    it(`distingue serviço indisponível de senha incorreta no erro HTTP ${status}`, async () => {
+      auth.login.mockReturnValue(throwError(() => new HttpErrorResponse({ status })));
+      const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+      component.form.setValue({ email: 'pessoa@exemplo.com', senha: 'senha-teste' });
+
+      await component.fazerLogin();
+      fixture.detectChanges();
+
+      expect(navegar).not.toHaveBeenCalled();
+      expect(fixture.nativeElement.querySelector('[role="alert"]').textContent)
+        .toContain('Serviço de autenticação indisponível');
+      expect(component.enviando()).toBe(false);
+    });
+  }
 });
